@@ -1,0 +1,111 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Dados Sensíveis
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+secrets/
+
+# Dados do Sistema
+data/*.sfs
+data/*.jsonl
+data/logs/
+data/backups/
+data/training/*.txt
+data/indexed/
+
+# Manter estrutura de diretórios
+!data/.gitkeep
+!data/logs/.gitkeep
+!data/backups/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Logs
+*.log
+logs/
+
+# Modelos treinados
+*.pkl
+*.h5
+*.pt
+*.pth
+models/
+
+# Temporários
+tmp/
+temp/
+*.tmp
+
+# Documentação gerada
+docs/_build/
+site/
+
+# Profiling
+*.prof
+*.svg
+profile.svg

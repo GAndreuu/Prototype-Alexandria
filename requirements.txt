@@ -1,0 +1,49 @@
+# ASI MONOLITH V12 - DEPENDÊNCIAS DO SISTEMA REAL
+# Sistema corrigido com APIs e modelos reais
+
+# Core Framework
+fastapi==0.104.1
+uvicorn==0.24.0
+pydantic==2.5.0
+
+# Machine Learning Real
+torch>=2.0.0
+torchvision>=0.15.0
+transformers>=4.35.0
+sentence-transformers>=2.2.2
+scikit-learn>=1.3.0
+
+# Multi-modal Processing
+pillow>=10.0.0
+opencv-python>=4.8.0
+
+# APIs Reais
+requests>=2.31.0
+google-generativeai>=0.3.0
+
+# Data Processing
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.11.0
+lancedb>=0.4.0 # High-performance vector storage
+arxiv>=2.1.0 # Paper Harvesting
+
+# Utilities
+pathlib2>=2.3.7
+tqdm>=4.66.0
+loguru>=0.7.0
+pypdf>=3.17.0
+psutil>=5.9.0
+watchdog>=3.0.0
+
+# Optional: CLIP for image embeddings
+# clip-by-openai>=1.0 (install manually if needed)
+
+# Development
+pytest>=7.4.0
+black>=23.0.0
+flake8>=6.0.0
+
+# UI & Optimization
+accelerate>=0.24.0
+streamlit>=1.28.0

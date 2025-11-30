@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  # ASI Monolith Backend & UI (Combined in one container for simplicity in V12)
+  asi-monolith:
+    build: .
+    container_name: asi_monolith_v12
+    ports:
+      - "8000:8000"
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - LOCAL_LLM_DEVICE=cpu # Change to 'cuda' if using NVIDIA GPU
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 8G
