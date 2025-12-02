@@ -1,0 +1,10 @@
+{
+  "input_dim": 384,
+  "hidden_dim": 512,
+  "num_heads": 4,
+  "codebook_size": 256,
+  "head_dim": 128,
+  "trained_on": 128138,
+  "epochs": 20,
+  "final_loss": 0.0023434361918808935
+}

@@ -150,6 +150,58 @@ class MycelialReasoning:
         """
         for indices in indices_batch:
             self.observe(indices)
+
+    def observe_sequence(self, indices_prev: Union[List[int], np.ndarray], indices_next: Union[List[int], np.ndarray]) -> None:
+        """
+        Observa uma transição temporal: prev -> next.
+        Reforça conexões que levam do estado anterior para o próximo.
+        
+        Args:
+            indices_prev: [h1, h2, h3, h4]
+            indices_next: [h1, h2, h3, h4]
+        """
+        # Normalizar inputs
+        indices_prev = np.array(indices_prev).flatten()
+        indices_next = np.array(indices_next).flatten()
+        
+        if len(indices_prev) != self.c.num_heads or len(indices_next) != self.c.num_heads:
+            return
+
+        self.step += 1
+        
+        # Hebbian Temporal: Predecessor -> Sucessor
+        # Assumimos que head[h] em t0 prediz head[h] em t1 (consistência de feature)
+        # E também cross-head: head[h1] em t0 pode predizer head[h2] em t1
+        
+        # 1. Intra-head Temporal (h -> h)
+        for h in range(self.c.num_heads):
+            i = int(indices_prev[h])
+            j = int(indices_next[h])
+            
+            if i < self.c.codebook_size and j < self.c.codebook_size:
+                # Reforço direcional
+                self.connections[h, i, j] += self.c.learning_rate * 2.0 # Peso maior para causalidade
+                
+        # 2. Cross-head Temporal (h1 -> h2)
+        # Isso permite que features visuais (h1) prevejam features textuais (h2) no futuro, etc.
+        for h1 in range(self.c.num_heads):
+            for h2 in range(self.c.num_heads):
+                if h1 != h2:
+                    i = int(indices_prev[h1])
+                    j = int(indices_next[h2])
+                    
+                    if i < self.c.codebook_size and j < self.c.codebook_size:
+                        # Usamos h1 como índice da matriz de conexões, significando "saindo de h1"
+                        # Mas a matriz connections[h] é (256, 256).
+                        # Se quisermos mapear h1->h2, precisamos saber que o destino é h2.
+                        # A estrutura atual connections[h] não distingue destino.
+                        # Ela assume que "se h1 ativou i, então j será ativado (em algum lugar)".
+                        # Isso é uma limitação da arquitetura simplificada.
+                        # Vamos manter apenas o reforço intra-head ou usar a matriz de forma "global".
+                        
+                        # Decisão: Reforçar na matriz do h1.
+                        # Isso significa: "Se h1 está em i, isso estimula j (em qualquer head que escute h1)"
+                        self.connections[h1, i, j] += self.c.learning_rate * 0.5
     
     # =========================================================================
     # DECAIMENTO
@@ -504,20 +556,98 @@ class MycelialReasoning:
 # INTEGRAÇÃO COM VQ-VAE
 # =============================================================================
 
+import sys
+import os
+# Add project root to path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
+from core.reasoning.vqvae.model import MonolithV13
+from core.reasoning.vqvae.model_wiki import MonolithWiki
+
 class MycelialVQVAE:
     """
-    Wrapper que integra MycelialReasoning com MonolithV13.
-    
-    Uso:
-        wrapper = MycelialVQVAE(vqvae_model)
-        indices = wrapper.encode(embedding)  # colapso inicial
-        new_indices = wrapper.reason(indices)  # colapso guiado
-        reconstructed = wrapper.decode(new_indices)
+    Wrapper integrating MycelialReasoning with VQ-VAE models.
+    Supports both wiki-trained (MonolithWiki) and original (MonolithV13) models.
     """
     
     def __init__(self, vqvae_model, mycelial_config: Optional[MycelialConfig] = None):
         self.vqvae = vqvae_model
         self.mycelial = MycelialReasoning(mycelial_config)
+        
+    @classmethod
+    def load_default(cls, model_path=None, use_wiki_model=True):
+        """
+        Load VQ-VAE model with automatic fallback.
+        
+        Args:
+            model_path: Explicit path to model weights (overrides auto-selection)
+            use_wiki_model: If True, try wiki-trained model first
+        
+        Priority:
+            1. Explicit model_path if provided
+            2. Wiki-trained model (MonolithWiki, 512D latent) if use_wiki_model=True
+            3. Old model (MonolithV13, 384D latent) as fallback
+        """
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        
+        # Define model paths
+        wiki_path = "data/monolith_v13_wiki_trained.pth"
+        old_path = "data/monolith_v13_trained.pth"
+        
+        # Determine which model to try
+        if model_path:
+            # Explicit path - assume old architecture
+            paths_to_try = [(model_path, "custom", "v13",384, 256)]
+        elif use_wiki_model:
+            # Try wiki first, then old
+            paths_to_try = [
+                (wiki_path, "wiki-trained (512D latent, 100% codebook usage)", "wiki", 512, 1024),
+                (old_path, "original (384D latent, 16% codebook usage)", "v13", 384, 256)
+            ]
+        else:
+            # Try old only
+            paths_to_try = [(old_path, "original (384D latent)", "v13", 384, 256)]
+        
+        # Try loading models in order
+        for path, description, model_type, latent_dim, hidden_dim in paths_to_try:
+            if os.path.exists(path):
+                try:
+                    logger.info(f"Attempting to load {description} from {path}...")
+                    
+                    # Instantiate model with correct architecture
+                    if model_type == "wiki":
+                        model = MonolithWiki(input_dim=384, hidden_dim=512)
+                    else:
+                        model = MonolithV13(
+                            input_dim=384, 
+                            hidden_dim=hidden_dim,
+                            latent_dim=latent_dim
+                        )
+                    
+                    # Load weights
+                    state_dict = torch.load(path, map_location=device, weights_only=False)
+                    model.load_state_dict(state_dict, strict=False)  # strict=False for wiki (has extra EMA buffers)
+                    
+                    logger.info(f"✅ VQ-VAE loaded successfully: {description}")
+                    logger.info(f"   Architecture: {model.__class__.__name__} (384D → {hidden_dim}D → {latent_dim}D latent)")
+                    
+                    model.to(device)
+                    model.eval()
+                    return cls(model)
+                    
+                except Exception as e:
+                    logger.warning(f"Failed to load {description}: {e}")
+                    logger.warning(f"Trying next option...")
+                    continue
+            else:
+                logger.debug(f"Model not found at {path}")
+        
+        # If all failed, create random model with default architecture
+        logger.warning("⚠️  No trained model found. Initializing with random weights (256D).")
+        model = MonolithV13(input_dim=384, hidden_dim=256)
+        model.to(device)
+        model.eval()
+        return cls(model)
     
     def encode(self, x: torch.Tensor) -> torch.Tensor:
         """Encode via VQ-VAE, retorna índices."""
@@ -561,6 +691,8 @@ class MycelialVQVAE:
             # Por enquanto, assumimos que o quantizer tem algo assim ou fazemos manualmente.
             
             # Hack: Se não tiver método direto, usamos o quantizer
+            if indices.dim() == 1:
+                indices = indices.unsqueeze(0)
             z_q = self.vqvae.quantizer.get_codes_from_indices(indices)
             return self.vqvae.decoder(z_q)
     

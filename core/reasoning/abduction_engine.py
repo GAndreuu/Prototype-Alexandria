@@ -15,6 +15,7 @@ from collections import defaultdict, deque
 from datetime import datetime
 import math
 import random
+import torch
 
 from .causal_reasoning import CausalEngine, CausalGraph
 from core.agents.action_agent import ActionAgent, ActionType
@@ -84,9 +85,11 @@ class AbductionEngine:
             engine = TopologyEngine()
             memory = SemanticFileSystem(engine)
             self.causal_engine = CausalEngine(engine, memory)
+            self.topology = engine
         except ImportError:
             # Fallback para demonstração
             self.causal_engine = None
+            self.topology = None
         self.hypotheses: Dict[str, Hypothesis] = {}
         self.knowledge_gaps: Dict[str, KnowledgeGap] = {}
         self.validation_tests: Dict[str, ValidationTest] = {}
@@ -501,15 +504,157 @@ class AbductionEngine:
             
         return evidence_score
     
+    def consolidate_knowledge(self, hypothesis: Dict) -> bool:
+        """
+        Consolida uma hipótese validada na memória neural (Self-Learning).
+        
+        Args:
+            hypothesis: Dict contendo 'source', 'target', 'relation'
+            
+        Returns:
+            Success bool
+        """
+        if hypothesis.get('validation_score', 0) < 0.7:
+            return False
+            
+        source_txt = hypothesis['source']
+        target_txt = hypothesis['target']
+        relation = hypothesis.get('relation', 'related')
+        
+        print(f"🧠 Consolidando conhecimento: {source_txt} -> {target_txt} ({relation})")
+        
+        try:
+            # 1. Obter embeddings (usando TopologyEngine ou SFS)
+            # Precisamos do vetor para passar pelo VQ-VAE
+            # O AbductionEngine tem acesso ao topology? Sim, self.topology
+            
+            vec_source = self.topology.encode([source_txt])[0]
+            vec_target = self.topology.encode([target_txt])[0]
+            
+            # 2. Converter para tensor
+            t_source = torch.tensor(vec_source).float()
+            t_target = torch.tensor(vec_target).float()
+            
+            # 3. Obter índices VQ-VAE
+            # Precisamos de uma instância do MycelialVQVAE.
+            # Se não tivermos, instanciamos (carrega pesos salvos)
+            from core.reasoning.mycelial_reasoning import MycelialVQVAE
+            
+            # Otimização: Manter instância em cache se possível
+            if not hasattr(self, '_neural_wrapper'):
+                self._neural_wrapper = MycelialVQVAE.load_default()
+                
+            indices_source = self._neural_wrapper.encode(t_source).cpu().numpy().flatten()
+            indices_target = self._neural_wrapper.encode(t_target).cpu().numpy().flatten()
+            
+            # 4. Aprender a transição (Hebbian Learning)
+            # Se for causal, aprendemos a sequência
+            if relation == 'causes':
+                self._neural_wrapper.mycelial.observe_sequence(indices_source, indices_target)
+            else:
+                # Se for apenas correlação, aprendemos a co-ocorrência (observamos ambos juntos?)
+                # Ou observamos a transição bidirecional
+                self._neural_wrapper.mycelial.observe_sequence(indices_source, indices_target)
+                self._neural_wrapper.mycelial.observe_sequence(indices_target, indices_source)
+                
+            # 5. Salvar estado
+            self._neural_wrapper.mycelial.save_state()
+            return True
+            
+        except Exception as e:
+            print(f"❌ Erro na consolidação neural: {e}")
+            return False
+
     def _check_co_occurrence(self, source: str, target: str) -> float:
-        """Verifica se source e target aparecem juntos nos documentos"""
-        # Implementação simplificada - usar dados reais do SFS no futuro
-        return random.uniform(0.1, 0.8)  # Placeholder
-    
+        """
+        Verifica se source e target aparecem juntos nos documentos usando LanceDB.
+        Realiza busca vetorial pelo 'source' e verifica presença do 'target' nos resultados.
+        """
+        if not self.causal_engine or not hasattr(self.causal_engine, 'memory'):
+            return 0.5  # Fallback se memória não estiver disponível
+            
+        try:
+            # Buscar documentos relevantes para o termo fonte
+            # Aumentamos o limit para ter uma amostra estatística melhor
+            results = self.causal_engine.memory.retrieve(source, limit=50)
+            
+            if not results:
+                return 0.1
+                
+            # Contar quantos resultados também contêm o termo alvo
+            co_occurrence_count = 0
+            target_lower = target.lower()
+            
+            for res in results:
+                content = res.get('content', '').lower()
+                if target_lower in content:
+                    co_occurrence_count += 1
+            
+            # Calcular score: proporção de documentos do source que contêm target
+            # Normalizamos para evitar scores muito baixos em corpus grandes
+            score = co_occurrence_count / len(results)
+            
+            # Boost: se score > 0, normalizar para 0.3-1.0
+            if score > 0:
+                score = 0.3 + (score * 0.7)
+                
+            return min(1.0, score)
+            
+        except Exception as e:
+            self.logger.warning(f"Erro ao verificar co-ocorrência real: {e}")
+            return 0.3
+
     def _check_temporal_sequence(self, source: str, target: str) -> float:
-        """Verifica se source aparece antes de target temporalmente"""
-        # Implementação simplificada - usar dados reais do SFS no futuro
-        return random.uniform(0.1, 0.8)  # Placeholder
+        """
+        Verifica se source aparece antes de target temporalmente.
+        Compara timestamps médios dos documentos recuperados.
+        """
+        if not self.causal_engine or not hasattr(self.causal_engine, 'memory'):
+            return 0.5
+            
+        try:
+            # Recuperar documentos para ambos os termos
+            source_docs = self.causal_engine.memory.retrieve(source, limit=20)
+            target_docs = self.causal_engine.memory.retrieve(target, limit=20)
+            
+            if not source_docs or not target_docs:
+                return 0.5
+                
+            # Função auxiliar para extrair timestamp
+            def get_timestamp(doc):
+                # Tentar pegar metadata 'created_at', 'published_date', 'timestamp' ou fallback para 'timestamp' do DB
+                meta = doc.get('metadata', {})
+                ts_str = meta.get('created_at') or meta.get('published_date') or meta.get('timestamp') or doc.get('timestamp')
+                
+                if ts_str:
+                    try:
+                        # Tentar parsing simples (ISO format)
+                        return datetime.fromisoformat(str(ts_str).replace('Z', '+00:00'))
+                    except:
+                        pass
+                return datetime.now() # Fallback se não tiver data
+
+            # Calcular média dos timestamps
+            source_dates = [get_timestamp(d).timestamp() for d in source_docs]
+            target_dates = [get_timestamp(d).timestamp() for d in target_docs]
+            
+            avg_source = np.mean(source_dates)
+            avg_target = np.mean(target_dates)
+            
+            # Se source é mais antigo que target (avg_source < avg_target), score alto
+            # Se forem iguais (mesma indexação), score neutro (0.5)
+            diff_seconds = avg_target - avg_source
+            
+            if abs(diff_seconds) < 86400: # Menos de 1 dia de diferença
+                return 0.5
+            elif diff_seconds > 0: # Target é mais novo (Source -> Target faz sentido temporalmente)
+                return 0.8
+            else: # Target é mais antigo (Source -> Target inverte causalidade temporal)
+                return 0.2
+                
+        except Exception as e:
+            self.logger.warning(f"Erro ao verificar sequência temporal real: {e}")
+            return 0.5
     
     def validate_hypothesis(self, hypothesis_id: str) -> bool:
         """

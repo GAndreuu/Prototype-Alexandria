@@ -1,0 +1,311 @@
+================================================================================
+SEMANTIC COLLISION ANALYSIS - 2025-11-30 21:05:31
+================================================================================
+
+DOMAIN A: thermodynamics
+DOMAIN B: neural
+
+Found 50 source documents from Domain A
+Identified 11 high-confidence bridges
+
+================================================================================
+BRIDGE ANALYSIS
+================================================================================
+
+BRIDGE #1 | Similarity: 0.539
+Source: Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf
+Target: Networks_of_neural_networks_more_is_different.pdf
+
+Text from Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf:
+"29
+in semi-inﬁnite, planar conﬁnement. The dimensionless free energy density of a nematic
+phase spatially conﬁned in a cylindrical geometry with planar anchoring conditions reads
+in the KKLZ-model as:......"
+
+Text from Networks_of_neural_networks_more_is_different.pdf:
+"References
+[1] P.W. Anderson. More is different: Broken symmetry and the nature of the hierarchical structure of
+science.Science, 177.4047:393–396, 1972.
+[2] B. Derrida. Can disorder induce several ph......"
+
+--------------------------------------------------------------------------------
+
+BRIDGE #2 | Similarity: 0.461
+Source: Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf
+Target: Stable_chaos_in_fluctuation_driven_neural_circuits.pdf
+
+Text from Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf:
+"29
+in semi-inﬁnite, planar conﬁnement. The dimensionless free energy density of a nematic
+phase spatially conﬁned in a cylindrical geometry with planar anchoring conditions reads
+in the KKLZ-model as:......"
+
+Text from Stable_chaos_in_fluctuation_driven_neural_circuits.pdf:
+"peak height of RT (∆ 0), suggesting that in the thermodynamic limit the value
+of these indicator will become inﬁnite, similarly to what found in the high con-
+nectivity limit for a binary neuronal mod......"
+
+--------------------------------------------------------------------------------
+
+BRIDGE #3 | Similarity: 0.454
+Source: Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf
+Target: Mechanisms_of_dimensionality_reduction_and_decorrelation_in_deep_neural_networks.pdf
+
+Text from Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf:
+"29
+in semi-inﬁnite, planar conﬁnement. The dimensionless free energy density of a nematic
+phase spatially conﬁned in a cylindrical geometry with planar anchoring conditions reads
+in the KKLZ-model as:......"
+
+Text from Mechanisms_of_dimensionality_reduction_and_decorrelation_in_deep_neural_networks.pdf:
+"7
+ 
+ 
+the additive term
+the additive term
+0
+0.2
+0.4
+0.6
+0.8
+1
+1.2
+ 
+ 
+layer index
+layer index
+0
+2
+4
+6
+8
+10
+g=0.8, 
+σ
+b
+=0.1
+FIG. 4: (Color online) The behavior of the additive term ( Kl
+1)2Υ as a func......"
+
+--------------------------------------------------------------------------------
+
+BRIDGE #4 | Similarity: 0.436
+Source: Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf
+Target: Efficient_coding_with_chaotic_neural_networks_A_journey_from_neuroscience_to_physics_and_back.pdf
+
+Text from Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf:
+"27
+a few nanometers [252]. The anchoring at the conﬁning walls, quantiﬁed by a surface
+ﬁeld, imposes a partial orientational, that is a partially nematic ordering of the conﬁned
+LCs, even at temperatu......"
+
+Text from Efficient_coding_with_chaotic_neural_networks_A_journey_from_neuroscience_to_physics_and_back.pdf:
+"Coding with chaotic networks 7
+Second-order (or continuous) transitions are particularly notable among phase
+transitions. These transitions are characterized by a continuous change in the
+order parame......"
+
+--------------------------------------------------------------------------------
+
+BRIDGE #5 | Similarity: 0.409
+Source: Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf
+Target: Neuromorphic_on-chip_reservoir_computing_with_spiking_neural_network_architectures.pdf
+
+Text from Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf:
+"25
+monoclinic transition is bypassed, and ethanol ﬁnally forms a glass state, with frozen-in
+translational, orientational, and perhaps also conformational disorder (a ”structural
+glass”). For intermed......"
+
+Text from Neuromorphic_on-chip_reservoir_computing_with_spiking_neural_network_architectures.pdf:
+"of the system remains constant over time. These fixed points occur when ( xn, yn) = (xn+1, yn+1),
+indicating an equilibrium state. In this case, the system exhibits regular behavior. As a is increased......"
+
+--------------------------------------------------------------------------------
+
+BRIDGE #6 | Similarity: 0.404
+Source: Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf
+Target: Effect_of_dilution_in_asymmetric_recurrent_neural_networks.pdf
+
+Text from Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf:
+"27
+a few nanometers [252]. The anchoring at the conﬁning walls, quantiﬁed by a surface
+ﬁeld, imposes a partial orientational, that is a partially nematic ordering of the conﬁned
+LCs, even at temperatu......"
+
+Text from Effect_of_dilution_in_asymmetric_recurrent_neural_networks.pdf:
+"symmetric networks are perfectly in agreement with theoretical values found by
+Tanaka & Edwards (1980). Thus the averaged number of length 1 cycles is not
+biased by the ﬁnite size eﬀects. In addition,......"
+
+--------------------------------------------------------------------------------
+
+BRIDGE #7 | Similarity: 0.390
+Source: Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf
+Target: Immunological_recognition_by_artificial_neural_networks.pdf
+
+Text from Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf:
+"36
+Figure 21. Illustration of molecules (left: linear hydrocarbons, right: polymers
+(Polyethylenoxide PEO)) freely diﬀusing in the core of a tubular pore in coexistence
+with a population of immobilise......"
+
+Text from Immunological_recognition_by_artificial_neural_networks.pdf:
+"15 
+ACKNOWLEDGEMENT  
+The study was supported by the Basic Science Research Program of the National Research Foundation 
+of Korea (NRF, www.nrf.re.kr), the Ministry of Education (2016R1D1A1B03932264) ......"
+
+--------------------------------------------------------------------------------
+
+BRIDGE #8 | Similarity: 0.367
+Source: Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf
+Target: Information_transmission_in_oscillatory_neural_activity.pdf
+
+Text from Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf:
+"47
+Figure 27.Optical interferometry experiment in order to address the inverse problem
+of capillary ﬁlling. a) Illustratoin of the experimental setup including a scanning
+electron microscopy image of ......"
+
+Text from Information_transmission_in_oscillatory_neural_activity.pdf:
+"Figure 2: Timing of retinogeniculate EPSPs and thalamic spikes recorded intracellularly from a
+single relay cell during the presentation of natural movies.A Rasters of timings of EPSPs for 7
+repeats o......"
+
+--------------------------------------------------------------------------------
+
+BRIDGE #9 | Similarity: 0.366
+Source: Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf
+Target: Graph_neural_networks_and_attention-based_CNN-LSTM_for_protein_classification.pdf
+
+Text from Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf:
+"33
+Figure 20. X-ray diﬀraction setup used for the reciprocal space mapping of LC-
+inﬁltrated alumina membranes (AAO) in the study by Zhang et al. [284]. The rotation
+angles Φ is the angle between the ......"
+
+Text from Graph_neural_networks_and_attention-based_CNN-LSTM_for_protein_classification.pdf:
+"2023/2/22 README
+file:///C:/Users/jhl/AppData/Local/Temp/mume2023122-38468-1aeha75.r5da.html 13/16
+GACLCPI
+Table 5 AUROC and AUPR
+Model AUROC AUPR
+kNN 0.860 0.931
+Logistic Regression 0.940 0.902
+Rando......"
+
+--------------------------------------------------------------------------------
+
+BRIDGE #10 | Similarity: 0.353
+Source: Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf
+Target: Robustly_overfitting_latents_for_flexible_neural_image_compression.pdf
+
+Text from Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf:
+"32
+Figure 19. (a) The optical birefringence of a discotic liquid crystal vs. temperature
+during cooling (blue) and subsequent heating (red) as a function of mean channel
+diameter variation from 8.5 nm......"
+
+Text from Robustly_overfitting_latents_for_flexible_neural_image_compression.pdf:
+"Table 2: True R-D loss for different τmax settings of:
+atanh(v), linear, cosine and SSL with a = 2.3. The lowest
+R-D loss per column is marked with: ↓. Note that the func-
+tion containing atanh is unn......"
+
+--------------------------------------------------------------------------------
+
+BRIDGE #11 | Similarity: 0.352
+Source: Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf
+Target: Interpretable_neural_architecture_search_and_transfer_learning_for_understanding_CRISPRCas9_off-targ.pdf
+
+Text from Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf:
+"11
+charge of the protein is zero. For example, Vinu et al. [158] studied the pH-dependent
+adsorption of horse heart cytochrome c a globular protein on SBA-15 and observed the
+highest pore loading at p......"
+
+Text from Interpretable_neural_architecture_search_and_transfer_learning_for_understanding_CRISPRCas9_off-targ.pdf:
+"[5] Kim, R.Q., Geurink, P.P., Mulder, M.P., Fish, A., Ekkebus, R., El Oualid, F.,
+Dijk, W.J., Dalen, D., Ovaa, H., Ingen, H., et al.: Kinetic analysis of multi-
+step usp7 mechanism shows critical role......"
+
+--------------------------------------------------------------------------------
+
+================================================================================
+TECHNICAL SYNTHESIS
+================================================================================
+
+# Cross-Domain Analysis: thermodynamics ↔ neural
+
+## 1. Direct Technical Connections
+
+- **Bridge #1 (53.9%)**: This connection links free energy density in confined nematic phases to the concept of "more is different" in hierarchical systems.
+    - **Source Concept**: Dimensionless free energy density of a nematic phase spatially confined in a cylindrical geometry with planar anchoring conditions, described by a KKLZ-model.
+    - **Target Concept**: The hierarchical structure of science and the principle that "more is different," potentially implying emergent properties in complex systems. Specifically referencing P.W. Anderson's work on broken symmetry.
+    - **Mathematical/Scientific Link**: Both domains discuss complex systems with emergent properties arising from the interactions of many components. The free energy density describes the energy landscape of a physical system, while "more is different" alludes to the emergent behaviors in complex networks due to many interconnected units. There is NO direct mathematical link provided.
+
+- **Bridge #2 (46.1%)**:  This connection links free energy density in confined nematic phases to the thermodynamic limit and high connectivity limits in neural networks.
+    - **Source Concept**: Dimensionless free energy density of a nematic phase spatially confined in a cylindrical geometry with planar anchoring conditions, described by a KKLZ-model.
+    - **Target Concept**: Behavior of indicator variables approaching infinity in the thermodynamic limit in highly connected neural networks.
+    - **Mathematical/Scientific Link**: Both areas consider a "thermodynamic limit" which is crucial. In soft matter physics, the thermodynamic limit applies to large systems, while in neural networks, it relates to the behavior of large, highly connected networks. Bridge 2 suggests that quantities in both approach infinity, pointing to similar mathematical treatments in stability analysis.
+
+- **Bridge #3 (45.4%)**: This connection links free energy density in confined nematic phases to an additive term related to layer index in deep neural networks.
+    - **Source Concept**: Dimensionless free energy density of a nematic phase spatially confined in a cylindrical geometry with planar anchoring conditions, described by a KKLZ-model.
+    - **Target Concept**: Behavior of an additive term ( Kl -1)2Υ as a function of layer index in deep neural networks.
+    - **Mathematical/Scientific Link**: There is NO apparent direct conceptual or mathematical link. Both are descriptions of complexity, but in vastly different contexts. One describes energy in a physical system, while the other describes the evolution of a quantity within layers of a network.
+
+- **Bridge #4 (43.6%)**: This connection links anchoring at confining walls in liquid crystals to phase transitions in chaotic neural networks.
+    - **Source Concept**: Anchoring at confining walls imposing partial nematic ordering of confined liquid crystals, even at temperatures that are normally isotropic.  This is quantified by a surface field.
+    - **Target Concept**: Second-order phase transitions in chaotic neural networks, characterized by a continuous change in the order parameter.
+    - **Mathematical/Scientific Link**: Both systems exhibit phase transitions, where the system's properties change qualitatively.  The anchoring in LCs can be seen as an external field influencing the "order" of the system. Similarly, in neural networks, control parameters affect the emergence of order (or chaos) within the network.  The concept of an "order parameter" is key here; a mathematical object whose value characterises the phase.
+
+- **Bridge #5 (40.9%)**: This connection links the formation of a structural glass state with frozen disorder in soft matter to equilibrium states in spiking neural networks.
+    - **Source Concept**: The formation of a glass state with frozen-in translational, orientational, and conformational disorder (a "structural glass") in ethanol.
+    - **Target Concept**: Fixed points in spiking neural networks, indicating an equilibrium state ( ( xn, yn) = (xn+1, yn+1) ).
+    - **Mathematical/Scientific Link**: Both describe systems settling into stable configurations. The glass state represents a non-equilibrium state, while the fixed point in the neural network represents an equilibrium state. However, both are associated with stability and fixed behavior under certain conditions.
+
+## 2. Quantitative Pattern Analysis
+
+*   **Mathematical Structures**:
+    *   The term "thermodynamic limit" appears as a method for evaluating both systems (Bridge 2).
+    *   The concept of an "order parameter" appears in relation to phase transition states (Bridge 4)
+*   **Conceptual Frameworks**:
+    *   **Phase Transition**: The notion of phase transition as a change in the qualitative behavior of a system appears in both the thermodynamics of soft matter and the dynamics of neural networks (Bridge 4).
+*   **Methodological Approaches**:
+    *   **Stability Analysis**: Both domains analyze the stability of states, either through free energy minimization or by identifying fixed points (Bridge 5).
+
+## 3. Novel Research Directions
+
+*   **Hypothesis 1**: The dynamics of neural networks near a critical point (e.g., onset of chaos) can be modeled using concepts from liquid crystal physics, specifically by mapping neural activity patterns to orientational order.
+    *   **Required Experimental Validation**: Simulate a recurrent neural network and measure the "order parameter" of its activity (e.g., using correlation functions or dimensionality reduction techniques). Compare this order parameter's behavior near a critical point to the behavior of orientational order parameters in liquid crystals as they undergo a phase transition.
+    *   **Expected Outcomes**: The order parameter in the neural network will exhibit similar scaling behavior and critical exponents as observed in liquid crystal phase transitions.
+
+*   **Hypothesis 2**: The "anchoring" concept in liquid crystals (where surface interactions constrain the system) can be analogously implemented in neural networks by biasing specific neurons or connections, thereby influencing the network's overall activity patterns.
+    *   **Required Experimental Validation**: Train a neural network on a task. Then, introduce a bias (e.g., increased firing rate or connection strength) to a subset of neurons (analogous to surface anchoring). Measure the effect of this bias on the network's performance and overall activity patterns.
+    *   **Expected Outcomes**: Biasing a small set of neurons will have a disproportionately large impact on the network's behavior, analogous to how surface anchoring influences the entire liquid crystal system (Bridge 4).
+
+*   **Hypothesis 3**: Neural networks, when subjected to external noise or perturbation, will exhibit aging phenomena similar to those observed in structural glasses.
+    *   **Required Experimental Validation**: Train a neural network. Subject the trained network to random noise or perturbations (e.g., randomly dropping connections or flipping bits in the weights).  Track the network's performance over time.
+    *   **Expected Outcomes**: The network's performance will degrade over time, exhibiting a logarithmic or stretched-exponential decay, mirroring the aging behavior of structural glasses. (Bridge 5)
+
+## 4. Citation Map
+
+*   **[Networks_of_neural_networks_more_is_different.pdf]**: Introduced the "more is different" concept, linking hierarchical structures to emergent behavior (Bridge 1).
+*   **[Stable_chaos_in_fluctuation_driven_neural_circuits.pdf]**: Examined the thermodynamic limit in neural networks, and that certain indicators go to infinity (Bridge 2).
+*   **[Efficient_coding_with_chaotic_neural_networks_A_journey_from_neuroscience_to_physics_and_back.pdf]**: Described second-order transitions in neural networks and the notion of a continuous order parameter (Bridge 4).
+*   **[Neuromorphic_on-chip_reservoir_computing_with_spiking_neural_network_architectures.pdf]**: Identified fixed points in spiking neural networks corresponding to equilibrium states (Bridge 5).
+*   **[Soft_matter_in_hard_confinement_phase_transition_thermodynamics_structure_texture_diffusion_and_flow.pdf]**: Provides the foundational thermodynamic and soft matter physics principles for confined systems (Bridges 1-5)
+
+
+================================================================================
+
+COLLISION STATISTICS
+================================================================================
+Total bridges identified: 11
+Unique target papers: 11
+Average similarity: 0.412
+Max similarity: 0.539
+Min similarity: 0.352
+
+Report saved to: C:\Users\G\Desktop\Alexandria\collision_report.txt

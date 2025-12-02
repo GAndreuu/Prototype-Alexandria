@@ -6,17 +6,9 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 import numpy as np
 
-# Importar o modelo da pasta v2
-# Assumindo que o script é rodado da raiz do projeto, o pythonpath deve permitir isso
-# Caso contrário, precisaremos ajustar sys.path
-try:
-    from v2.core.model import MonolithV13
-    from v2.core.loss import compute_orthogonal_loss, compute_vq_commitment_loss
-except ImportError:
-    # Fallback para quando rodando de dentro de core/ ou testes
-    import sys
-    sys.path.append(str(Path(__file__).parent.parent.parent))
-    from v2.core.model import MonolithV13
+from core.reasoning.vqvae.model import MonolithV13
+from core.reasoning.vqvae.loss import compute_orthogonal_loss, compute_vq_commitment_loss
+
 logger = logging.getLogger(__name__)
 
 class V2Learner:
@@ -31,9 +23,15 @@ class V2Learner:
     Data: 2025-11-28
     """
     
-    def __init__(self, model_path: str = "v2/monolith_v13_trained.pth", device: str = None):
+    def __init__(self, model_path: str = None, device: str = None):
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-        self.model_path = Path(model_path)
+        
+        # Paths
+        self.model_dir = Path("data")
+        self.model_path = self.model_dir / "monolith_v13_trained.pth"
+        if model_path:
+            self.model_path = Path(model_path)
+        
         self.model = MonolithV13().to(self.device)
         self.optimizer = optim.AdamW(self.model.parameters(), lr=1e-4)
         self.is_loaded = False

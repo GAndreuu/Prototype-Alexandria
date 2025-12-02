@@ -16,7 +16,7 @@ import logging
 import google.generativeai as genai
 from typing import List, Dict, Any, Optional
 from datetime import datetime
-from core.local_llm import LocalLLM
+from core.utils.local_llm import LocalLLM
 from config import settings
 
 # Configurar logging
