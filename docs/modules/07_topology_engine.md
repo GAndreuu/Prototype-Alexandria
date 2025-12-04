@@ -107,6 +107,10 @@ class TopologyEngine:
         return embeddings
 ```
 
+> [!TIP]
+> **Robust Fallback**: If `sentence-transformers` is unavailable or fails, the engine automatically falls back to generating **consistent deterministic embeddings** based on content hash. This ensures the system remains functional (e.g., for testing or in restricted environments) even without the heavy model loaded.
+
+
 **Performance**:
 - **Batch encoding**: ~500 chunks/second
 - **Single chunk**: ~2ms

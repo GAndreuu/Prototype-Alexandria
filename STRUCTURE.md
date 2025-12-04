@@ -22,8 +22,9 @@ alexandria/
 │   │   ├── train_mycelial.py
 │   │   └── train_vqvae.py
 │   ├── Testing:
-│   │   ├── test_*.py
-│   │   └── validate_*.py
+│   │   ├── integration_test.py
+│   │   ├── stress_test.py
+│   │   └── test_model_loading.py
 │   ├── Analysis:
 │   │   ├── analyze_*.py
 │   │   └── visualize_*.py
@@ -33,8 +34,10 @@ alexandria/
 │
 ├── 📂 tests/                   # Test suite
 │   ├── test_core.py
-│   ├── test_memory.py
-│   └── test_reasoning.py
+│   ├── test_mycelial.py
+│   ├── test_storage.py
+│   ├── test_v2_cycle.py
+│   └── test_viz.py
 │
 ├── 📂 data/                    # Data directory
 │   ├── library/                # Raw documents

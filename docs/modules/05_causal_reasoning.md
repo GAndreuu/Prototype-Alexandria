@@ -126,6 +126,9 @@ graph LR
 
 ### 1. Co-occurrence Analysis
 
+> [!NOTE]
+> **Heuristic Approach**: The current implementation relies on statistical heuristics (co-occurrence frequency and timestamp metadata) to infer potential causal links. It does not yet perform full causal discovery (e.g., PC algorithm).
+
 ```python
 def build_from_cooccurrence(documents):
     """

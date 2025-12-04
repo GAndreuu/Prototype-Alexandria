@@ -151,6 +151,10 @@ def execute_internal_learning(hypothesis):
     )
 ```
 
+> [!NOTE]
+> **Experimental Actions**: The agent also supports `MODEL_RETRAIN` and `DATA_GENERATION` actions. In the current phase, these use **Scikit-Learn on synthetic data** to validate the agent's planning capabilities without modifying the core Monolith weights.
+
+
 ---
 
 ## 🔄 Execution Pipeline

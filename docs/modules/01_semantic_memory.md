@@ -172,9 +172,12 @@ Loads and manages V11 Vision Encoder for image processing.
 ```python
 class VisionLoader:
     def load_model(self):
-        """Lazy-loads V11 Vision Encoder (863 lines)"""
-        from core.memory.v11_vision_encoder import MonolithV11VisionEncoder
-        self.v11_encoder = MonolithV11VisionEncoder()
+        """
+        Lazy-loads V11 Vision Encoder.
+        Uses V11VisionEncoderSimplified wrapper for robust integration.
+        """
+        from core.memory.v11_vision_encoder import V11VisionEncoderSimplified
+        self.v11_encoder = V11VisionEncoderSimplified()
 ```
 
 ### **ImageProcessor**
