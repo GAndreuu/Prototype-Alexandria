@@ -82,9 +82,9 @@ Each head has its own **codebook** of 256 vectors (128D each).
 
 ## 🔬 Training Results
 
-### Wiki-Trained Model (Current Production)
+### Modified Wiki Model (Current Production)
 
-**Training Data**: WikiText-103 (100M tokens)  
+**Training Data**: WikiText-103 (Modified Training)  
 **Epochs**: 20  
 **Final Metrics**:
 
@@ -268,6 +268,6 @@ orthogonal_loss = similarity(codebook_i, codebook_j)  # Heads stay diverse
 
 ---
 
-**Last Updated**: 2025-12-01  
-**Version**: MonolithWiki v1.0  
+**Last Updated**: 2025-12-04
+**Version**: Monolith Modified Wiki v3.1
 **Status**: Production (100% codebook usage)

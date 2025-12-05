@@ -3,7 +3,8 @@ import os
 from pathlib import Path
 import argparse
 from tqdm import tqdm
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
+import multiprocessing
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
@@ -11,28 +12,37 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 from core.memory.semantic_memory import SemanticFileSystem
 from core.topology.topology_engine import TopologyEngine
 
-def ingest_file_direct(sfs, file_path):
-    """Ingest a single file using SFS instance"""
+# Global instance for worker processes
+sfs_instance = None
+
+def init_worker():
+    """Initialize SFS in each worker process"""
+    global sfs_instance
+    print(f"🔧 Worker {os.getpid()} initializing...")
+    topology = TopologyEngine()
+    sfs_instance = SemanticFileSystem(topology)
+
+def ingest_file_direct(file_path):
+    """Ingest a single file using global SFS instance"""
+    global sfs_instance
     try:
         # Check if already indexed (optional optimization)
         # For now, we rely on SFS to handle duplicates or overwrite
         
-        chunks = sfs.index_file(str(file_path))
+        chunks = sfs_instance.index_file(str(file_path))
         return True, file_path.name, f"Indexed {chunks} chunks"
     except Exception as e:
         return False, file_path.name, str(e)
 
 def process_directory(directory_path, workers=4):
-    """Process directory directly using SemanticFileSystem"""
+    """Process directory directly using SemanticFileSystem with Multiprocessing"""
     path = Path(directory_path)
     if not path.exists():
         print(f"❌ Directory not found: {directory_path}")
         return
 
-    # Initialize Core Systems
-    print("🧠 Initializing Semantic Memory System...")
-    topology = TopologyEngine()
-    sfs = SemanticFileSystem(topology)
+    # Initialize Core Systems (Main Process just for scanning)
+    print("🧠 Initializing Main Process...")
     
     extensions = ['.pdf', '.txt', '.md']
     files = []
@@ -47,12 +57,16 @@ def process_directory(directory_path, workers=4):
     success_count = 0
     fail_count = 0
     
-    print(f"🚀 Starting direct ingestion with {workers} workers...")
+    # Pre-load existing files to skip duplicates (Need a temporary SFS or direct DB access)
+    # To avoid loading model in main process, we can just check LanceDB directly if possible, 
+    # or just let workers handle it (but that's slower). 
+    # Let's try to be efficient and check DB in main process without loading models.
     
-    # Pre-load existing files to skip duplicates
     print("📋 Checking existing index...")
     try:
-        existing_sources = set(sfs.storage.table.to_pandas()['source'].unique())
+        from core.memory.storage import LanceDBStorage
+        storage = LanceDBStorage()
+        existing_sources = set(storage.table.to_pandas()['source'].unique())
         print(f"✅ Found {len(existing_sources)} files already indexed.")
     except Exception as e:
         print(f"⚠️ Could not load existing index: {e}")
@@ -61,8 +75,6 @@ def process_directory(directory_path, workers=4):
     # Filter files
     files_to_process = []
     for f in files:
-        # Normalize path for comparison (LanceDB stores absolute paths usually)
-        # We try both absolute and name just in case
         abs_path = str(f.absolute())
         if abs_path not in existing_sources and f.name not in existing_sources:
              files_to_process.append(f)
@@ -74,8 +86,11 @@ def process_directory(directory_path, workers=4):
         print("✅ Nothing to do!")
         return
 
-    with ThreadPoolExecutor(max_workers=workers) as executor:
-        future_to_file = {executor.submit(ingest_file_direct, sfs, f): f for f in files_to_process}
+    print(f"🚀 Starting MULTIPROCESSING ingestion with {workers} workers...")
+    
+    # Use ProcessPoolExecutor
+    with ProcessPoolExecutor(max_workers=workers, initializer=init_worker) as executor:
+        future_to_file = {executor.submit(ingest_file_direct, f): f for f in files_to_process}
         
         with tqdm(total=len(files_to_process), desc="Ingesting") as pbar:
             for future in as_completed(future_to_file):
@@ -91,9 +106,12 @@ def process_directory(directory_path, workers=4):
     print(f"\n✅ Completed! Success: {success_count}, Failed: {fail_count}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Direct Mass Ingestion (No API required)")
+    # Windows support for multiprocessing
+    multiprocessing.freeze_support()
+    
+    parser = argparse.ArgumentParser(description="Direct Mass Ingestion (Multiprocessing)")
     parser.add_argument("directory", help="Directory to ingest")
-    parser.add_argument("--workers", type=int, default=4, help="Number of worker threads")
+    parser.add_argument("--workers", type=int, default=4, help="Number of worker processes")
     
     args = parser.parse_args()
     

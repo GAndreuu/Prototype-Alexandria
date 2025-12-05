@@ -31,7 +31,7 @@ graph TB
     end
     
     subgraph VQ-VAE
-        B[MonolithWiki Encoder]
+        B[Monolith FineWeb Encoder]
         C[Product Quantizer]
         D[4 Codes<br/>H1: 0-255<br/>H2: 0-255<br/>H3: 0-255<br/>H4: 0-255]
     end
@@ -344,6 +344,6 @@ class MycelialConfig:
 
 ---
 
-**Last Updated**: 2025-12-04  
-**Version**: 2.0 (Sparse Graph)  
+**Last Updated**: 2025-12-04
+**Version**: 3.1 (Modified Wiki Model)
 **Status**: Production

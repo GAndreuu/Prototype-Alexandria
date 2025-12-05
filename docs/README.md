@@ -22,7 +22,7 @@ Alexandria system documentation - organized by module.
 
 3. **[VQ-VAE Compression](./modules/03_vqvae.md)** 🧬 ✅
    - Product quantization
-   - Wiki-trained model (100% codebook usage)
+   - Modified Wiki Training (V3.1)
    - 384D → 4 bytes compression
    - **~200 lines** | Production
 
@@ -184,6 +184,6 @@ Each module document includes:
 
 ---
 
-**Last Updated**: 2025-12-01  
-**Project**: Alexandria v1.0  
-**Built in**: 5 days
+**Last Updated**: 2025-12-04
+**Project**: Alexandria v3.1
+**Status**: Production-ready cognitive AI system

@@ -11,7 +11,7 @@ from pathlib import Path
 from sklearn.decomposition import PCA
 
 # Adicionar raiz ao path
-sys.path.append(str(Path(__file__).parent.parent))
+sys.path.append(str(Path(__file__).parent.parent.parent))
 
 from core.memory.storage import LanceDBStorage
 

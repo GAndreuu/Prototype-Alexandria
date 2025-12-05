@@ -27,7 +27,7 @@ graph TB
     end
     
     subgraph Reasoning Layer
-        VQ[VQ-VAE<br/>MonolithWiki]
+        VQ[VQ-VAE<br/>Monolith Modified Wiki]
         MC[Mycelial Network<br/>128K observations]
         Abd[Abduction Engine]
         Caus[Causal Reasoning]
@@ -372,7 +372,6 @@ Current system is **foundation**. Next phases:
 
 ---
 
-**Last Updated**: 2025-12-01  
-**Version**: 1.0  
-**Built in**: 5 days  
+**Last Updated**: 2025-12-04
+**Version**: 3.1
 **Status**: Production-ready cognitive AI system

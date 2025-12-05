@@ -3,7 +3,7 @@ Quick script to count unique papers in LanceDB
 """
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 from core.memory.storage import LanceDBStorage
 
