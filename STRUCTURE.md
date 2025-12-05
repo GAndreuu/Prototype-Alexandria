@@ -8,7 +8,7 @@ alexandria/
 │   ├── agents/                 # Action & Critic agents
 │   ├── memory/                 # Semantic memory & storage
 │   ├── reasoning/              # Mycelial, Abduction, Causal reasoning
-│   │   └── vqvae/             # VQ-VAE models (MonolithV13, MonolithWiki)
+│   │   └── vqvae/             # VQ-VAE models
 │   ├── topology/               # Topology engine & clustering
 │   └── utils/                  # Utilities (harvester, LLM, logger)
 │
@@ -18,45 +18,21 @@ alexandria/
 │   └── app.py                  # Main application
 │
 ├── 📂 scripts/                 # Utility scripts
-│   ├── Training:
-│   │   ├── train_mycelial.py
-│   │   └── train_vqvae.py
-│   ├── Testing:
-│   │   ├── integration_test.py
-│   │   ├── stress_test.py
-│   │   └── test_model_loading.py
-│   ├── Analysis:
-│   │   ├── analyze_*.py
-│   │   └── visualize_*.py
-│   └── Automation:
-│       ├── auto_ingest.py
-│       └── mass_ingest.py
+│   ├── Training/               # train_*.py
+│   ├── Testing/                # test_*.py
+│   ├── Analysis/               # analyze_*.py
+│   └── ingestion/              # cycle_harvest.py, mass_ingest.py
 │
 ├── 📂 tests/                   # Test suite
-│   ├── test_core.py
-│   ├── test_mycelial.py
-│   ├── test_storage.py
-│   ├── test_v2_cycle.py
-│   └── test_viz.py
 │
 ├── 📂 data/                    # Data directory
 │   ├── library/                # Raw documents
 │   ├── lancedb/                # Vector database
-│   ├── mycelial_state.npz      # Mycelial network state
-│   ├── monolith_v13_trained.pth          # Old VQ-VAE (384D)
-│   ├── monolith_v13_wiki_trained.pth     # Wiki VQ-VAE (512D) ✨
-│   └── monolith_v13_wiki_codebooks.npz   # Wiki codebooks
-│
-├── 📂 reports/                 # Generated reports & visualizations
-│   ├── collision_report.txt
-│   ├── network_viz_3d.html
-│   └── system_health_dashboard.png
+│   ├── mycelial_state.pkl      # Mycelial network state
+│   └── monolith_v3_fineweb.pt  # VQ-VAE Model (Modified Wiki)
 │
 ├── 📂 docs/                    # Documentation
-│
-├── 📂 archive/                 # Deprecated/old files
-│   ├── next_passo_old/        # Old training experiments
-│   └── README_old.md          # Previous README
+│   └── modules/               # Component docs
 │
 ├── 📄 README.md               # Main documentation
 ├── 📄 requirements.txt        # Python dependencies
@@ -80,7 +56,21 @@ alexandria/
 - `vqvae/model_wiki.py` (108 lines) - Wiki-trained VQ-VAE ✨
 
 ### Agents (`core/agents/`)
-- `action_agent.py` (498 lines) - Action execution & validation
+- `action/` - **Refactored modular structure (v2.0.0)** ✨
+  - `__init__.py` - Public API exports
+  - `types.py` - Enums & dataclasses (ActionType, ActionStatus, EvidenceType)
+  - `security_controller.py` - API validation, rate limiting, audit logs
+  - `parameter_controller.py` - System parameter management
+  - `agent.py` - Main orchestrator (ActionAgent class)
+  - `test_simulator.py` - Hypothesis testing simulations
+  - `evidence_registrar.py` - Evidence registration in SFS
+  - `execution/` - Specialized action executors
+    - `api_executor.py` - HTTP API calls
+    - `model_executor.py` - ML model training
+    - `data_executor.py` - Synthetic data generation
+    - `simulation_executor.py` - Simulations & config changes
+- `action_agent.py` - **Deprecated wrapper** (backward compatibility)
+- `bridge_agent.py` (313 lines) - Knowledge gap bridging
 - `critic_agent.py` (312 lines) - Hypothesis criticism
 - `oracle.py` (267 lines) - Knowledge oracle
 
@@ -90,29 +80,22 @@ alexandria/
 ## 📊 Key Files
 
 ### Models
-- **monolith_v13_wiki_trained.pth** (7.9 MB) - Production VQ-VAE
-  - 512D latent space
+- **monolith_v3_fineweb.pt** (11.3 MB) - Production VQ-VAE
+  - Modified Wiki Training (V3.1)
+  - Orthogonal heads (No hub dominance)
   - 100% codebook usage
-  - Trained on WikiText
-  - Power-law distribution (α=1.6)
 
 ### State
-- **mycelial_state.npz** - Mycelial network weights
-  - 128K+ observations
-  - 2,252 active connections
-  - <1% density
+- **mycelial_state.pkl** - Mycelial network weights
+  - Sparse graph representation
+  - Hebbian connections
 
 ### Configuration
 - **config.py** - System settings
 - **.env** - API keys & secrets (git-ignored)
 - **requirements.txt** - 25 dependencies
 
-## 🗑️ Archived (Not in Use)
 
-Files moved to `archive/` folder:
-- `next_passo_old/` - Old training experiments
-- `monolith_wikitext_real_extracted/` - Raw training data
-- `README_old.md` - Previous documentation
 
 ## 🚀 Entry Points
 
@@ -165,6 +148,7 @@ User Query ← Results ← core/reasoning/mycelial_reasoning ← Propagation
 
 ---
 
-**Last Updated**: 2025-12-01  
-**Version**: 1.0  
-**Structure**: Production-ready, organized, archived legacy code
+**Last Updated**: 2025-12-04  
+**Version**: 3.1.1  
+**Structure**: Cleaned and optimized for production  
+**Recent Changes**: Action Agent refactored to modular structure (v2.0.0)
