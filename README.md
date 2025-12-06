@@ -1,6 +1,4 @@
-# Alexandria
-
-**Local-First Cognitive AI System with Self-Learning Capabilities**
+# 🏛️ Alexandria - Local AI Synthesis
 
 <div align="center">
 
@@ -8,451 +6,361 @@
 ![Python](https://img.shields.io/badge/python-3.10+-blue?style=for-the-badge&logo=python)
 ![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
 
-*Built in 5 days. Zero cloud dependencies. Truly autonomous.*
+**Síntese Local de IA através de Aprendizado Não-Supervisionado**
 
-[Features](#-features) • [Architecture](#-architecture) • [Quick Start](#-quick-start) • [Documentation](#-documentation)
+*A cognitive architecture for local, self-improving AI systems*
+
+[Objetivos](#-objetivos) • [Como Funciona](#-como-funciona) • [Teorias](#-fundamentos-teóricos) • [Documentação](#-documentação)
 
 </div>
 
 ---
 
-## 🎯 What is Alexandria?
+## 🎯 Objetivos
 
-Alexandria is a **production-ready cognitive AI system** that combines semantic memory, neural reasoning, and self-learning to create an intelligent local-first knowledge engine. Unlike cloud-based solutions, Alexandria runs entirely on your machine with **zero dependencies** on external services.
+Alexandria busca criar uma **síntese local de IA** através de:
 
-### Why Alexandria Exists
+1. **Autonomia Total**: Zero dependências de serviços cloud ou APIs externas
+2. **Aprendizado Contínuo**: Sistema que se aperfeiçoa com cada observação
+3. **Raciocínio Emergente**: Inteligência que surge de processos bio-inspirados simples
+4. **Transparência**: Visualização completa dos processos internos de decisão
+5. **Eficiência**: Compressão neural radical (96%) para operar localmente
 
-Big Tech wants your data in their cloud. Alexandria believes your intelligence should be **yours**.
-
-- ✅ **100% Local** - No cloud, no API calls, no data exfiltration
-- ✅ **Self-Learning** - Improves autonomously through Hebbian learning
-- ✅ **Transparent** - Visualize exactly how it reasons
-- ✅ **Hackable** - Modify anything, train on YOUR data
-- ✅ **Fast** - <50ms query latency, 1000 chunks/sec indexing
+**Visão**: Uma IA autônoma e auto-aperfeiçoante que roda na sua máquina, sem cloud, sem censura, sem custo operacional.
 
 ---
 
-## ⚡ Key Features
+## 📖 A História do Sistema
 
-### 🧠 **Semantic Memory**
-- **Multi-modal ingestion**: PDFs, text files, images
-- **LanceDB vector storage**: Sub-50ms similarity search  
-- **Intelligent chunking**: Paragraph-aware text segmentation
-- **Scalable**: Tested with 100K+ documents (~295MB RAM)
+Alexandria começou como um experimento em **composicionalidade semântica**: será que códigos discretos podem raciocinar como embeddings contínuos?
 
-### 🍄 **Mycelial Reasoning**
-- **Hebbian learning**: "Neurons that fire together, wire together"
-- **100% codebook usage**: Wiki-trained VQ-VAE with perfect distribution (α=1.6)
-- **Activation propagation**: Multi-step semantic spreading
-- **Hub detection**: Automatic discovery of concept bridges
+A resposta foi surpreendente: **sim, mas de forma fundamentalmente diferente**.
 
-### 🔮 **Abductive Engine**  
-- **Gap detection**: Identifies missing knowledge automatically
-- **Hypothesis generation**: Creates testable theories to fill gaps
-- **Self-validation**: Multi-stage testing pipeline
-- **Neural consolidation**: Validated knowledge → neural weights
+### Evolução
 
-### 🧬 **VQ-VAE Compression**
-- **96% compression**: 384D embeddings → 4 bytes
-- **Product quantization**: 4 heads × 256 codes = 1024 tokens
-- **Lossless reconstruction**: 0.0025 MSE after 20 epochs
-- **Power-law distribution**: Zipf-compliant code usage
+1. **Fase I**: RAG básico com LanceDB
+2. **Fase II**: VQ-VAE para compressão neural
+3. **Fase III**: Mycelial Network (Hebbian learning)
+4. **Fase IV**: Nemesis Core (Active Inference + Predictive Coding)
+5. **Fase Atual**: Integração completa e otimização
+
+Hoje, Alexandria é um sistema cognitivo completo que combina 6 paradigmas teóricos em uma arquitetura unificada.
 
 ---
 
-## 🏗️ Architecture
+## 🧠 Como Funciona
+
+### Arquitetura Completa
 
 ```mermaid
 graph TB
-    subgraph Input[" 📥 INPUT LAYER "]
-        A[Documents/Images]
+    subgraph Input["📥 INTERFACE DE ENTRADA"]
+        A[Documentos/Imagens]
+        B[Queries do Usuário]
     end
     
-    subgraph Process[" ⚙️ PROCESSING LAYER "]
-        B[File Router]
-        C[Text: SentenceTransformer]
-        D[Images: V11 Vision Encoder]
+    subgraph Processing["⚙️ PROCESSAMENTO MULTIMODAL"]
+        C[Sentence Transformer]
+        D[V11 Vision Encoder]
         E[384D Embeddings]
     end
     
-    subgraph Memory[" 🗄️ MEMORY LAYER "]
-        F[LanceDB Storage]
-        G[VQ-VAE Compression]
-        H[4-byte Codes]
+    subgraph Compression["�️ COMPRESSÃO NEURAL"]
+        F[VQ-VAE Monolith V13]
+        G[Product Quantizer]
+        H[4 bytes/chunk]
+        I[4 heads × 256 codes]
     end
     
-    subgraph Reasoning[" 🧠 REASONING LAYER "]
-        I[Mycelial Network]
-        J[Hebbian Learning]
-        K[Activation Propagation]
+    subgraph Memory["🗄️ MEMÓRIA SEMÂNTICA"]
+        J[LanceDB Vector Store]
+        K[193k documents indexed]
     end
     
-    subgraph Intelligence[" 🎯 INTELLIGENCE LAYER "]
-        L[Abduction Engine]
-        M[Hypothesis Generation]
-        N[Self-Validation]
+    subgraph Reasoning["🍄 RACIOCÍNIO MICELAR"]
+        L[Mycelial Network]
+        M[638k Hebbian Connections]
+        N[Activation Propagation]
     end
     
-    A --> B
-    B --> C & D
-    C & D --> E
+    subgraph Nemesis["🧬 NEMESIS CORE"]
+        O[Active Inference Agents]
+        P[Predictive Coding]
+        Q[Free Energy Minimization]
+    end
+    
+    subgraph Intelligence["🎯 CAMADA DE INTELIGÊNCIA"]
+        R[Abduction Engine]
+        S[Causal Reasoning]
+        T[Meta-Hebbian Plasticity]
+    end
+    
+    subgraph Output["📤 SAÍDA"]
+        U[Respostas Enriquecidas]
+        V[Hipóteses Geradas]
+        W[Ações Autônomas]
+    end
+    
+    A --> C
+    A --> D
+    B --> J
+    C --> E
+    D --> E
     E --> F
     F --> G
     G --> H
     H --> I
     I --> J
-    J --> K
-    K --> L
+    J --> L
     L --> M
     M --> N
+    N --> O
+    O --> P
+    P --> Q
+    Q --> R
+    R --> S
+    S --> T
+    T --> U
+    T --> V
+    T --> W
     
     style Input fill:#e3f2fd
-    style Process fill:#fff3e0
+    style Processing fill:#fff3e0
+    style Compression fill:#f3e5f5
     style Memory fill:#e8f5e9
-    style Reasoning fill:#f3e5f5
-    style Intelligence fill:#fce4ec
+    style Reasoning fill:#fce4ec
+    style Nemesis fill:#fff9c4
+    style Intelligence fill:#e0f2f1
+    style Output fill:#fce4ec
 ```
 
-### Data Flow
+### Fluxo de Dados
 
 ```
-1. INGEST → Document chunked (~1000 chars/chunk)
-2. EMBED → Sentence-Transformer (384D vectors)
-3. COMPRESS → VQ-VAE (4 bytes per chunk)
-4. STORE → LanceDB (indexed vector DB)
-5. OBSERVE → Mycelial network learns patterns
-6. QUERY → Semantic search + reasoning
-7. REASON → Activation propagation enhances results
-8. LEARN → Abduction engine fills knowledge gaps
+1. INGESTÃO
+   └─> Document → Chunking (~1000 chars) → Embedding (384D)
+
+2. COMPRESSÃO
+   └─> Embedding → VQ-VAE → 4 bytes (96% compression)
+
+3. ARMAZENAMENTO
+   └─> LanceDB indexing + Mycelial observation
+
+4. RACIOCÍNIO
+   ├─> Semantic Search (LanceDB)
+   ├─> Hebbian Propagation (Mycelial)
+   └─> Active Inference (Nemesis)
+
+5. SÍNTESE
+   ├─> Abduction (Gap detection)
+   ├─> Causal Reasoning (Graph construction)
+   └─> Meta-Hebbian Plasticity (Self-optimization)
+
+6. AÇÃO
+   └─> Response | Hypothesis | Autonomous Action
 ```
 
 ---
 
-## 📊 Performance Metrics
+## � Fundamentos Teóricos
 
-| Operation | Performance | Notes |
-|-----------|-------------|-------|
-| **Indexing** | 1,000 chunks/sec | Text documents |
-| **Image Processing** | 5-10 images/sec | V11 Vision Encoder |
-| **Vector Search** | <50ms (p99) | Top-10 results |
-| **Mycelial Propagation** | <15ms (p99) | 3-step spreading |
-| **Full Pipeline** | <300ms (p99) | Query → Results |
-| **Storage Efficiency** | ~3KB/document | 85% compression |
+Alexandria combina múltiplas teorias de neurociência computacional e IA:
 
-### Scalability
+### 1. **Hebbian Learning** (Donald Hebb, 1949)
+> *"Neurons that fire together, wire together"*
 
-| Documents | RAM Usage | Query Latency (p99) |
-|-----------|-----------|---------------------|
+- **Aplicação**: Mycelial Network aprende co-ocorrências de códigos VQ-VAE
+- **Vantagem**: Não-supervisionado, online, biologicamente plausível
+- **Status**: 638,130 conexões ativas, densidade <1%
+
+### 2. **Free Energy Principle** (Karl Friston, 2010)
+> Sistemas inteligentes minimizam surpresa variacional
+
+- **Aplicação**: Nemesis Core usa Active Inference para seleção de ações
+- **Vantagem**: Framework unificado para percepção, ação e aprendizado
+- **Status**: Operacional com overflow warnings esperados
+
+### 3. **Predictive Coding** (Rao & Ballard, 1999)
+> Cérebros são máquinas preditivas que minimizam erro
+
+- **Aplicação**: Hierarquia de 5 camadas prediz embeddings
+- **Vantagem**: Compressão + predição em uma única arquitetura
+- **Status**: 4 camadas construídas (384→256→128→64→32)
+
+### 4. **Vector Quantization** (VQ-VAE, van den Oord, 2017)
+> Compressão neural via codebook discreto
+
+- **Aplicação**: Monolith V13 com 4 heads × 256 codes
+- **Vantagem**: 96% compression mantendo reconstrução (MSE 0.0021)
+- **Status**: 255/256 códigos ativos, Head 0 dominante (67%)
+
+### 5. **Abductive Reasoning** (Charles Peirce, 1878)
+> Inferência à melhor explicação
+
+- **Aplicação**: Detecção automática de gaps e geração de hipóteses
+- **Vantagem**: Expansão autônoma de conhecimento
+- **Status**: Gap detection operacional
+
+### 6. **Meta-Learning** (Schmidhuber, 1987)
+> Aprender a aprender
+
+- **Aplicação**: Meta-Hebbian ajusta taxas de plasticidade dinamicamente
+- **Vantagem**: Auto-otimização sem intervenção manual
+- **Status**: Implementado, em teste
+
+---
+
+## 🏗️ Módulos Principais
+
+### VQ-VAE (Neural Compression)
+**Arquivo**: `core/reasoning/vqvae/`
+
+- **Monolith V13**: 4 heads, 256 codes/head, 384D → 4 bytes
+- **Head Balance Regularization**: Previne colapso de codebook
+- **Status**: ✅ Produção (epoch 20, codebook 99.6% ativo)
+
+### Mycelial Network (Hebbian Reasoning)
+**Arquivo**: `core/reasoning/mycelial_reasoning.py`
+
+- **638,130 conexões** aprendidas via Hebb
+- **Propagação**: 3-5 steps para enriquecer queries
+- **Status**: ✅ Saudável (densidade <1%, hubs emergentes)
+
+### Nemesis Core (Active Inference)
+**Arquivos**: `core/learning/`
+
+- **Active Inference**: Scout, Judge, Weaver agents
+- **Predictive Coding**: 5-layer hierarchical prediction
+- **Free Energy**: Governança top-level
+- **Status**: ✅ Operacional (warnings numéricos esperados)
+
+### LanceDB (Vector Storage)
+**Arquivo**: `core/memory/storage.py`
+
+- **193,502 documentos** indexados
+- **Busca**: <50ms (p99) para top-10
+- **Status**: ✅ Operacional
+
+---
+
+## 📊 Métricas de Performance
+
+| Operação | Performance | Notas |
+|:---|:---:|:---|
+| **Indexação** | 1,000 chunks/s | Batch processing |
+| **Busca Vetorial** | <50ms (p99) | Top-10 resultados |
+| **Propagação Micelar** | <15ms | 3 steps |
+| **Compressão VQ-VAE** | 96% | 384D → 4 bytes |
+| **Codebook Ativo** | 99.6% | 255/256 codes |
+| **Conexões Hebbian** | 638,130 | Densidade <1% |
+
+### Escalabilidade
+
+| Documentos | RAM | Query Latency |
+|:---:|:---:|:---:|
 | 10K | 30 MB | 50ms |
 | 100K | 295 MB | 80ms |
 | 1M | 2.8 GB | 150ms |
 
 ---
 
-## 🚀 Quick Start
+## 📚 Documentação
 
-### Prerequisites
+A documentação completa está organizada em `docs/`:
 
-- Python 3.10+
-- 4GB RAM (8GB recommended)
-- 2GB disk space
-
-### Installation
-
-```bash
-# Clone repository
-git clone https://github.com/yourusername/alexandria.git
-cd alexandria
-
-# Create virtual environment
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Initialize system
-python scripts/init_brain.py
+```
+docs/
+├── SYSTEM_OVERVIEW.md    # Visão geral da arquitetura
+├── modules/               # Documentação por módulo
+├── reports/               # Relatórios de análise
+└── tutorials/             # Tutoriais passo-a-passo
 ```
 
-### Basic Usage
+**Relatórios Técnicos** (gerados automaticamente):
+- VQ-VAE Deep Analysis
+- Experimental Ablation Suite (A-D)
+- Module Integration Status
+- Cleanup Reports
 
-```python
+---
+
+## � Quick Start
+
+```bash
+# Clone
+git clone https://github.com/GAndreuu/Prototype-Alexandria.git
+cd Alexandria
+
+# Setup
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+
+# Initialize
+python scripts/init_brain.py
+
+# Index documents
 from core.memory.semantic_memory import SemanticFileSystem
 from core.topology.topology_engine import TopologyEngine
 
-# Initialize
 engine = TopologyEngine()
 memory = SemanticFileSystem(engine)
+memory.index_file("path/to/document.pdf")
 
-# Index documents
-chunks = memory.index_file("path/to/document.pdf")
-print(f"✅ Indexed {chunks} chunks")
-
-# Semantic search
-results = memory.retrieve(
-    query="quantum computing applications",
-    limit=10
-)
-
-for result in results:
-    print(f"[{result['relevance']:.3f}] {result['content'][:100]}...")
+# Query
+results = memory.retrieve("quantum computing", limit=10)
 ```
 
-### Launch UI
-
+**Interface**:
 ```bash
 streamlit run interface/app.py
-```
-
-Access at `http://localhost:8501`
-
----
-
-## 🧩 Core Modules
-
-### 1. **Semantic Memory** (`core/memory/`)
-
-Multi-modal indexing with LanceDB backend.
-
-```python
-class SemanticFileSystem:
-    def index_file(file_path: str) -> int
-    def retrieve(query: str, limit: int = 10) -> List[Dict]
-    def get_stats() -> Dict
-```
-
-**Features:**
-- Paragraph-aware chunking
-- OCR support for scanned PDFs
-- Image embedding via V11 encoder
-- IVF-PQ approximate nearest neighbors
-
-### 2. **Mycelial Reasoning** (`core/reasoning/mycelial_reasoning.py`)
-
-Hebbian learning network over VQ-VAE codebook.
-
-```python
-class MycelialReasoning:
-    def observe(indices: np.ndarray) -> None
-    def propagate(indices: np.ndarray, steps: int = 3) -> np.ndarray
-    def reason(indices: np.ndarray) -> Tuple[np.ndarray, np.ndarray]
-    def get_network_stats() -> Dict
-```
-
-**Algorithm:**
-```python
-# Simplified Hebbian update
-for observation in data:
-    for i, j in code_pairs:
-        connections[i, j] += learning_rate  # Strengthen co-occurring codes
-    connections *= (1 - decay_rate)  # Decay unused connections
-```
-
-**Metrics:**
-- 128K+ observations trained
-- <1% network density (sparse & efficient)
-- 2,252 active connections
-- 20 hub codes identified
-
-### 3. **Abduction Engine** (`core/reasoning/abduction_engine.py`)
-
-Automatic hypothesis generation for knowledge expansion.
-
-```python
-class AbductionEngine:
-    def detect_knowledge_gaps() -> List[KnowledgeGap]
-    def generate_hypotheses(max_hypotheses: int = 10) -> List[Hypothesis]
-    def validate_hypothesis(hypothesis_id: str) -> bool
-    def run_abduction_cycle() -> Dict
-```
-
-**Capabilities:**
-- Orphaned cluster detection
-- Missing connection identification  
-- Broken chain discovery
-- Multi-stage hypothesis validation
-
-### 4. **VQ-VAE Neural Core** (`core/reasoning/vqvae/`)
-
-Product quantization for semantic compression.
-
-**Architecture (MonolithWiki):**
-```
-Input (384D) 
-  → Encoder (384D → 1024D → 512D)
-  → Quantizer (4 heads × 256 codes × 128D)
-  → Decoder (512D → 1024D → 384D)
-  → Output (384D)
-```
-
-**Training Results:**
-- Final loss: 0.0025 (excellent)
-- Codebook usage: 100% (all 1024 codes used)
-- Power-law α: 1.58-1.63 (ideal distribution)
-- R² fit: 0.92-0.95 (Zipf-compliant)
-
----
-
-## 📚 System Statistics
-
-```
-Codebase:
-├─ Python files: 73
-├─ Lines of code: ~15,000+
-├─ Core modules: 6
-├─ Test coverage: 80%+
-└─ Dependencies: 25 libraries
-
-Performance:
-├─ Mycelial observations: 128,692
-├─ Active connections: 2,252
-├─ Network density: 0.86%
-├─ Storage efficiency: 85% compression
-└─ Codebook usage: 100%
+# Access: http://localhost:8501
 ```
 
 ---
 
-## 🎨 Interface
+## �️ Roadmap
 
-Alexandria includes a Streamlit-based UI with 5 pages:
-
-1. **Dashboard** 🧠 - System health & statistics
-2. **Mycelial Brain** 🍄 - Network visualization  
-3. **Knowledge Graph** 🕸️ - Causal relationships
-4. **Abduction** 🔮 - Hypothesis generation
-5. **Collider** 💥 - Semantic collision experiments
-
----
-
-## 🔬 Advanced Features
-
-### Mycelial Configuration
-
-```python
-from core.reasoning.mycelial_reasoning import MycelialConfig
-
-config = MycelialConfig(
-    num_heads=4,
-    codebook_size=256,
-    learning_rate=0.01,
-    decay_rate=0.001,
-    propagation_steps=5,
-    connection_threshold=0.05
-)
-```
-
-### Multi-Modal Search
-
-```python
-# Search across text AND images
-results = memory.retrieve(
-    query="neural network architecture",
-    modality_filter=None,  # Search both text and images
-    limit=20
-)
-```
-
-### Batch Processing
-
-```bash
-# Bulk ingest directory
-python scripts/mass_ingest.py --directory ./papers --workers 4
-
-# Auto-harvest from arXiv
-python scripts/auto_ingest.py --query "machine learning" --max-results 100
-```
-
----
-
-## 🛠️ Technical Deep-Dive
-
-### Why VQ-VAE?
-
-Traditional RAG systems store full 384D embeddings (~1.5KB each). With 1M documents:
-- **Without compression**: 1.5 GB RAM
-- **With VQ-VAE**: 60 MB RAM (96% savings)
-
-Plus, VQ-VAE codes enable **discrete reasoning** via the mycelial network.
-
-### Why Hebbian Learning?
-
-Unlike backpropagation (requires labels), Hebbian learning is:
-- **Unsupervised**: Learns from observation patterns
-- **Online**: Updates with every new document  
-- **Biological**: Mimics how brains form associations
-- **Efficient**: O(h²) per observation (h=4 heads)
-
-### Why Local-First?
-
-1. **Privacy**: Your data never leaves your machine
-2. **Cost**: Zero cloud bills ($0 vs $700/month for Pinecone)
-3. **Speed**: No network latency
-4. **Control**: Modify anything, no vendor lock-in
-5. **Reliability**: Works offline
-
----
-
-## 🚧 Roadmap
-
-### Phase 1: Enhanced Reasoning (Current)
-- [x] Semantic memory system
+### ✅ Fase Atual: Production Ready
+- [x] VQ-VAE compression & balance
 - [x] Mycelial reasoning network
-- [x] VQ-VAE compression
-- [x] Abductive engine
-- [ ] Chain-of-thought integration
+- [x] Nemesis Core integration
+- [x] Complete system verification
+
+### 🔄 Próxima Fase: Enhanced Intelligence
+- [ ] Chain-of-Thought integration
+- [ ] Local LLM integration (Llama 3)
+- [ ] Tool use framework
 - [ ] Self-reflection loops
 
-### Phase 2: Autonomous Actions
-- [ ] Local LLM integration (Llama3)
-- [ ] Tool use framework
-- [ ] Planning module (MCTS)
-- [ ] Self-modification capability
-
-### Phase 3: Meta-Learning
-- [ ] Performance tracking
-- [ ] Automated experimentation
+### 🌟 Fase Futura: Meta-Learning
+- [ ] Performance tracking dashboard
+- [ ] Automated hyperparameter search
 - [ ] Curriculum generation
 - [ ] Multi-task learning
 
 ---
 
-## 🤝 Contributing
+## 🤝 Contribuindo
 
-Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
----
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details.
+Alexandria é open-source e aceita contribuições! Veja [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
-## 🙏 Acknowledgments
+## � Licença
 
-- **LanceDB** - High-performance vector storage
-- **SentenceTransformers** - Semantic embeddings
-- **Streamlit** - Beautiful UI framework
-- **PyTorch** - Neural network backend
-
----
-
-## 📞 Contact
-
-- **Email**: [gabrielandreu82@hotmail.com](mailto:gabrielandreu82@hotmail.com)
-- **GitHub Issues**: [Report bugs](https://github.com/GAndreuu/Prototype-Alexandria/issues)
-- **Discussions**: [Ask questions](https://github.com/GAndreuu/Prototype-Alexandria/discussions)
+MIT License - Veja [LICENSE](LICENSE) para detalhes.
 
 ---
 
 <div align="center">
 
-**Built with 🧠 in 5 days**
+**Alexandria Cognitive System**
 
-*Making AGI local, one commit at a time*
+*Building local AGI, one commit at a time*
 
-⭐ Star us if Alexandria helps your research!
+⭐ Star se Alexandria ajudou sua pesquisa!
+
+**Contato**: [gabrielandreu82@hotmail.com](mailto:gabrielandreu82@hotmail.com)
 
 </div>

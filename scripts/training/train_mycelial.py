@@ -31,7 +31,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Adicionar path do projeto
-PROJECT_ROOT = Path(__file__).parent.parent
+# Adicionar path do projeto
+PROJECT_ROOT = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 
@@ -60,7 +61,7 @@ SemanticMemory = safe_import('core.memory.semantic_memory', 'SemanticMemory')
 SemanticFileSystem = safe_import('core.memory.semantic_memory', 'SemanticFileSystem')
 
 # Tentar importar VQ-VAE
-MonolithV13 = safe_import('v2.monolith_v13', 'MonolithV13')
+MonolithV13 = safe_import('core.reasoning.vqvae.model', 'MonolithV13')
 
 # Tentar importar modelo de embedding
 try:
@@ -87,7 +88,7 @@ class TrainConfig:
     
     # Paths
     data_path: str = "data/semantic_memory.db"
-    vqvae_path: str = "models/monolith_v13.pt"
+    vqvae_path: str = "data/monolith_v13_trained.pth"
     mycelial_path: str = "data/mycelial_state.npz"
     report_path: str = "reports/mycelial_analysis.json"
     
@@ -198,6 +199,13 @@ class DataLoader:
                 self.embeddings = np.load(str(emb_path))
                 logger.info(f"Carregado {len(self.embeddings)} embeddings de numpy")
                 return len(self.embeddings)
+            
+            # Check training_embeddings.npy
+            train_emb_path = PROJECT_ROOT / "data" / "training_embeddings.npy"
+            if train_emb_path.exists():
+                self.embeddings = np.load(str(train_emb_path))
+                logger.info(f"Carregado {len(self.embeddings)} embeddings de training_embeddings.npy")
+                return len(self.embeddings)
                 
             # Tentar .npz
             npz_path = PROJECT_ROOT / "data" / "embeddings.npz"
@@ -273,7 +281,9 @@ class Encoder:
             return
         
         try:
-            self.vqvae = MonolithV13.load(str(vqvae_path))
+            self.vqvae = MonolithV13()
+            state = torch.load(str(vqvae_path), map_location='cpu')
+            self.vqvae.load_state_dict(state)
             self.vqvae.eval()
             logger.info("VQ-VAE carregado com sucesso")
         except Exception as e:
@@ -430,10 +440,15 @@ class MycelialTrainer:
         # Análise adicional
         stats = analysis['network_stats']
         
+        density_val = stats['density']
+        is_sparse = True
+        if isinstance(density_val, (float, int)):
+            is_sparse = density_val < 0.1
+        
         analysis['health'] = {
-            'is_sparse': stats['density'] < 0.1,
+            'is_sparse': is_sparse,
             'has_hubs': len(analysis['hubs']) > 0,
-            'has_connections': stats['active_connections'] > 0,
+            'has_connections': stats['active_edges'] > 0,
             'observations_sufficient': stats['total_observations'] >= 100,
         }
         
@@ -441,13 +456,37 @@ class MycelialTrainer:
         
         # Distribuição de grau por head
         analysis['degree_distribution'] = {}
+        # Distribuição de grau por head (Sparse)
+        analysis['degree_distribution'] = {}
+        degrees_per_head = {h: [] for h in range(4)}
+        
+        # Coletar graus
+        for (head, code), neighbors in self.mycelial.graph.items():
+             # Contar vizinhos fortes > 0.05
+             degree = sum(1 for w in neighbors.values() if w > 0.05)
+             if 0 <= head < 4:
+                 degrees_per_head[head].append(degree)
+        
         for h in range(4):
-            degrees = np.sum(self.mycelial.connections[h] > 0.05, axis=1)
+            degs = degrees_per_head[h]
+            if not degs:
+                degs = [0]
+            
             analysis['degree_distribution'][f'head_{h}'] = {
-                'mean': float(np.mean(degrees)),
-                'max': int(np.max(degrees)),
-                'nonzero': int(np.sum(degrees > 0)),
+                'mean': float(np.mean(degs)),
+                'max': int(np.max(degs)),
+                'nonzero': int(sum(1 for d in degs if d > 0)),
             }
+            
+        # Active codes per head calculation
+        stats['active_codes_per_head'] = [0] * 4
+        for (head, code) in self.mycelial.graph.keys():
+            if 0 <= head < 4:
+                stats['active_codes_per_head'][head] += 1
+
+        # Key mapping for backward compatibility
+        stats['mean_connection_strength'] = stats.get('mean_weight', 0.0)
+        stats['max_connection_strength'] = stats.get('max_weight', 0.0)
         
         return analysis
     
@@ -482,8 +521,11 @@ def print_analysis(analysis: Dict):
     stats = analysis['network_stats']
     print(f"\n📊 Estatísticas Gerais:")
     print(f"   Observações: {stats['total_observations']:,}")
-    print(f"   Conexões ativas: {stats['active_connections']:,}")
-    print(f"   Densidade: {stats['density']:.4%}")
+    print(f"   Conexões ativas: {stats['active_edges']:,}")
+    if isinstance(stats['density'], (float, int)):
+        print(f"   Densidade: {stats['density']:.4%}")
+    else:
+        print(f"   Densidade: {stats['density']}")
     print(f"   Força média: {stats['mean_connection_strength']:.4f}")
     print(f"   Força máxima: {stats['max_connection_strength']:.4f}")
     
@@ -494,12 +536,14 @@ def print_analysis(analysis: Dict):
     print(f"\n🏆 Top 10 Hubs:")
     for hub in analysis['hubs'][:10]:
         print(f"   Head {hub['head']}, Code {hub['code']:3d}: "
-              f"degree={hub['total_degree']:3d}, ativações={hub['activation_count']:,}")
+              f"degree={hub['degree']:3d}, ativações={hub['activations']:,}")
     
     print(f"\n⚡ Top 10 Conexões:")
     for conn in analysis['top_connections'][:10]:
-        print(f"   Head {conn['head']}: {conn['from']:3d} → {conn['to']:3d} "
-              f"(força: {conn['strength']:.4f})")
+        # Sparse graph uses tuples (head, code)
+        h1, c1 = conn['from']
+        h2, c2 = conn['to']
+        print(f"   H{h1}:{c1} ↔ H{h2}:{c2} (força: {conn['strength']:.4f})")
     
     print(f"\n❤️ Saúde da Rede:")
     health = analysis['health']

@@ -17,6 +17,45 @@ class OrthogonalProductQuantizer(nn.Module):
         # Codebooks: [Heads, Tamanho do Dicionário, Dimensão da Head]
         # Inicializamos com ruído pequeno para evitar colapso inicial
         self.codebooks = nn.Parameter(torch.randn(num_heads, num_embeddings, self.head_dim) * 0.02)
+        
+        # Buffer to track initialization status (non-trainable)
+        self.register_buffer("inited", torch.zeros(1))
+
+    def init_codebook(self, z):
+        """
+        Data-dependent initialization: Initialize codebook centroids with random data points.
+        z shape: [Batch, Heads, Head_Dim]
+        """
+        if self.inited.item() == 1:
+            return
+
+        with torch.no_grad():
+            # Flatten batch and heads: [Batch * Heads, Head_Dim]
+            # ACTUALLY we want to init each head independently from its distribution
+            for h in range(self.num_heads):
+                # Get data for this head: [Batch, Head_Dim]
+                z_head = z[:, h, :]
+                
+                # We need num_embeddings points.
+                # If batch size < num_embeddings, we might need to repeat or add noise,
+                # but usually batch size (256) >= num_embeddings (256).
+                # If batch is smaller, we sample with replacement.
+                n_data = z_head.shape[0]
+                
+                if n_data >= self.num_embeddings:
+                     indices = torch.randperm(n_data)[:self.num_embeddings]
+                     new_codes = z_head[indices]
+                else:
+                     # Upsample if not enough data
+                     repeat = (self.num_embeddings // n_data) + 1
+                     new_codes = z_head.repeat(repeat, 1)[:self.num_embeddings]
+                     # Add slight noise to duplicates
+                     new_codes += torch.randn_like(new_codes) * 0.01
+
+                self.codebooks.data[h] = new_codes
+
+            self.inited.fill_(1)
+            # print("VQ-VAE Codebooks Initialized from Data.")
 
     def forward(self, z):
         """
@@ -32,6 +71,10 @@ class OrthogonalProductQuantizer(nn.Module):
         # Reshape para separar as cabeças: [Batch, Heads, Head_Dim]
         z_reshaped = z.view(bsz, self.num_heads, self.head_dim)
 
+        # --- Lazy Initialization ---
+        if self.training and self.inited.item() == 0:
+            self.init_codebook(z_reshaped)
+
         # --- Lógica de VQ (Vector Quantization) ---
         
         # Queremos calcular a distância ||z - c||^2 = z^2 + c^2 - 2zc
@@ -41,13 +84,6 @@ class OrthogonalProductQuantizer(nn.Module):
 
         # Distância Euclidiana Quadrada
         # (z - c)^2
-        # FIX: Using explicit permutation for correct broadcasting if implicit fails
-        # But sticking to user provided code structure first.
-        # Note: The user's code uses matmul(z_reshaped, codebooks.transpose).
-        # z_reshaped: [B, H, D]
-        # codebooks.T: [H, D, N]
-        # PyTorch matmul might struggle with [B, H, D] x [H, D, N] broadcasting B vs H.
-        # We will use the robust implementation we found earlier to ensure it works.
         
         # Termo 1: ||z||^2
         z_sq = torch.sum(z_expanded**2, dim=-1) # [B, H, 1]
@@ -71,6 +107,32 @@ class OrthogonalProductQuantizer(nn.Module):
 
         # Encontrar o índice mais próximo (Argmin)
         encoding_indices = torch.argmin(distances, dim=-1) # [Batch, Heads]
+
+        # --- Dead Code Revival (Training Only) ---
+        if self.training:
+             with torch.no_grad():
+                for h in range(self.num_heads):
+                    # Identify used indices in this batch
+                    used_indices = torch.unique(encoding_indices[:, h])
+                    
+                    # If we used all codes, great. If not, revive.
+                    if len(used_indices) < self.num_embeddings:
+                        # Find unused indices
+                        # (We can do this efficiently using a boolean mask)
+                        used_mask = torch.zeros(self.num_embeddings, dtype=torch.bool, device=z.device)
+                        used_mask[used_indices] = True
+                        unused_indices = torch.where(~used_mask)[0]
+                        
+                        n_unused = unused_indices.shape[0]
+                        
+                        # Select random data points from current batch to replace dead codes
+                        # We pick random indices from batch
+                        rand_batch_idx = torch.randint(0, bsz, (n_unused,), device=z.device)
+                        replacement_vecs = z_reshaped[rand_batch_idx, h, :]
+                        
+                        # Update codebook
+                        # We use .data to modify parameter in-place without affecting gradient graph
+                        self.codebooks.data[h, unused_indices] = replacement_vecs
 
         # --- Reconstrução (Lookup) ---
         # Cria um tensor vazio e preenche com os vetores escolhidos

@@ -54,3 +54,42 @@ class MonolithV13(nn.Module):
             "z_e": z,    # Latente pré-quantização (usado na loss)
             "z_q": z_q   # Latente pós-quantização (usado na loss)
         }
+    
+    def forward_with_head_mask(self, x, head_mask):
+        """
+        Forward pass com máscara por head (para ablação).
+        
+        Args:
+            x: Input tensor [B, D]
+            head_mask: Tensor [H] com 1=usa head, 0=zera head
+        
+        Returns:
+            dict com 'reconstructed', 'indices', 'z_e', 'z_q', 'z_q_masked'
+        """
+        # Encode
+        z = self.encoder(x)
+        
+        # Quantize
+        z_q, indices, distances = self.quantizer(z)
+        
+        # Reshape to separate heads
+        B, D = z_q.shape
+        H = self.quantizer.num_heads
+        Hd = D // H
+        z_q_heads = z_q.view(B, H, Hd)
+        
+        # Apply mask
+        z_q_masked_heads = z_q_heads * head_mask.view(1, H, 1)
+        z_q_masked = z_q_masked_heads.view(B, D)
+        
+        # Decode with masked z_q
+        out = self.decoder(z_q_masked)
+        
+        return {
+            "reconstructed": out,
+            "indices": indices,
+            "z_e": z,
+            "z_q": z_q,
+            "z_q_masked": z_q_masked
+        }
+

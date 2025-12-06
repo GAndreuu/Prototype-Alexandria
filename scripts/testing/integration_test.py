@@ -4,7 +4,7 @@ Tests all core components sequentially to verify functionality and identify erro
 """
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 import logging
 import traceback
