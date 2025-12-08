@@ -42,6 +42,7 @@ data/*
 !data/.gitkeep
 
 # IDE
+.gemini/
 .vscode/
 .idea/
 *.swp

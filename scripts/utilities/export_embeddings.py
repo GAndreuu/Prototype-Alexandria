@@ -6,7 +6,7 @@ import logging
 from tqdm import tqdm
 
 # Add project root to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from config import settings
 
@@ -36,26 +36,79 @@ def export_embeddings(output_path="data/training_embeddings.npy"):
 
         # Export in batches to avoid memory issues
         batch_size = 10000
-        embeddings = []
+        shard_arrays = []
         
-        # LanceDB iterator
-        # Note: to_arrow() or to_pandas() might be faster but let's be safe with memory
-        # actually table.to_pandas() with columns=['vector'] is efficient enough for 128k rows
+        print("Streaming vectors via Arrow (Offset/Limit)...", flush=True)
         
-        logger.info("Loading vectors...")
-        # Use to_arrow() which is more robust across versions
-        arrow_table = table.to_arrow()
+        try:
+            total_batches = (total_rows // batch_size) + 1
+            print(f"Total batches expected: {total_batches}", flush=True)
+            
+            for i in range(0, total_rows, batch_size):
+                batch_num = (i // batch_size) + 1
+                print(f"Processing batch {batch_num} (Offset {i})...", end="", flush=True)
+                
+                # Fetch batch via search query
+                arrow_batch = table.search().limit(batch_size).offset(i).to_arrow()
+                
+                # Check if empty (end of data)
+                if len(arrow_batch) == 0:
+                    print(" Empty.", flush=True)
+                    break
+
+                # Extract vectors
+                # Using to_pylist() on a small batch (10k) is acceptable, but let's try to be efficient
+                # arrow_batch["vector"] is a list<float> column.
+                # To numpy:
+                # We can access the values array if it's a generic ListArray
+                # But search() might return FixedSizeList or Variable List.
+                # Let's inspect type on first batch
+                vec_col = arrow_batch["vector"]
+                
+                try:
+                    # Try optimized flatten
+                    # For ListArray or FixedSizeListArray
+                    flat_values = vec_col.values.to_numpy()
+                    
+                    if hasattr(vec_col.type, 'list_size'):
+                         dim = vec_col.type.list_size
+                    else:
+                         # Fallback for variable list or if list_size not available on type object directly
+                         # Assume all have same length if we are training
+                         dim = 384 # Default or infer
+                         # Verify length of first item
+                         if len(vec_col) > 0:
+                             dim = len(vec_col[0].as_py())
+                    
+                    shaped_batch = flat_values.reshape(-1, dim)
+                    
+                except Exception as e_convert:
+                    # Fallback to slower convert if optimized fails (e.g. if chunks are weird)
+                    # 10k items is not too bad for python list
+                    # print(f" (fallback {e_convert})", end="")
+                    vectors_list = vec_col.to_pylist()
+                    shaped_batch = np.array(vectors_list, dtype=np.float32)
+
+                shard_arrays.append(shaped_batch)
+                print(f" Done. Shape: {shaped_batch.shape}", flush=True)
+                
+        except Exception as e_iter:
+            print(f"\nError in loop: {e_iter}", flush=True)
+            import traceback
+            traceback.print_exc()
+            return
+            
+        print(f"Concatenating {len(shard_arrays)} batches...", flush=True)
+        if not shard_arrays:
+            print("No batches were processed!", flush=True)
+            return
+
+        vectors = np.vstack(shard_arrays)
         
-        # Extract vector column as numpy array
-        # Arrow stores list<float> which converts to object array of numpy arrays
-        # We need to stack them
-        vectors_list = arrow_table["vector"].to_pylist()
-        vectors = np.array(vectors_list, dtype=np.float32)
-        
-        logger.info(f"Exported shape: {vectors.shape}")
+        print(f"Exported shape: {vectors.shape}", flush=True)
         
         np.save(output_path, vectors)
-        logger.info(f"Saved embeddings to {output_path}")
+        print(f"Saved embeddings to {output_path}", flush=True)
         
     except Exception as e:
         logger.error(f"Export failed: {e}")

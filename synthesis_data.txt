@@ -1,0 +1,1410 @@
+Query: vector quantization power law neural criticality
+================================================================================
+
+Source: Brain_as_a_complex_system_harnessing_systems_neuroscience_tools__notions_for_an_empirical_approach.pdf
+Relevance: 0.5061
+----------------------------------------
+3.3 seeking for a bridge : a complementary approach 19
+[170] proposed that these two types of criticality do not necessarily
+co-occur and therefore should be attributed to two distinct phenomena.
+thermodynamic criticality : Statistical mechanic provides a power-
+ful framework to study collective behavior in systems consisting of
+interacting units with many degrees of freedom [ 44]. Tools from sta-
+tistical mechanic have been applied in neural networks in order to
+understand their collective dynamics [ 171]. Along the same line Tkacik
+et al. [172] approached the activity of neurons from a thermodynamical
+perspective. They define a Boltzman-like distribution, derive various
+thermodynamic quantities such as heat capacity based on estimated
+Boltzman distribution, and ultimately define criticality based on ther-
+modynamic quantities (like divergence of heat capacity). Moreover, in
+empirical data this novel framework is applicable and functionally rele-
+vant. This novel formulation introduces another signature or definition
+of criticality in neural system [ 172] (but also see [ 173]).
+3.3 seeking for a bridge : a complementary approach
+As mentioned earlier, over the last two decades, multiple experimental and
+theoretical investigations lend support to criticality hypothesis of the brain. In
+particular, as it was briefly discussed in Section 3.1, closeness to criticality has
+been suggested to be an optimal state for information processing. To evaluate
+how closeness to criticality can be beneficial for the information processing in
+the brain, the common approach is using a model (e. g. a branching network,
+a recurrent neural network) that can attain various states (including critical
+and non-critical states), depending on control parameters (e. g. branching
+ratio, connection strength) of the model. Then by quantifying how general
+information processing capabilities such as information transmission depend
+on the control parameters, the advantages of being close to a critical state
+can be assessed. For instance, if information transmission in the model under
+study is optimized exclusively close to the critical state of the model (defined
+based on the control parameter(s)), then it can be considered as evidence for
+relevance of usefulness of criticality for the brain.
+Indeed, one of the important reasons for the relevance of the criticality
+for the brain is the optimized information processing capabilities that op-
+erating close to this state offers. Nevertheless, the optimized setting implied
+by criticality hypothesis, does not imply any specific computation that the
+brain may need to execute, but rather general capabilities for computation
+2. For instance, being in a state which is optimized to have the maximum
+sensitivity to input [ 63, 64], and maximum dynamic range [ 63, 65, 66] are
+all relevant capabilities for coding sensory information, but mere adjusting
+for the closeness to criticality cannot provide a neural coding algorithm
+and its implementation for coding given resource constraints. In contrast,
+there are frameworks (such as efficient coding) that provide the functionally
+relevant objectives to be maximized or minimized (which define the opti-
+mized computation), the algorithm of computation (neural coding algorithm)
+and the neural implementation. Therefore, we think we need complemen-
+tary approaches to criticality that can bridge the gap between criticality
+2 See also Lizier [ 174] (in particular chapter 6) that argue closeness to criticality is a sate where
+[some] computing primitives (such as information storage, transfer and modification) are
+optimized. Furthermore, an complementary perspective is, non-critical states can be specifically
+advantageous for a particular computation, and therefore brain needs to be able to flexibly
+switch between them [156, 175].
+================================================================================
+
+Source: Additive_Powers-of-Two_Quantization_An_Efficient_Non-uniform_Discretization_for_Neural_Networks.pdf
+Relevance: 0.5009
+----------------------------------------
+Published as a conference paper at ICLR 2020
+ADDITIVE POWERS -OF-TWO QUANTIZATION :
+AN EFFICIENT NON-UNIFORM DISCRETIZATION FOR
+NEURAL NETWORKS
+Yuhang Li†∗, Xin Dong§∗, Wei Wang†
+†National University of Singapore, §Harvard University
+loafyuhang@gmail.com, xindong@g.harvard.edu, wangwei@comp.nus.edu.sg
+ABSTRACT
+We propose Additive Powers-of-Two (APoT) quantization, an efﬁcient non-
+uniform quantization scheme for the bell-shaped and long-tailed distribution of
+weights and activations in neural networks. By constraining all quantization lev-
+els as the sum of Powers-of-Two terms, APoT quantization enjoys high compu-
+tational efﬁciency and a good match with the distribution of weights. A simple
+reparameterization of the clipping function is applied to generate a better-deﬁned
+gradient for learning the clipping threshold. Moreover, weight normalization is
+presented to reﬁne the distribution of weights to make the training more stable
+and consistent. Experimental results show that our proposed method outperforms
+state-of-the-art methods, and is even competitive with the full-precision models,
+demonstrating the effectiveness of our proposed APoT quantization. For example,
+our 4-bit quantized ResNet-50 on ImageNet achieves 76.6% top-1 accuracy with-
+out bells and whistles; meanwhile, our model reduces 22% computational cost
+compared with the uniformly quantized counterpart. 1
+1 I NTRODUCTION
+Deep Neural Networks (DNNs) have made a signiﬁcant improvement for various real-world appli-
+cations. However, the huge memory and computational cost impede the mass deployment of DNNs,
+e.g., on resource-constrained devices. To reduce memory footprint and computational burden, sev-
+eral model compression methods such as quantization (Zhou et al., 2016), pruning (Han et al., 2015)
+and low-rank decomposition (Denil et al., 2013) have been widely explored.
+In this paper, we focus on the neural network quantization for efﬁcient inference. Two operations
+are involved in the quantization process, namely clipping and projection. The clipping operation sets
+a full precision number to the range boundary if it is outside of the range; the projection operation
+maps each number (after clipping) into a predeﬁned quantization level (a ﬁxed number). We can
+see that both operations incur information loss. A good quantization method should resolve the two
+following questions/challenges, which correspond to two contradictions respectively.
+How to determine the optimal clipping threshold to balance clipping range and projection resolu-
+tion? The resolution indicates the interval between two quantization levels; the smaller the interval,
+the higher the resolution. The ﬁrst contradiction is that given a ﬁxed number of bits to represent
+weights, the range and resolution are inversely proportional. For example, a larger range can clip
+fewer weights; however, the resolution becomes lower and thus damage the projection. Note that
+slipshod clipping of outliers can jeopardize the network a lot (Zhao et al., 2019) although they may
+only take 1-2% of all weights in one layer. Previous works have tried either pre-deﬁned (Cai et al.,
+2017; Zhou et al., 2016) or trainable (Choi et al., 2018b) clipping thresholds, but how to ﬁnd the
+optimal threshold during training automatically is still not resolved.
+∗Equal Contribution. Y . L. completed this work during his internship at NUS.
+1Code is available at https://github.com/yhhhli/APoT_Quantization.
+1
+arXiv:1909.13144v2  [cs.LG]  2 Feb 2020
+================================================================================
+
+Source: Learning_Optimal_Lattice_Vector_Quantizers_for_End-to-end_Neural_Image_Compression.pdf
+Relevance: 0.4854
+----------------------------------------
+Learning Optimal Lattice Vector Quantizers for
+End-to-end Neural Image Compression
+Xi Zhang1 Xiaolin Wu2∗
+1Department of Electronic Engineering, Shanghai Jiao Tong University
+2School of Computing and Artificial Intelligence, Southwest Jiaotong University
+xzhang9308@gmail.com, xlw@swjtu.edu.cn
+Abstract
+It is customary to deploy uniform scalar quantization in the end-to-end optimized
+Neural image compression methods, instead of more powerful vector quantization,
+due to the high complexity of the latter. Lattice vector quantization (LVQ), on the
+other hand, presents a compelling alternative, which can exploit inter-feature depen-
+dencies more effectively while keeping computational efficiency almost the same
+as scalar quantization. However, traditional LVQ structures are designed/optimized
+for uniform source distributions, hence nonadaptive and suboptimal for real source
+distributions of latent code space for Neural image compression tasks. In this paper,
+we propose a novel learning method to overcome this weakness by designing the
+rate-distortion optimal lattice vector quantization (OLVQ) codebooks with respect
+to the sample statistics of the latent features to be compressed. By being able to
+better fit the LVQ structures to any given latent sample distribution, the proposed
+OLVQ method improves the rate-distortion performances of the existing quan-
+tization schemes in neural image compression significantly, while retaining the
+amenability of uniform scalar quantization.
+1 Introduction
+Deep neural network (DNN) based image compression methods have quickly merged as the winner of
+rate-distortion performance over all their competitors, which is a remarkable achievement considering
+decades of slow progress in this heavily researched field. Their successes are mostly due to the
+capability of DNNs to learn compact and yet versatile latent representations of images. Nevertheless,
+all neural image compression systems will not be complete without the quantization and entropy
+coding modules for the learnt latent features.
+Contrary to the sophistication of highly expressive non-linear latent image representations, quantizing
+the latent representations (the bottleneck of the autoencoder compression architecture) is done, in
+current prevailing practice, by uniform scalar quantizer. This design decision is apparently made
+in favor of the simplicity and computational efficiency. However, uniform scalar quantization is
+inevitably limited in capturing complex inter-feature dependencies present in the latent space, leading
+to lower coding efficiency, particularly for highly correlated or skewed source distributions.
+In data compression, a common approach of overcoming the limitations of scalar quantization is vector
+quantization (VQ), in which a vector of tokens is quantized as a whole into a VQ codeword, allowing
+for effective exploitation of inter-feature dependencies. But designing optimal vector quantizers is an
+NP-hard problem. Moreover, the VQ encoding requires the expensive nearest neighbor search in high
+dimensional space. One way of balancing between the complexity and compression performance is to
+introduce some structures into the quantizers. Lattice vector quantization (LVQ) is such an approach.
+∗Corresponding author.
+38th Conference on Neural Information Processing Systems (NeurIPS 2024).
+arXiv:2411.16119v1  [eess.IV]  25 Nov 2024
+================================================================================
+
+Source: Efficient_coding_with_chaotic_neural_networks_A_journey_from_neuroscience_to_physics_and_back.pdf
+Relevance: 0.4838
+----------------------------------------
+Efficient coding with chaotic neural networks:
+A journey from neuroscience to physics and back
+Jonathan Kadmon
+Eddmond and Lily Center for Brain Sciences (ELSC)
+The Hebrew University, Jerusalem
+jonathan.kadmon@mail.huji.ac.il
+Abstract. This essay, derived from a lecture at ”The Physics Modeling
+of Thought” workshop in Berlin in winter 2023, explores the mutually
+beneficial relationship between theoretical neuroscience and statistical
+physics through the lens of efficient coding and computation in cortical
+circuits. It highlights how the study of neural networks has enhanced our
+understanding of complex, nonequilibrium, and disordered systems, while
+also demonstrating how neuroscientific challenges have spurred novel de-
+velopments in physics. The paper traces the evolution of ideas from sem-
+inal work on chaos in random neural networks to recent developments
+in efficient coding and the partial suppression of chaotic fluctuations. It
+emphasizes how concepts from statistical physics, such as phase transi-
+tions and critical phenomena, have been instrumental in elucidating the
+computational capabilities of neural networks.
+By examining the interplay between order and disorder in neural com-
+putation, the essay illustrates the deep connection between theoretical
+neuroscience and the statistical physics of nonequilibrium systems. This
+synthesis underscores the ongoing importance of interdisciplinary ap-
+proaches in advancing both fields, offering fresh perspectives on the fun-
+damental principles governing information processing in biological and
+artificial systems. This multidisciplinary approach not only advances
+our understanding of neural computation and complex systems but also
+points toward future challenges at the intersection of neuroscience and
+physics.
+Keywords: Neural Networks, Chaos, Statistical Physics, Critical Phe-
+nomena
+Introduction
+Capturing the nuances and intricacies of interdisciplinary scientific research is
+likely as delicate and elusive as producing fine art. When one thinks of science,
+math, nature, and art, one of the first names that comes to mind is the contempo-
+rary American painter Mark Tensey. Tansey’s art masterfully intertwines these
+domains, often employing visual metaphors and allegorical scenes to explore
+and critique complex ideas, blending rigorous conceptual thought with meticu-
+lous craftsmanship. Of his works, the painting Achilles and Tortoise (1986)is
+an exquisite example of the deep interplay between applied and basic research.
+arXiv:2408.01949v1  [q-bio.NC]  4 Aug 2024
+================================================================================
+
+Source: Quantum_Generative_Adversarial_Networks_For_Anomaly_Detection_In_High_Energy_Physics.pdf
+Relevance: 0.4831
+----------------------------------------
+11
+[58] O. Cerri, T. Q. Nguyen, M. Pierini, M. Spiropulu, and
+J.-R. Vlimant, “Variational autoencoders for new physics
+mining at the lhc,” Journal of High Energy Physics , vol.
+2019, no. 5, 2019.
+[59] H. Hotelling, “Analysis of a complex of statistical vari-
+ables into principal components. ”Journal of educational
+psychology, vol. 24, no. 6, 1933.
+[60] E. Grant, M. Benedetti, S. Cao, A. Hallam, J. Lockhart,
+V. Stojevic, A. G. Green, and S. Severini, “Hierarchical
+quantum classifiers,” npj Quantum Information , vol. 4,
+no. 1, 2018.
+[61] E. Stoudenmire and D. J. Schwab, “Supervised learning
+with tensor networks,” Advances in neural information
+processing systems, vol. 29, 2016.
+[62] S. Cao, L. Wossnig, B. Vlastakis, P. Leek, and E. Grant,
+“Cost-function embedding and dataset encoding for ma-
+chine learning with parametrized quantum circuits,”Phys-
+ical Review A, vol. 101, no. 5, 2020.
+[63] Qiskit contributors, “Qiskit: An open-source framework
+for quantum computing,” 2023.
+[64] J. R. McClean, J. Romero, R. Babbush, and A. Aspuru-
+Guzik, “The theory of variational hybrid quantum-
+classical algorithms,” New Journal of Physics , vol. 18,
+no. 2, 2016.
+[65] M. Benedetti, E. Lloyd, S. Sack, and M. Fiorentini, “Pa-
+rameterized quantum circuits as machine learning models,”
+Quantum Science and Technology, vol. 4, no. 4, 2019.
+[66] M. A. Nielsen and I. Chuang, “Quantum computation
+and quantum information,” 2002.
+[67] J. A. Hanley and B. J. McNeil, “The meaning and use of
+the area under a ROC curve. ”Radiology, vol. 143, no. 1,
+1982.
+[68] E. R. DeLong, D. M. DeLong, and D. L. Clarke-Pearson,
+“Comparing the areas under two or more correlated re-
+ceiver operating characteristic curves: a nonparametric
+approach,” Biometrics, 1988.
+[69] J. Schuhmacher, L. Boggia, V. Belis, E. Puljak, M. Grossi,
+M. Pierini, S. Vallecorsa, F. Tacchino, P. Barkoutsos, and
+I. Tavernelli, “Unravelling physics beyond the standard
+model with classical and quantum anomaly detection,”
+arXiv preprint arXiv:2301.10787 , 2023.
+[70] K. A. Wo´ zniak, V. Belis, E. Puljak, P. Barkoutsos, G. Dis-
+sertori, M. Grossi, M. Pierini, F. Reiter, I. Tavernelli, and
+S. Vallecorsa, “Quantum anomaly detection in the la-
+tent space of proton collision events at the LHC,” arXiv
+preprint arXiv:2301.10780, 2023.
+================================================================================
+
+Source: Efficient_coding_with_chaotic_neural_networks_A_journey_from_neuroscience_to_physics_and_back.pdf
+Relevance: 0.4827
+----------------------------------------
+Coding with chaotic networks 7
+Second-order (or continuous) transitions are particularly notable among phase
+transitions. These transitions are characterized by a continuous change in the
+order parameter. In addition, second-order phase transitions exhibit critical phe-
+nomena, such as divergence of correlation lengths and slowing down of the sys-
+tem near the transition. Furthermore, second-order transitions are categorized
+by scaling behaviors reflecting the underlying symmetries of the transitions that
+transverse different system scales.
+Out of equilibrium, phase transitions are not as well defined. In particular,
+neural networks are nonequilibrium systems that do not obey energy conserva-
+tion. This is a fundamental property due to the non-symmetry in the neurons’
+interaction that defies Newton’s third principle (unless we force the connectivity
+between neurons to be symmetric). From a statistical physics perspective, ran-
+dom neural networks do not display detailed balance (van Kampen, 2007) and
+thus are not an equilibrium. In these systems, we extend the notion of phase
+transition to dynamical phase transitions. Dynamical phase transitions involve
+qualitative changes in the temporal behavior of the system as a function of
+parameters such as synaptic strength and input. These transitions arise from
+intrinsic nonlinearities and feedback mechanisms, leading to bifurcations where
+small parameter changes cause sudden shifts in system behavior.
+Neural networks exhibit different dynamical bifurcations that separate dif-
+ferent types of temporal behavior, including fixed points, periodic oscillations,
+and chaotic dynamics. While transitions between stable fixed points and orbits
+are well described by the theory of dynamical systems, the transition to chaos,
+as found by Sompolinsky et al., can only be described statistically, in the limit of
+very large networks (known as thethermodynamic limit). This distinction makes
+the transition to chaos unique among dynamical bifurcations and more similar
+to a phase transition of matter.
+However, since neural networks are fundamentally nonequilibrium systems,
+the transition to chaos cannot be clearly classified as a first or second-order tran-
+sition. Nevertheless, the transition shows many characteristics of a second-order
+phase transition, particularly critical behavior and scaling phenomena (Kadmon
+and Sompolinsky, 2015). As the disorder in the network increases, the system
+becomes more regular, pairwise correlations increase, and the typical temporal
+scales observed in the network diverge.
+The critical phenomena observed near the transition to chaos potentially
+benefit neural computation. Near the transition, the increased regularity and
+prolonged temporal scales allow the system to produce coherent, longer-lasting
+activity patterns. The rich neural dynamics at the edge of chaos make a large
+reservoir of spatiotemporal patterns that can be used for downstream compu-
+tation (Jaeger and Haas, 2004). In addition, long timescales enable networks at
+the edge of chaos to train on tasks requiring longer temporal correlations and
+carry the error signal necessary for training further back in time (Raghu et al,
+2016; Bahri et al, 2020). Other merits of networks at the edge of chaos include
+efficient transmission of information in a noisy environment (Toyoizumi and Ab-
+================================================================================
+
+Source: Additive_Powers-of-Two_Quantization_An_Efficient_Non-uniform_Discretization_for_Neural_Networks.pdf
+Relevance: 0.4750
+----------------------------------------
+Published as a conference paper at ICLR 2020
+How to design quantization levels with consideration for both the computational efﬁciency and
+the distribution of weights? Most of the existing quantization approaches (Cai et al., 2017; Gong
+et al., 2019) use uniform quantization although non-uniform quantization can usually achieve better
+More weights in
+peak area
+Less weights in
+edge area
+Figure 1: Density of weights in ResNet-18
+accuracy (Zhu et al., 2016). The reason is that projec-
+tion against uniform quantization levels are much more
+hardware-friendly (Zhou et al., 2016). However, empirical
+study (Han et al., 2015) has shown that weights in a layer
+of DNN follow a bell-shaped and long-tailed distribution
+instead of a uniform distribution (as shown in the right
+ﬁgure). In other words, a fair percentage of weights con-
+centrate around the mean (peak area); and a few weights
+are of relatively high magnitude and out of the quanti-
+zation range (called outliers). Such distribution also ex-
+ists in activations (Miyashita et al., 2016). The second
+contradiction is: considering the bell-shaped distribution
+of weight, it is well-motivated to assign higher resolution
+(i.e. smaller quantization interval) around the mean; how-
+ever, such non-uniform quantization levels will introduce
+high computational overhead. Powers-of-Two quantization levels (Miyashita et al., 2016; Zhou
+et al., 2017) are then proposed because of its cheap multiplication implemented by shift operations
+on hardware, and super high resolution around the mean. However, the vanilla powers-of-two quan-
+tization method only increases the resolution near the mean and ignores other regions at all when
+the bit-width is increased. Consequently, it assigns inordinate quantization levels for a tiny range
+around the mean. To this end, we propose additive Powers-of-Two (APoT) quantization to resolve
+these two contradictions, our contribution can be listed as follows:
+1. We introduce the APoT quantization scheme for the weights and activations of DNNs.
+APoT is a non-uniform quantization scheme, in which the quantization levels is a sum of
+several PoT terms and can adapt well to the bell-shaped distribution of weights. APoT
+quantization enjoys an approximate 2×multiplication speed-up compared with uniform
+quantization on both generic and speciﬁc hardware.
+2. We propose a Reparameterized Clipping Function (RCF) that can compute a more accurate
+gradient for the clipping threshold and thus facilitate the optimization of the clipping thresh-
+old. We also introduce weight normalization for neural network quantization. Normalized
+weights in the forward pass are more stable and consistent for clipping and projection.
+3. Experimental results show that our proposed method outperforms state-of-the-art methods,
+and is even competitive with the full-precision implementation with higher computational
+efﬁciency. Speciﬁcally, our 4-bit quantized ResNet-50 on ImageNet achieve 76.6% Top-1
+and 93.1% Top-5 accuracy. Compared with uniform quantization, our method can decrease
+22% computational cost, demonstrating the proposed algorithm is hardware-friendly.
+2 M ETHODOLOGY
+2.1 P RELIMINARIES
+Suppose kernels in a convolutional layer are represented by a 4D tensor W ∈RCout×Cin×K×K,
+where Cout and Cin are the number of output and input channels respectively, and K is the kernel
+size. We denote the quantization of the weights as
+ˆW= ΠQ(α,b)⌊W,α⌉, (1)
+where αis the clipping threshold and the clipping function ⌊·,α⌉clips weights into [−α,α]. After
+clipping, each element of Wis projected by Π(·) onto the quantization levels. We denote Q(α,b)
+for a set of quantization levels, where bis the bit-width. For uniform quantization, the quantization
+levels are deﬁned as
+Qu(α,b) = α×{0, ±1
+2b−1 −1, ±2
+2b−1 −1, ±3
+2b−1 −1,..., ±1}. (2)
+For every ﬂoating-point number, uniform quantization maps it to a b-bit ﬁxed-point representation
+(quantization levels) in Qu(α,b). Note that αis stored separately as a full-precision ﬂoating-point
+2
+================================================================================
+
+Source: Unitary_Evolutions_Sourced_By_Interacting_Quantum_Memories_Closed_Quantum_Systems_Directing_Themselv.pdf
+Relevance: 0.4740
+----------------------------------------
+[118] Vanchurin, V. “Towards a theory of quantum gravity from neural networks”.Entropy
+2022, 24(1), 7 (2021).
+[119] Alexander, S., Cunningham, W. J., Lanier, J., Smolin, L., Stanojevic, S., Toomey,
+M. W., & Wecker, D. “The Autodidactic Universe”. arXiv preprint arXiv:2104.03902
+(2021).
+[120] Kak, S. C. “Quantum neural computing”.Advances in imaging and electron physics
+94, 259-313 (1995).
+[121] Schuld, M., Sinayskiy, I., & Petruccione, F. “The quest for a quantum neural net-
+work”.Quantum Information Processing13(11), 2567-2586 (2014).
+[122] Biamonte, J., Wittek, P., Pancotti, N., Rebentrost, P., Wiebe, N., & Lloyd, S.
+“Quantum machine learning”.Nature 549(7671), 195-202 (2017).
+[123] Dunjko, V., &Briegel, H.J.“Machinelearning&artiﬁcialintelligenceinthequantum
+domain: a review of recent progress”.Reports on Progress in Physics81(7), 074001
+(2018).
+[124] Wittek, P. (2014).Quantum machine learning: what quantum computing means to
+data mining. Academic Press (2014).
+[125] Kristensen, L. B., Degroote, M., Wittek, P., Aspuru-Guzik, A., & Zinner, N. T. “An
+artiﬁcial spiking quantum neuron”.npj Quantum Information7(1), 1-7 (2021).
+[126] Ciliberto, C., Herbster, M., Ialongo, A. D., Pontil, M., Rocchetto, A., Severini,
+S., & Wossnig, L. “Quantum machine learning: a classical perspective”.Proceedings
+of the Royal Society A: Mathematical, Physical and Engineering Sciences474(2209),
+20170551 (2018).
+[127] Arunachalam, S., & de Wolf, R. “Guest column: A survey of quantum learning
+theory”.ACM SIGACT News48(2), 41-67 (2017).
+[128] Gonzalez-Raya, T., Solano, E., & Sanz, M. “Quantized three-ion-channel neuron
+model for neural action potentials”.Quantum 4, 224 (2020).
+[129] Garg, S., & Ramakrishnan, G. “Advances in quantum deep learning: An overview”.
+ArXiv preprint arXiv:2005.04316 (2020).
+[130] Abbas, A., Sutter, D., Zoufal, C., Lucchi, A., Figalli, A., & Woerner, S. “The power
+of quantum neural networks”.Nature Computational Science1(6), 403-409 (2021).
+[131] Carleo, G., Cirac, I., Cranmer, K., Daudet, L., Schuld, M., Tishby, N., ... & Zde-
+borová, L. “Machine learning and the physical sciences”.Reviews of Modern Physics
+91(4), 045002 (2019).
+[132] Cornelissen, A. Quantum gradient estimation and its application to quantum rein-
+forcement learning, Master thesis, TU Delft (2018).
+[133] Saggio, V., Asenbeck, B. E., Hamann, A., Strömberg, T., Schiansky, P., Dunjko, V.,
+... & Walther, P. “Experimental quantum speed-up in reinforcement learning agents”.
+Nature 591(7849), 229-233 (2021).
+[134] Dong, D., Chen, C., Li, H., & Tarn, T. J. “Quantum reinforcement learning”.IEEE
+Transactions on Systems, Man, and Cybernetics, Part B (Cybernetics)38(5), 1207-
+1220 (2008).
+[135] Barry, J., Barry, D. T., & Aaronson, S. “Quantum partially observable Markov deci-
+sion processes”.Physical Review A90(3), 032311 (2014).
+Accepted inQuantum 2023-04-19, click title to verify. Published under CC-BY 4.0. 94
+================================================================================
+
+Source: Learned_transform_compression_with_optimized_entropy_encoding.pdf
+Relevance: 0.4721
+----------------------------------------
+Published as a workshop paper at ICLR 2021 neural compression workshop
+2 Q UANTIZATION
+We employ the soft relaxation approach to quantization proposed in Agustsson et al. (2017) simpli-
+ﬁed similarly to Mentzer et al. (2018). However, instead of the scalar version Mentzer et al. (2018);
+Habibian et al. (2019) we use the vector formulation of the quantization as in van den Oord et al.
+(2017) in which the kquantization centers are the learned embedding vectors {e(j)}k
+j=1, ei ∈Rm,
+columns of the m×kembedding matrix E = [e(1),..., e(k)].
+The quantizer QE ﬁrst reshapes the transformed data 5 z ∈Z ⊆Rd into a m×d/mmatrix Z =
+[z(1),..., z(d/m)], then ﬁnds for each column z(i) ∈Rm its nearest embedding and replaces it by
+the embedding vector index to output the d/mdimensional vector of discrete codes c = QE(z)
+QE : ˆz(i) = arg min
+e(j)
+∥z(i) −e(j)∥, c (i) = {j : ˆz(i) = e(j)}, i = 1,...,d/m . (3)
+After transmission, the quantized latent representation ˆZ = [ ˆz(1),..., ˆz(d/m)] is recovered from
+c by indexing to the shared codebook E and decoded ˆx = Dφ(ˆz), ˆz = ﬂatten( ˆZ). In practice,
+the quantized latent ˆz can be used directly by the decoder at training in the forward pass without
+triggering the c indexing operation.
+The ﬁnite quantization operation in equation 3 is non-differentiable. To allow for the ﬂow of gradi-
+ents back to Eθ and QE we use a differentiable soft relaxation for the backward pass
+˜z(i) =
+k∑
+j
+e(j)softmax(−σ∥z(i) −e(j)∥) =
+k∑
+j
+e(j) exp(−σ∥z(i) −e(j)∥)
+∑k
+j exp(−σ∥z(i) −e(j)∥)
+, (4)
+where instead of the hard encoding ˆ¯z(i) picking the single nearest embedding vector, the soft ˜z(i) is
+a linear combination of the embeddings weighted by their (softmaxed) distances. The distortion loss
+is thus formulated as d(x,ˆx) = d(x,Dφ[sg(ˆz −˜z) + ˜z]), where sg is the stopgradient operator.
+The hard/soft strategy is different from the approach of van den Oord et al. (2017) where they use
+a form of straight-through gradient estimator and dedicated codebook and commitment terms in the
+loss to train the embeddings E. This is also different from Williams et al. (2020), where they use
+the relaxed formulation of equation 4 for both forward and backward passes in a fully stochastic
+quantization scheme aimed at preventing the mode-dropping effect of a deterministic approximate
+posterior in a hierarchical vector-quantized V AE.
+3 M INIMIZING THE CODE CROSS -ENTROPY
+Though the optimal lossless encoding is decided by the self-information of the code −log pc(c),
+it cannot be used directly since pc is unknown. Instead we replace the unknown pc by its esti-
+mated approximation qc, derive the code length ˆl(c) from ˆic = −log qc(c), and therefore minimize
+the expected approximate self-information, the cross-entropy Hµc|qc (c) = −Eµc log qc(c). This,
+however, yields inefﬁciencies as Hµc|qc (c) ≥Hµc (c) due to the decomposition
+Hµc|qc (c) = DKL(pc∥qc) + Hµc (c) , (5)
+where DKL ≥0 is the Kullback-Leibler divergence between pc and qc which can be interpreted as
+the expected additional bits over the optimal rateHµc (c) caused by using qcinstead of the truepc. In
+addition to Eθ, Dφand QE we shall now therefore train also a probability estimatorPψ : {c}n
+i →qc
+by minimizing the cross-entropy Hµc|qc (c) so that the estimated qc is as close as possible to the true
+pc, the DKL is small, and the above mentioned inefﬁciencies disappear.
+As we cannot evaluate the cross-entropy over the unknownµc, we instead learn Pψ by its empirical
+estimate over the sample data which is equivalent to minimizing the negative log likelihood (NLL)
+arg min
+ψ
+−1
+n
+n∑
+i
+log qc(c = ci), ci ∼µc . (6)
+5For notational simplicity we regard the data asddimensional vectors. In practice, these are often(d1 ×d2)
+matrices or even higher order tensors (d1 ×... ×dt). z can be seen simply as their ﬂattened version with
+d= ∏
+idi.
+2
+================================================================================
+
+Source: CRVQ_Channel-Relaxed_Vector_Quantization_for_Extreme_Compression_of_LLMs.pdf
+Relevance: 0.4678
+----------------------------------------
+CRVQ: Channel-Relaxed Vector Quantization
+for Extreme Compression of LLMs
+Yuzhuang Xu Shiyu Ji Qingfu Zhu Wanxiang Che B
+Research Center for Social Computing and Interactive Robotics (SCIR)
+Harbin Institute of Technology, Harbin, China
+{xyz, car}@ir.hit.edu.cn
+Abstract
+Powerful large language models (LLMs) are in-
+creasingly expected to be deployed with lower
+computational costs, enabling their capabilities
+on resource-constrained devices. Post-training
+quantization (PTQ) has emerged as a star ap-
+proach to achieve this ambition, with best meth-
+ods compressing weights to less than 2 bit on
+average. In this paper, we propose Channel-
+Relaxed Vector Quantization (CRVQ), a novel
+technique that significantly improves the per-
+formance of PTQ baselines at the cost of only
+minimal additional bits. This state-of-the-art
+extreme compression method achieves its re-
+sults through two key innovations: (1) carefully
+selecting and reordering a very small subset
+of critical weight channels, and (2) leverag-
+ing extended codebooks to relax the constraint
+of critical channels. With our method, we
+demonstrate a 38.9% improvement over the cur-
+rent strongest sub-2-bit PTQ baseline, enabling
+nearer lossless 1-bit compression. Furthermore,
+our approach offers flexible customization of
+quantization bit-width and performance, pro-
+viding a wider range of deployment options for
+diverse hardware platforms.
+1 Introduction
+Large language models (LLMs) have made re-
+markable strides, with open-source models like
+LLaMA (Touvron et al., 2023a,b), Phi (Abdin
+et al., 2024) and Qwen (Bai et al., 2023; Yang
+et al., 2024) achieving exceptional performance.
+However, their massive sizes present challenges
+for deployment and usability. For instance, the
+widely adopted and powerful LLaMA2-70B model
+requires over 140GB when loaded in FP16 format,
+which makes application on most single-GPUs in-
+feasible. This computational and memory over-
+head becomes even more prohibitive for resource-
+constrained devices. As the demand for edge-
+device LLM inference grows, especially on mo-
+bile platforms (Hu et al., 2024; Abdin et al., 2024),
+0.123
+weight scale 12.30 round 1100
+vectors
+0.123
+0.313
+0.101 cluster
+codebook 
+match
+0.123
+0.313
+0.101
+0.521
+0.001
+0.442
+0001
+FP16 INT4
+channel 
+selection important 
+vectors
+common 
+vectors
+basic 
+codebook
+basic+extend 
+codebook
+0010
+0011
+1010
+0.313
+0.521
+0.442
+0.123
+0.101
+0.001
+(a) uniform quantization
+0.123
+weight scale 12.30 round 1100
+vectors
+0.123
+0.313
+0.101 cluster
+codebook 
+match
+0.123
+0.313
+0.101
+0.521
+0.001
+0.442
+0001
+FP16 INT4
+channel 
+selection important 
+vectors
+common 
+vectors
+basic 
+codebook
+basic+extend 
+codebook
+0010
+0011
+1010
+0.313
+0.521
+0.442
+0.123
+0.101
+0.001
+(b) vector quantization
+0.123
+weight scale 12.30 round 1100
+vectors
+0.123
+0.313
+0.101 cluster
+codebook 
+match
+0.123
+0.313
+0.101
+0.521
+0.001
+0.442
+0001
+FP16 INT4
+channel 
+selection important 
+vectors
+common 
+vectors
+basic 
+codebook
+basic+extend 
+codebook
+0010
+0011
+1010
+0.313
+0.521
+0.442
+0.123
+0.101
+0.001
+(c) CRVQ
+Figure 1: Comparison of different quantization meth-
+ods. Uniform quantization treats each weight to be
+quantized as a scalar, whereas vector quantization con-
+siders weight segments as vectors. Our proposed CRVQ
+introduces distinct importance across weight channels,
+with the more critical channels selected and highlighted
+in dark colors. We use additional extended codebooks to
+quantize the vectors formed by these critical channels.
+researchers have turned to model compression tech-
+niques (Frantar et al., 2022; Shao et al., 2024; Xu
+et al., 2024) to enable efficient deployment without
+compromising performance noticeably.
+Post-Training Quantization (PTQ) efficiently
+compresses LLMs by converting pre-trained mod-
+els to lower-bit formats with relatively few com-
+putations (Frantar et al., 2022; Tseng et al.,
+2024; Huang et al., 2024). Its effectiveness has
+driven broad research and practical adoption. No-
+tably, recent advances achieve 3-bit compression
+while astonishingly maintaining lossless perfor-
+mance (Tseng et al., 2024). Unfortunately, the
+performance of powerful PTQ methods rapidly de-
+teriorates in extremely low bit-widths scenarios.
+For instance, GPTQ (Frantar et al., 2022), the most
+arXiv:2412.09282v2  [cs.LG]  19 Feb 2025
+================================================================================
+
+Source: Brain_as_a_complex_system_harnessing_systems_neuroscience_tools__notions_for_an_empirical_approach.pdf
+Relevance: 0.4675
+----------------------------------------
+74 bibliography
+[161] N. Friedman et al. “Universal Critical Dynamics in High Resolution
+Neuronal Avalanche Data.” Physical review letters 108 (2012), p. 208102
+(cit. on p. 18).
+[162] Laurence Aitchison, Nicola Corradi, and Peter E. Latham. “Zipf’s Law
+Arises Naturally When There Are Underlying, Unobserved Variables.”
+PLOS Computational Biology 12.12 (2016), e 1005110. doi: 10.1371/
+journal.pcbi.1005110 (cit. on p. 18).
+[163] Jonathan Touboul and Alain Destexhe. “Power-Law Statistics and
+Universal Scaling in the Absence of Criticality.” Phys. Rev. E 95.1
+(2017), p. 012413. doi: 10.1103/PhysRevE.95.012413 (cit. on p. 18).
+[164] M. Breakspear. “Dynamic Models of Large-Scale Brain Activity.”
+Nature neuroscience 20.3 (2017), pp. 340–352. doi: 10.1038/nn.4497
+(cit. on pp. 18, 54).
+[165] Luca Cocchi et al. “Criticality in the Brain: A Synthesis of Neuro-
+biology, Models and Cognition.” Progress in Neurobiology 158 (2017),
+pp. 132–152. doi: 10.1016/j.pneurobio.2017.07.002 (cit. on p. 18).
+[166] N. Bertschinger and T. Natschlager. “Real-Time Computation at the
+Edge of Chaos in Recurrent Neural Networks.” Neural computation 16
+(2004), pp. 1413–1436 (cit. on pp. 18, 37, 53).
+[167] Serena di Santo et al. “Landau–Ginzburg Theory of Cortex Dynamics:
+Scale-free Avalanches Emerge at the Edge of Synchronization.” PNAS
+(2018), p. 201712989. doi: 10.1073/pnas.1712989115 (cit. on p. 18).
+[168] M. O. Magnasco, O. Piro, and G. A. Cecchi. “Self-Tuned Critical Anti-
+Hebbian Networks.” Physical review letters 102 (2009), p. 258102 (cit. on
+p. 18).
+[169] Fabrizio Pittorino et al. “Chaos and Correlated Avalanches in Excita-
+tory Neural Networks with Synaptic Plasticity.” Phys. Rev. Lett. 118.9
+(2017), p. 098102. doi: 10.1103/PhysRevLett.118.098102 (cit. on
+p. 18).
+[170] Karlis Kanders, Tom Lorimer, and Ruedi Stoop. “Avalanche and
+Edge-of-Chaos Criticality Do Not Necessarily Co-Occur in Neural
+Networks.” Chaos 27.4 (2017), p. 047408. doi: 10.1063/1.4978998
+(cit. on p. 18).
+[171] D. J. Amit and Daniel J. Amit. Modeling Brain Function: The World of
+Attractor Neural Networks. Cambridge University Press, 1992 (cit. on
+p. 19).
+[172] G. Tkacik et al. “Thermodynamics and Signatures of Criticality in a
+Network of Neurons.” Proceedings of the National Academy of Sciences
+of the United States of America (2015). doi: 10.1073/pnas.1514188112
+(cit. on p. 19).
+[173] Marcel Nonnenmacher et al. “Signatures of Criticality Arise from Ran-
+dom Subsampling in Simple Population Models.” PLOS Computational
+Biology 13.10 (2017), e1005718. doi: 10.1371/journal.pcbi.1005718
+(cit. on p. 19).
+[174] Joseph T. Lizier. The Local Information Dynamics of Distributed Computa-
+tion in Complex Systems. Springer Theses. Berlin: Springer, 2013 (cit. on
+p. 19).
+================================================================================
+
+Source: Compensate_Quantization_Errors_Quantized_Models_Are_Inquisitive_Learners.pdf
+Relevance: 0.4632
+----------------------------------------
+IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS, VOL. X, NO. X, APRIL 2025 1
+Compensate Quantization Errors+: Quantized Models
+Are Inquisitive Learners
+Yifei Gao∗ , Jie Ou ∗ , Lei Wang†, Senior Member, IEEE,
+Jun Cheng, Senior Member, IEEE, and Mengchu Zhou, Fellow, IEEE
+Abstract—The quantization of large language models (LLMs)
+has been a prominent research area aimed at enabling their
+lightweight deployment in practice. Existing research about
+LLM’s quantization has mainly explored the interplay between
+weights and activations, or employing auxiliary components while
+neglecting the necessity of adjusting weights during quantization.
+Consequently, original weight distributions frequently fail to
+yield desired results after round-to-nearest (RTN) quantization.
+Even though incorporating techniques such as mixed precision
+and low-rank error approximation in LLM’s quantization can
+yield improved results, they inevitably introduce additional
+computational overhead. On the other hand, traditional tech-
+niques for weight quantization, such as Generative Post-Training
+Quantization, rely on manually tweaking weight distributions to
+minimize local errors, but they fall short of achieving globally
+optimal outcomes. Although the recently proposed Learnable
+Singular-value Increment improves global weight quantization by
+modifying weight distributions, it disrupts the original distribution
+considerably. This introduces pronounced bias toward the training
+data and can degrade downstream task performance. In this
+paper, we introduce Singular-value Diagonal Expansion, a more
+nuanced approach to refining weight distributions to achieve
+better quantization alignment. Furthermore, we introduce Cross-
+layer Learning that improves overall quantization outcomes
+by distributing errors more evenly across layers. Our plug-
+and-play weight-quantization methods demonstrate substantial
+performance improvements over state-of-the-art approaches,
+including OmniQuant, DuQuant, and PrefixQuant.
+Index Terms—Quantization of Large Language Models, Large
+Language Models, Weight Quantization Method.
+I. I NTRODUCTION
+Large language models (LLMs) have attracted considerable
+attention due to their exceptional performance on a variety of
+downstream tasks [ 63][16]. However, training and maintaining
+these LLMs require substantial resources. In this scenario,
+quantization becomes an essential strategy, providing solutions
+to decrease both memory and computational requirements of
+LLMs.
+One of the primary challenges in quantization lies in handling
+outliers, which can be broadly categorized into normal and
+massive outliers [ 101]. Traditional approaches address this
+issue by using such techniques as mixed precision [ 33][65],
+low-rank approximation [ 113][114], and weight-activation
+smoothing [ 20][21]. Mixed precision and low-rank approx-
+imation are effective in mitigating both normal and massive
+outliers, but they inevitably introduce additional computational
+overhead and cannot fully compensate for massive outliers.
+∗ Equal contribution.
+† Corresponding author.
+Preprint. This paper is under review in TNNLS.
+In contrast, smoothing can be elegantly integrated into the
+model itself with the minimal overhead, but it is only effective
+in alleviating normal outliers. Recent work has primarily
+focuses on addressing massive outliers [ 100, 102, 108]. The
+residual structure of LLMs, while facilitating training, leads
+to the dramatic amplification of activation gradients as they
+accumulate. However, all these efforts often overlook the
+impact of the model linear weights themselves. As quantization
+introduces errors unavoidably, simply preserving the original
+weight distribution through various approaches fails yield the
+optimal results [ 107]. As such, appropriately adjusting the
+original weight distribution becomes essential.
+For linear-weight quantization in LLMs, the Generative
+Post-Training Quantization (GPTQ) series [ 26][27] employs
+a handcrafted process in which individual weights with the
+least error after quantization are incrementally rounded to n-
+bit precision. After several steps, the Hessian matrix of the
+weights is updated, allowing subsequent weight adjustments.
+In contrast, round-to-nearest (RTN) applies a direct MinMax
+rounding approach, mapping weights to the nearest n-bit integer
+without additional computation. More recently, in Learnable
+Singular-value Incremental (LSI) [ 22], Gao et al. introduced a
+novel approach by proactively redistributing the magnitudes
+of weight matrices to better align them with RTN calibration.
+This method involves decomposing weight matrices through
+singular value decomposition (SVD) and making the resulting
+diagonal singular values learnable.
+RTN employs a straightforward quantization approach, but
+delivers the poorest results in general. GPTQ, while offering
+quantization-aware weight alignments, fails to achieve global
+optima and demands extensive calibration time. In contrast, LSI
+effectively redistributes weights to better align with activations.
+However, it excessively adjusts the weights to accommodate
+activation outliers, resulting in pronounced overfitting and
+biased downstream task performance. These limitations in
+existing methods have inspired this work; our improvements
+over them are shown in Fig. 1.
+In this paper, we mainly aim to address the limitations of LSI
+while leveraging its strengths to improve weight quantization
+techniques. We begin by analyzing the key factors behind
+LSI’s effectiveness and, building on these insights, introduce
+a novel approach: Singular-value Diagonal Expansion (SDE).
+This method refines LSI by incorporating additional learnable
+parameters into the diagonals adjacent to the singular-value
+matrix of linear weights. To further distribute quantization
+errors across layers evenly, we adopt Cross-layer Learning
+(CL) that considers errors that may propagate into subsequent
+layers. Both SDE and CL are designed to be plug-and-play
+arXiv:2407.15508v3  [cs.CL]  15 May 2025
+================================================================================
+
+Source: Brain_as_a_complex_system_harnessing_systems_neuroscience_tools__notions_for_an_empirical_approach.pdf
+Relevance: 0.4592
+----------------------------------------
+18 approaching through neural theories
+more references see [48, 141]). Moreover, being close to this state is beneficial
+for the brain [ 48, 61, 62], as it has been shown that general information
+processing capabilities such as sensitivity to input [ 63, 64], dynamic range
+[63, 65, 66], or information transmission and storage [ 67–70], and various
+other computational characteristics has been also considered to be relevant
+[142–152] (also see [153–155] for a reviews).
+To summarize, multiple studies have reported signatures of criticality
+observed in various neuronal recordings at different scales, and theoretical
+investigations demonstrated various aspects of information processing are
+optimized at the second-order phase transition (see references in [ 48, 141]).
+3.2 signatures of criticality in neural systems
+As motivated in the previous section, various empirical and theoretical
+investigations lend support to criticality hypothesis of the brain, and signify
+the potential functional relevance of the criticality hypothesis of the brain.
+Therefore, it has been motivating to search for diverse signatures of criticality
+in the brain. These signatures can be categorized into three groups [ 156]:
+scale-freeness neural activity (avalanche criticality), dynamical regime of the
+neural system (edge of bifurcation criticality), and thermodynamic of the
+neural data (maximum entropy criticality).
+avalanche criticality : Scale-free cascade of activity is a ubiquitous
+type of dynamics in nature: For instance in interacting tectonic plates
+[157], forest fires [158], nuclear chain reactions [159], threshold-crossing
+events that appears as one unit (e. g. a tree) exceeding a threshold (e. g.
+a tree fires) and because the units of the system are coupled to each
+other, similar threshold-crossing events propagate through other units
+of the system. Such propagating dynamics can lead to large avalanches
+of activity. Almost two decades ago Beggs et al. [ 137] observed similar
+cascades in activity of in-vitro neural populations and later on others
+reported such scale-free cascades at various other neuronal recordings
+in various scales (see references in [ 48, 141]). Truly critical systems, not
+only should show the mentioned scale free dynamics, but also they
+should follow the scaling laws introduced by Sethna et al. [ 160], that
+were observed in neural data [ 161] as well 1.
+bifurcation criticality : When a dynamical system has a transition
+from one dynamical regime to another (such as transition from order
+to chaos), it experiences a bifurcation [29, 164, 165]. The point where the
+transition happens is also denoted as the critical point. There are various
+kinds of bifurcations (see Izhikevich [ 29]), but some of them have been
+particularly appealing for understating the dynamics of the brain as
+well as computation in the brain. Without getting into the theoretical
+details of these bifurcations and in very brief fashion, transitioning
+from order to chaos [ 166], and transitioning from an asynchronous
+to a synchronous state [ 167] have been considered as two important
+bifurcations for the brain (for further elaboration see Muñoz [ 48] and
+Cocchi et al. [ 165] and references therein). Avalanche criticality and
+bifurcation criticality can co-occur, when there is a continuous phase
+transition [165] (for example see [ 168, 169]), nevertheless, Kanders et al.
+1 Indeed, scale-free neural avalanches without following scaling laws have been observed in
+neural models that are not operating close to a critical point [ 162, 163].
+================================================================================
+
+Source: Perspectives_on_theory_at_the_interface_of_physics_and_biology.pdf
+Relevance: 0.4585
+----------------------------------------
+14
+ing argument for the speed ﬂuctuations, and in this case
+long–ranged correlations must be a signature of critical-
+ity, as one can verify by detailed analysis of the model in
+Ref [132].19 The Rome group has gone on to analyze the
+trajectories of swarming midges, and here too they see
+long–ranged correlations of velocity ﬂuctuations, now in
+the absence of symmetry breaking, and argue that this
+again is a sign of criticality [137, 138].
+For neurons, the notion of locality of interactions is not
+so useful, because neurons are extended objects and can
+reach many, many neighbors. As a result, long–ranged
+correlations are not a useful diagnostic of criticality. As
+an alternative we have tried to develop a thermodynam-
+ics for neural networks, essentially counting the number
+of states (combinations of spiking and silence across the
+population) that have a particular value of log proba-
+bility; this is equivalent to measuring entropy vs energy
+[139, 140]. Strikingly, for the activity of neurons in the
+retina, the entropy is essentially a linear function of the
+energy, with unit slope [141], which corresponds to an
+unusual kind of critical point.
+There is an independent literature that tries to con-
+nect the dynamical patterns of activity in neural systems
+with the scale–invariant “avalanches” predicted by self–
+organized criticality [142–144]. Another dynamical no-
+tion of criticality is to ask about the number of Lyapunov
+exponents near zero, and there is an elegantly simple
+model that shows how a network could learn to be criti-
+cal in this sense [145]. Subsequent work from Magnasco
+and colleagues has looked at the data emerging from hu-
+man electro–corticography; they estimate the spectra of
+Lyapunov exponents for models that describe these dy-
+namical signals, show that there is a concentration of
+exponents near zero, and even that this critical behav-
+ior is lost as the patient slips out of consciousness under
+anesthesia [146, 147]. The relationship between statisti-
+cal and dynamical notions of criticality is not at all clear,
+and this is a physics problem not a biology problem; for
+a ﬁrst try at connecting the diﬀerent ideas in the context
+of neural data, see Ref [148].
+Returning to the families of proteins, we again see hints
+of critical behavior. The hope is that the distribution
+of sequences can be described by models in which the
+diﬀerent choices of amino acid interact only when the
+residues are in contact, but we also know that measured
+correlations extend over long distances, which is why the
+19 Because the ﬂock is an active system, even if the real interac-
+tions among birds are local, the joint distribution of velocities at
+one moment in time might not be well approximated by a local
+model. Thus it is important that, within the maximum entropy
+framework, one can test for the (un)importance of longer ranged
+interactions [134]. One can go further, and build maximum en-
+tropy models that describe the dynamics of the ﬂock, and for real
+ﬂocks of starlings much of our equilibrium intuition is valid be-
+cause the time scales for rearrangement of the birds in the ﬂock
+is much longer than the time scale for equilibration of birds with
+their neighbors [135, 136].
+attempt to infer contacts from correlations is hard. If
+this picture really is correct, we have the coexistence of
+local interactions and long–ranged correlations, which is
+a signature of criticality. But the situation is far from
+clear, since the data are still sparse, 20 and correlations
+derived from functionality are mixed with correlations
+derived from shared evolutionary history. We have tried
+a test case—the diversity of antibodies in the zebraﬁsh
+immune system—that involves much shorter sequences,
+where the relevant protein family can be exhaustively
+sampled [161], and hence where the maximum entropy
+construction can be carried, convincingly, to completion.
+Even in this more limited problem, we see signs that the
+distribution of sequences is poised near a critical point in
+parameter space [162].
+IX. TOWARD CONCLUSIONS
+I hope to have convinced you that our modern under-
+standing of the phenomena of life has already been in-
+ﬂuenced, dramatically, by theory, and that the prospects
+for the future are bright. This is, perhaps, a moment
+to emphasize that the examples I have chosen are far
+from exhaustive. In the same spirit, I could have dis-
+cussed many other beautiful developments: the idea that
+reliable transmission of information through the synthe-
+sis of new molecules—as in the replication, transcription,
+and translation of sequence information coded in DNA—
+depends on building Maxwell demons (kinetic proofread-
+ing) that can push past the limits to precision set by
+thermodynamics [163–165]; the idea that amino acid se-
+quences of real proteins are selected to avoid the frustra-
+tion that leads to the glassiness of random heteropoly-
+mers [166–168]; the idea that the pace of evolutionary
+change is determined not by the typical organism, but
+by those rare organisms in the tail of the ﬁtness distri-
+bution, as well as broader connections of evolutionary
+dynamics to statistical physics [169–173]; the idea that
+the active mechanics of the inner ear are tuned near a
+critical point (Hopf bifurcation), maximizing sensitivity
+and frequency selectivity while providing a natural and
+20 For related reasons, I have not discussed the problem of genetic
+networks, although it does seem appropriate to give some point-
+ers. There is early work connecting biochemical and genetic net-
+works to Boolean networks [149], and this led to substantial the-
+oretical developments [150, 151]. A second wave used ideas bor-
+rowed from Hopﬁeld’s approach to neural networks [152], while
+more recent work has focused on incorporating what we know of
+the molecular details [153, 154]. Picking up old threads, Kauﬀ-
+man and colleagues made eﬀorts to identify signatures of criti-
+cality in genetic networks [155–157], while my colleagues and I
+have argued that one can see such signatures in the the statis-
+tical and dynamical behavior of the gap gene network [158]. I
+think all will be clearer when we ﬁnally have tools that allow us
+to measure simultaneously the expression levels of many genes,
+in single cells, with a resolution signiﬁcantly better than the in-
+trinsic noise levels, and these are just emerging [159, 160].
+================================================================================
+
+Source: Perspectives_on_theory_at_the_interface_of_physics_and_biology.pdf
+Relevance: 0.4585
+----------------------------------------
+14
+ing argument for the speed ﬂuctuations, and in this case
+long–ranged correlations must be a signature of critical-
+ity, as one can verify by detailed analysis of the model in
+Ref [132].19 The Rome group has gone on to analyze the
+trajectories of swarming midges, and here too they see
+long–ranged correlations of velocity ﬂuctuations, now in
+the absence of symmetry breaking, and argue that this
+again is a sign of criticality [137, 138].
+For neurons, the notion of locality of interactions is not
+so useful, because neurons are extended objects and can
+reach many, many neighbors. As a result, long–ranged
+correlations are not a useful diagnostic of criticality. As
+an alternative we have tried to develop a thermodynam-
+ics for neural networks, essentially counting the number
+of states (combinations of spiking and silence across the
+population) that have a particular value of log proba-
+bility; this is equivalent to measuring entropy vs energy
+[139, 140]. Strikingly, for the activity of neurons in the
+retina, the entropy is essentially a linear function of the
+energy, with unit slope [141], which corresponds to an
+unusual kind of critical point.
+There is an independent literature that tries to con-
+nect the dynamical patterns of activity in neural systems
+with the scale–invariant “avalanches” predicted by self–
+organized criticality [142–144]. Another dynamical no-
+tion of criticality is to ask about the number of Lyapunov
+exponents near zero, and there is an elegantly simple
+model that shows how a network could learn to be criti-
+cal in this sense [145]. Subsequent work from Magnasco
+and colleagues has looked at the data emerging from hu-
+man electro–corticography; they estimate the spectra of
+Lyapunov exponents for models that describe these dy-
+namical signals, show that there is a concentration of
+exponents near zero, and even that this critical behav-
+ior is lost as the patient slips out of consciousness under
+anesthesia [146, 147]. The relationship between statisti-
+cal and dynamical notions of criticality is not at all clear,
+and this is a physics problem not a biology problem; for
+a ﬁrst try at connecting the diﬀerent ideas in the context
+of neural data, see Ref [148].
+Returning to the families of proteins, we again see hints
+of critical behavior. The hope is that the distribution
+of sequences can be described by models in which the
+diﬀerent choices of amino acid interact only when the
+residues are in contact, but we also know that measured
+correlations extend over long distances, which is why the
+19 Because the ﬂock is an active system, even if the real interac-
+tions among birds are local, the joint distribution of velocities at
+one moment in time might not be well approximated by a local
+model. Thus it is important that, within the maximum entropy
+framework, one can test for the (un)importance of longer ranged
+interactions [134]. One can go further, and build maximum en-
+tropy models that describe the dynamics of the ﬂock, and for real
+ﬂocks of starlings much of our equilibrium intuition is valid be-
+cause the time scales for rearrangement of the birds in the ﬂock
+is much longer than the time scale for equilibration of birds with
+their neighbors [135, 136].
+attempt to infer contacts from correlations is hard. If
+this picture really is correct, we have the coexistence of
+local interactions and long–ranged correlations, which is
+a signature of criticality. But the situation is far from
+clear, since the data are still sparse, 20 and correlations
+derived from functionality are mixed with correlations
+derived from shared evolutionary history. We have tried
+a test case—the diversity of antibodies in the zebraﬁsh
+immune system—that involves much shorter sequences,
+where the relevant protein family can be exhaustively
+sampled [161], and hence where the maximum entropy
+construction can be carried, convincingly, to completion.
+Even in this more limited problem, we see signs that the
+distribution of sequences is poised near a critical point in
+parameter space [162].
+IX. TOWARD CONCLUSIONS
+I hope to have convinced you that our modern under-
+standing of the phenomena of life has already been in-
+ﬂuenced, dramatically, by theory, and that the prospects
+for the future are bright. This is, perhaps, a moment
+to emphasize that the examples I have chosen are far
+from exhaustive. In the same spirit, I could have dis-
+cussed many other beautiful developments: the idea that
+reliable transmission of information through the synthe-
+sis of new molecules—as in the replication, transcription,
+and translation of sequence information coded in DNA—
+depends on building Maxwell demons (kinetic proofread-
+ing) that can push past the limits to precision set by
+thermodynamics [163–165]; the idea that amino acid se-
+quences of real proteins are selected to avoid the frustra-
+tion that leads to the glassiness of random heteropoly-
+mers [166–168]; the idea that the pace of evolutionary
+change is determined not by the typical organism, but
+by those rare organisms in the tail of the ﬁtness distri-
+bution, as well as broader connections of evolutionary
+dynamics to statistical physics [169–173]; the idea that
+the active mechanics of the inner ear are tuned near a
+critical point (Hopf bifurcation), maximizing sensitivity
+and frequency selectivity while providing a natural and
+20 For related reasons, I have not discussed the problem of genetic
+networks, although it does seem appropriate to give some point-
+ers. There is early work connecting biochemical and genetic net-
+works to Boolean networks [149], and this led to substantial the-
+oretical developments [150, 151]. A second wave used ideas bor-
+rowed from Hopﬁeld’s approach to neural networks [152], while
+more recent work has focused on incorporating what we know of
+the molecular details [153, 154]. Picking up old threads, Kauﬀ-
+man and colleagues made eﬀorts to identify signatures of criti-
+cality in genetic networks [155–157], while my colleagues and I
+have argued that one can see such signatures in the the statis-
+tical and dynamical behavior of the gap gene network [158]. I
+think all will be clearer when we ﬁnally have tools that allow us
+to measure simultaneously the expression levels of many genes,
+in single cells, with a resolution signiﬁcantly better than the in-
+trinsic noise levels, and these are just emerging [159, 160].
+================================================================================
+
+Source: Perspectives_on_theory_at_the_interface_of_physics_and_biology.pdf
+Relevance: 0.4585
+----------------------------------------
+14
+ing argument for the speed ﬂuctuations, and in this case
+long–ranged correlations must be a signature of critical-
+ity, as one can verify by detailed analysis of the model in
+Ref [132].19 The Rome group has gone on to analyze the
+trajectories of swarming midges, and here too they see
+long–ranged correlations of velocity ﬂuctuations, now in
+the absence of symmetry breaking, and argue that this
+again is a sign of criticality [137, 138].
+For neurons, the notion of locality of interactions is not
+so useful, because neurons are extended objects and can
+reach many, many neighbors. As a result, long–ranged
+correlations are not a useful diagnostic of criticality. As
+an alternative we have tried to develop a thermodynam-
+ics for neural networks, essentially counting the number
+of states (combinations of spiking and silence across the
+population) that have a particular value of log proba-
+bility; this is equivalent to measuring entropy vs energy
+[139, 140]. Strikingly, for the activity of neurons in the
+retina, the entropy is essentially a linear function of the
+energy, with unit slope [141], which corresponds to an
+unusual kind of critical point.
+There is an independent literature that tries to con-
+nect the dynamical patterns of activity in neural systems
+with the scale–invariant “avalanches” predicted by self–
+organized criticality [142–144]. Another dynamical no-
+tion of criticality is to ask about the number of Lyapunov
+exponents near zero, and there is an elegantly simple
+model that shows how a network could learn to be criti-
+cal in this sense [145]. Subsequent work from Magnasco
+and colleagues has looked at the data emerging from hu-
+man electro–corticography; they estimate the spectra of
+Lyapunov exponents for models that describe these dy-
+namical signals, show that there is a concentration of
+exponents near zero, and even that this critical behav-
+ior is lost as the patient slips out of consciousness under
+anesthesia [146, 147]. The relationship between statisti-
+cal and dynamical notions of criticality is not at all clear,
+and this is a physics problem not a biology problem; for
+a ﬁrst try at connecting the diﬀerent ideas in the context
+of neural data, see Ref [148].
+Returning to the families of proteins, we again see hints
+of critical behavior. The hope is that the distribution
+of sequences can be described by models in which the
+diﬀerent choices of amino acid interact only when the
+residues are in contact, but we also know that measured
+correlations extend over long distances, which is why the
+19 Because the ﬂock is an active system, even if the real interac-
+tions among birds are local, the joint distribution of velocities at
+one moment in time might not be well approximated by a local
+model. Thus it is important that, within the maximum entropy
+framework, one can test for the (un)importance of longer ranged
+interactions [134]. One can go further, and build maximum en-
+tropy models that describe the dynamics of the ﬂock, and for real
+ﬂocks of starlings much of our equilibrium intuition is valid be-
+cause the time scales for rearrangement of the birds in the ﬂock
+is much longer than the time scale for equilibration of birds with
+their neighbors [135, 136].
+attempt to infer contacts from correlations is hard. If
+this picture really is correct, we have the coexistence of
+local interactions and long–ranged correlations, which is
+a signature of criticality. But the situation is far from
+clear, since the data are still sparse, 20 and correlations
+derived from functionality are mixed with correlations
+derived from shared evolutionary history. We have tried
+a test case—the diversity of antibodies in the zebraﬁsh
+immune system—that involves much shorter sequences,
+where the relevant protein family can be exhaustively
+sampled [161], and hence where the maximum entropy
+construction can be carried, convincingly, to completion.
+Even in this more limited problem, we see signs that the
+distribution of sequences is poised near a critical point in
+parameter space [162].
+IX. TOWARD CONCLUSIONS
+I hope to have convinced you that our modern under-
+standing of the phenomena of life has already been in-
+ﬂuenced, dramatically, by theory, and that the prospects
+for the future are bright. This is, perhaps, a moment
+to emphasize that the examples I have chosen are far
+from exhaustive. In the same spirit, I could have dis-
+cussed many other beautiful developments: the idea that
+reliable transmission of information through the synthe-
+sis of new molecules—as in the replication, transcription,
+and translation of sequence information coded in DNA—
+depends on building Maxwell demons (kinetic proofread-
+ing) that can push past the limits to precision set by
+thermodynamics [163–165]; the idea that amino acid se-
+quences of real proteins are selected to avoid the frustra-
+tion that leads to the glassiness of random heteropoly-
+mers [166–168]; the idea that the pace of evolutionary
+change is determined not by the typical organism, but
+by those rare organisms in the tail of the ﬁtness distri-
+bution, as well as broader connections of evolutionary
+dynamics to statistical physics [169–173]; the idea that
+the active mechanics of the inner ear are tuned near a
+critical point (Hopf bifurcation), maximizing sensitivity
+and frequency selectivity while providing a natural and
+20 For related reasons, I have not discussed the problem of genetic
+networks, although it does seem appropriate to give some point-
+ers. There is early work connecting biochemical and genetic net-
+works to Boolean networks [149], and this led to substantial the-
+oretical developments [150, 151]. A second wave used ideas bor-
+rowed from Hopﬁeld’s approach to neural networks [152], while
+more recent work has focused on incorporating what we know of
+the molecular details [153, 154]. Picking up old threads, Kauﬀ-
+man and colleagues made eﬀorts to identify signatures of criti-
+cality in genetic networks [155–157], while my colleagues and I
+have argued that one can see such signatures in the the statis-
+tical and dynamical behavior of the gap gene network [158]. I
+think all will be clearer when we ﬁnally have tools that allow us
+to measure simultaneously the expression levels of many genes,
+in single cells, with a resolution signiﬁcantly better than the in-
+trinsic noise levels, and these are just emerging [159, 160].
+================================================================================
+
+Source: Robustness_of_Generalized_Learning_Vector_Quantization_Models_against_Adversarial_Attacks.pdf
+Relevance: 0.4567
+----------------------------------------
+Robustness of Generalized Learning Vector
+Quantization Models against Adversarial Attacks
+Sascha Saralajew1, Lars Holdijk1,2, Maike Rees1, and Thomas Villmann3
+1 Dr. Ing. h.c. F. Porsche AG, Weissach, Germany,
+<firstname>.<lastname>@porsche.de
+2 University of Groningen, Groningen, Netherlands
+3 Saxony Institute for Computational Intelligence and Machine Learning,
+University of Applied Sciences Mittweida, Mittweida, Germany,
+thomas.villmann@hs-mittweida.de
+Abstract. Adversarial attacks and the development of (deep) neural
+networks robust against them are currently two widely researched topics.
+The robustness of Learning Vector Quantization (LVQ) models against
+adversarial attacks has however not yet been studied to the same ex-
+tent. We therefore present an extensive evaluation of three LVQ mod-
+els: Generalized LVQ, Generalized Matrix LVQ and Generalized Tangent
+LVQ. The evaluation suggests that both Generalized LVQ and General-
+ized Tangent LVQ have a high base robustness, on par with the cur-
+rent state-of-the-art in robust neural network methods. In contrast to
+this, Generalized Matrix LVQ shows a high susceptibility to adversarial
+attacks, scoring consistently behind all other models. Additionally, our
+numerical evaluation indicates that increasing the number of prototypes
+per class improves the robustness of the models.
+1 Introduction
+The robustness against adversarial attacks of (deep) neural networks (NNs) for
+classiﬁcation tasks has become one of the most discussed topics in machine
+learning research since it was discovered [1,2]. By making almost imperceptible
+changes to the input of a NN, attackers are able to force a misclassiﬁcation of the
+input or even switch the prediction to any desired class. With machine learning
+taking a more important role within our society, the security of machine learning
+models in general is under more scrutiny than ever.
+To deﬁne an adversarial example, we use a deﬁnition similar to [3]. Sup-
+pose we use a set of scoring functionsfj : X→ R which assign a score to each
+class j ∈ C= {1,...,Nc}given an input x of the data space X. Moreover,
+the predicted class label c∗(x) for x is determined by a winner-takes-all rule
+c∗(x) = arg maxj fj (x) and we have access to a labeled data point(x,y) which
+is correctly classiﬁed asc∗(x) = y. An adversarial example˜x of the samplex
+is deﬁned as the minimal required perturbation ofx by ϵ to ﬁnd a point at the
+decision boundary or in the classiﬁcation region of a diﬀerent class thany, i.e.
+arXiv:1902.00577v2  [cs.LG]  9 Mar 2019
+================================================================================
+
+Source: Neuromorphic_Computing_for_Content-based_Image_Retrieval.pdf
+Relevance: 0.4563
+----------------------------------------
+WMAX and weight norm to ﬁnd out how many times we can scale up weight without exceeding88
+WMAX , and we do the same thing to calculate bias ratio. In line 13, we compare weight ratio89
+and bias ratio to set the param scale to the smaller value. In line 14 and 15, we useparam scale90
+to scale the ANN weight and bias, quantizing them to integers, and set them as the parameters of91
+snn layer. In line 16, we calculate dvdt by simulating the ANN neuron activation and the shape92
+of dvdt becomes N ×FH ×FW ×FC , where FH , FW , and FC stand for the feature map’s93
+height, width, and channel.94
+In line 18 and 19, we set the threshold of neurons at snn layer to the quantized percentile95
+value of dvdt so there is one single threshold value for this layer. Then, in line 20, we calculate96
+the spikerate, an estimation of the spiking probability of neurons, as the output of snn layer,97
+which has the same shape as dvdt. In line 21, we update slope by multiplying it with the ratio of98
+param scale and threshold.99
+Now having a SNN at hand, we start feeding images into the network. For each image, we100
+probe the neurons of the layer before the output layer at the last execution time step to get the101
+neuron membrane potentials. The membrane potential vector is then the embedding of the input102
+image.103
+Our SNN takes images in the training and test sets as inputs and generates their embeddings.104
+We see the training image embeddings as a corpus of image features. For each test image, we apply105
+nearest neighbor search using cosine similarity to ﬁnd images in the corpus that are the closest to106
+the test image in the embedding space.107
+8
+================================================================================
+
+Source: Scaling_Properties_of_Human_Brain_Functional_Networks.pdf
+Relevance: 0.4554
+----------------------------------------
+Scaling Properties of Human Brain
+Functional Networks
+Riccardo Zucca1, Xerxes D. Arsiwalla1, Hoang Le2,
+Mikail Rubinov3,4, and Paul F. M. J. Verschure1,5
+1 Laboratory of Synthetic Perceptive, Emotive and Cognitive Systems (SPECS),
+N-RAS, DTIC, Universitat Pompeu Fabra (UPF), Barcelona, Spain
+2 California Institute of Technology, Pasadena, USA
+3 Department of Psychiatry, Behavioural and Clinical Neuroscience Institute,
+University of Cambridge, Cambridge, UK
+4 Janelia Research Campus, Howard Hughes Medical Institute, Ashburn, VA, USA
+5 Catalan Institute of Advanced Studies (ICREA), Barcelona, Spain
+paul.verschure@upf.edu
+http://specs.upf.edu
+Abstract. We investigate scaling properties of human brain functional
+networks in the resting-state. Analyzing network degree distributions,
+we statistically test whether their tails scale as power-law or not. Ini-
+tial studies, based on least-squares ﬁtting, were shown to be inadequate
+for precise estimation of power-law distributions. Subsequently, meth-
+ods based on maximum-likelihood estimators have been proposed and
+applied to address this question. Nevertheless, no clear consensus has
+emerged, mainly because results have shown substantial variability de-
+pending on the data-set used or its resolution. In this study, we work with
+high-resolution data (10K nodes) from the Human Connectome Project
+and take into account network weights. We test for the power-law, ex-
+ponential, log-normal and generalized Pareto distributions. Our results
+show that the statistics generally do not support a power-law, but in-
+stead these degree distributions tend towards the thin-tail limit of the
+generalized Pareto model. This may have implications for the number of
+hubs in human brain functional networks.
+Keywords: Power-law distributions, functional connectivity, general-
+ized Pareto, model ﬁtting, maximum likelihood, connectome, brain net-
+works
+1 Introduction
+Much interest in theoretical neuroscience has revolved around graph-theoretic
+scaling properties of the network of structural and functional correlations in the
+human brain. Some authors have described the degree distribution of nodes in
+brain functional networks as scale-free; that is, these networks follow a power-law
+degree distribution P(k) ∼ k−α with an exponent close to 2 [7, 11], indicating the
+presence of a small number of hub-nodes that connect widely across the network.
+arXiv:1702.00768v1  [q-bio.NC]  2 Feb 2017
+================================================================================
+
+Source: Scaling_Properties_of_Human_Brain_Functional_Networks.pdf
+Relevance: 0.4554
+----------------------------------------
+Scaling Properties of Human Brain
+Functional Networks
+Riccardo Zucca1, Xerxes D. Arsiwalla1, Hoang Le2,
+Mikail Rubinov3,4, and Paul F. M. J. Verschure1,5
+1 Laboratory of Synthetic Perceptive, Emotive and Cognitive Systems (SPECS),
+N-RAS, DTIC, Universitat Pompeu Fabra (UPF), Barcelona, Spain
+2 California Institute of Technology, Pasadena, USA
+3 Department of Psychiatry, Behavioural and Clinical Neuroscience Institute,
+University of Cambridge, Cambridge, UK
+4 Janelia Research Campus, Howard Hughes Medical Institute, Ashburn, VA, USA
+5 Catalan Institute of Advanced Studies (ICREA), Barcelona, Spain
+paul.verschure@upf.edu
+http://specs.upf.edu
+Abstract. We investigate scaling properties of human brain functional
+networks in the resting-state. Analyzing network degree distributions,
+we statistically test whether their tails scale as power-law or not. Ini-
+tial studies, based on least-squares ﬁtting, were shown to be inadequate
+for precise estimation of power-law distributions. Subsequently, meth-
+ods based on maximum-likelihood estimators have been proposed and
+applied to address this question. Nevertheless, no clear consensus has
+emerged, mainly because results have shown substantial variability de-
+pending on the data-set used or its resolution. In this study, we work with
+high-resolution data (10K nodes) from the Human Connectome Project
+and take into account network weights. We test for the power-law, ex-
+ponential, log-normal and generalized Pareto distributions. Our results
+show that the statistics generally do not support a power-law, but in-
+stead these degree distributions tend towards the thin-tail limit of the
+generalized Pareto model. This may have implications for the number of
+hubs in human brain functional networks.
+Keywords: Power-law distributions, functional connectivity, general-
+ized Pareto, model ﬁtting, maximum likelihood, connectome, brain net-
+works
+1 Introduction
+Much interest in theoretical neuroscience has revolved around graph-theoretic
+scaling properties of the network of structural and functional correlations in the
+human brain. Some authors have described the degree distribution of nodes in
+brain functional networks as scale-free; that is, these networks follow a power-law
+degree distribution P(k) ∼ k−α with an exponent close to 2 [7, 11], indicating the
+presence of a small number of hub-nodes that connect widely across the network.
+arXiv:1702.00768v1  [q-bio.NC]  2 Feb 2017
+================================================================================
+

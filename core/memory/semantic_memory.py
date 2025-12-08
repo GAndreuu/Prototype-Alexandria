@@ -168,7 +168,13 @@ class SemanticFileSystem:
     
     def __init__(self, topology_engine, engine_encoder=None):
         self.topology = topology_engine
-        self.engine_encoder = engine_encoder  # MiniLM para texto
+        
+        # BUG FIX: If engine_encoder is not provided, use topology_engine as encoder
+        # topology_engine has an encode() method that can be used directly
+        if engine_encoder is None:
+            self.engine_encoder = topology_engine
+        else:
+            self.engine_encoder = engine_encoder
         
         # Componentes para processamento de imagem
         self.vision_loader = VisionLoader()
@@ -181,7 +187,7 @@ class SemanticFileSystem:
         
         print("SemanticFileSystem V11 - Multi-Modal inicializado")
         print(f"Storage: LanceDB (Alta Performance)")
-        print(f"Suporte: Texto/PDF (via {type(engine_encoder).__name__}) + Imagens (V11)")
+        print(f"Suporte: Texto/PDF (via {type(self.engine_encoder).__name__}) + Imagens (V11)")
         print(f"Dimensão vetorial: 384D (unificada)")
     
     def _chunk_text(self, text: str, chunk_size: int = 1000) -> List[str]:
@@ -254,7 +260,7 @@ class SemanticFileSystem:
                     
                     chunk_metadata = {
                         'chunk_id': f"{self.file_counter}_{i}",
-                        'content': chunk[:200] + "..." if len(chunk) > 200 else chunk,
+                        'content': chunk,
                         'vector': vector_384d.tolist(),
                         'chunk_size': len(chunk)
                     }
@@ -264,7 +270,7 @@ class SemanticFileSystem:
                     vector_384d = np.random.randn(384)
                     chunk_metadata = {
                         'chunk_id': f"{self.file_counter}_{i}",
-                        'content': chunk[:200] + "..." if len(chunk) > 200 else chunk,
+                        'content': chunk,
                         'vector': vector_384d.tolist(),
                         'chunk_size': len(chunk)
                     }
@@ -428,9 +434,11 @@ class SemanticFileSystem:
             
             # 1. Gerar embedding da query se possível
             query_vector = None
+            
             if self.engine_encoder:
                 # O encoder retorna shape (1, 384) ou (384,)
                 query_vector = self.engine_encoder.encode([query])[0]
+                
                 # Normalizar query vector
                 norm = np.linalg.norm(query_vector)
                 if norm > 0:
@@ -459,7 +467,9 @@ class SemanticFileSystem:
                     'source': res['source'],
                     'modalidade': res['modality'],
                     'media_path': res['source'],
-                    'encoder_used': res['metadata'].get('encoder_used', 'unknown')
+                    'encoder_used': res['metadata'].get('encoder_used', 'unknown'),
+                    'vector': res.get('vector'),
+                    'id': res.get('id')
                 })
             
             return formatted_results

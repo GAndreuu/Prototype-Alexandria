@@ -1,6 +1,7 @@
 # Alexandria - Project Structure
 
-**Last Updated**: 2025-12-06
+**Last Updated**: 2025-12-07  
+**Technical Deep Dive**: See [TECHNICAL_ARCHITECTURE.md](docs/TECHNICAL_ARCHITECTURE.md)
 
 ---
 
@@ -250,8 +251,9 @@ alexandria/
 
 ### Core Docs
 - `README.md` - Main documentation (this is comprehensive!)
-- `STRUCTURE.md` - This file
-- `docs/SYSTEM_OVERVIEW.md` - Architecture deep dive
+- `STRUCTURE.md` - This file (project structure)
+- `docs/SYSTEM_OVERVIEW.md` - Architecture overview (visual)
+- `docs/TECHNICAL_ARCHITECTURE.md` - **NEW**: Complete code analysis & technical deep dive
 
 ### Module Docs
 - `docs/modules/` - Per-module documentation

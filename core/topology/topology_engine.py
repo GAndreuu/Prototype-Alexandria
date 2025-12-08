@@ -13,7 +13,7 @@ import os
 import torch
 import numpy as np
 from typing import List, Dict, Any, Optional, Tuple
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, MiniBatchKMeans
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import logging
@@ -204,13 +204,25 @@ class TopologyEngine:
                 pca = PCA(n_components=384)
                 vectors_normalized = pca.fit_transform(vectors_normalized)
             
-            # Clustering K-Means real
-            self.kmeans = KMeans(
-                n_clusters=n_clusters,
-                random_state=42,
-                n_init=10,
-                max_iter=300
-            )
+            # Usar MiniBatchKMeans para grande quantidade de dados (muito mais rápido)
+            use_minibatch = len(vectors) > 50000
+            
+            if use_minibatch:
+                logger.info(f"Usando MiniBatchKMeans (dataset grande: {len(vectors)} vetores)")
+                self.kmeans = MiniBatchKMeans(
+                    n_clusters=n_clusters,
+                    random_state=42,
+                    batch_size=1024,
+                    max_iter=100,
+                    verbose=1  # Mostrar progresso
+                )
+            else:
+                self.kmeans = KMeans(
+                    n_clusters=n_clusters,
+                    random_state=42,
+                    n_init=10,
+                    max_iter=300
+                )
             
             self.cluster_labels = self.kmeans.fit_predict(vectors_normalized)
             
@@ -260,7 +272,16 @@ class TopologyEngine:
         try:
             from sklearn.metrics import silhouette_score
             if len(np.unique(labels)) > 1:  # Mínimo 2 clusters para silhouette
-                score = silhouette_score(vectors, labels)
+                # Se muitos vetores, usar amostragem para evitar O(n²)
+                max_samples = 10000
+                if len(vectors) > max_samples:
+                    logger.info(f"Usando amostragem de {max_samples} vetores para silhouette score")
+                    indices = np.random.choice(len(vectors), max_samples, replace=False)
+                    vectors_sample = vectors[indices]
+                    labels_sample = labels[indices]
+                    score = silhouette_score(vectors_sample, labels_sample)
+                else:
+                    score = silhouette_score(vectors, labels)
                 return float(score)
             else:
                 return 0.0

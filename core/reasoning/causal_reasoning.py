@@ -430,7 +430,13 @@ Data: 2025-11-22
         return explanation
     
     def _save_causal_graph(self):
-        """Salva grafo causal em arquivo."""
+        """Salva grafo causal em arquivo. Não sobrescreve se o novo grafo estiver vazio."""
+        # Evitar sobrescrever arquivo existente com grafo vazio
+        if not self.causal_graph or len(self.causal_graph) == 0:
+            if os.path.exists(self.causal_graph_path):
+                print("⚠️ Não sobrescrevendo grafo causal existente com grafo vazio")
+                return
+        
         with open(self.causal_graph_path, 'w', encoding='utf-8') as f:
             json.dump(self.causal_graph, f, indent=2, ensure_ascii=False)
     

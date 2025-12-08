@@ -266,17 +266,48 @@ Alexandria combina múltiplas teorias de neurociência computacional e IA:
 
 ## 📚 Documentação
 
-A documentação completa está organizada em `docs/`:
+A documentação está organizada topologicamente em [`docs/`](docs/):
 
 ```
 docs/
-├── SYSTEM_OVERVIEW.md    # Visão geral da arquitetura
-├── modules/               # Documentação por módulo
-├── reports/               # Relatórios de análise
-└── tutorials/             # Tutoriais passo-a-passo
+├── README.md                    # 🎯 Índice principal (COMECE AQUI)
+│
+├── architecture/                # 🏗️ Arquitetura do Sistema
+│   ├── overview.md             #    → Diagramas visuais e fluxo
+│   ├── technical.md            #    → Análise técnica completa
+│   └── components.md           #    → Breakdown de módulos
+│
+├── modules/                     # 📦 Documentação Técnica
+│   ├── README.md               #    → Índice navegável
+│   ├── 01-09_*.md              #    → Módulos core
+│   └── NEMESIS_MANUAL.md       #    → Bio-inspired learning
+│
+├── guides/                      # 📘 Guias de Uso
+│   └── user-manual.md          #    → Manual do usuário
+│
+├── reports/                     # 🧪 Análises e Experimentos
+└── concepts/                    # 💡 Conceitos Avançados
 ```
 
-**Relatórios Técnicos** (gerados automaticamente):
+### 🎓 **Comece Aqui por Perfil**
+
+| Perfil | Documento Recomendado |
+|--------|----------------------|
+| **🟢 Iniciante** | [`docs/architecture/overview.md`](docs/architecture/overview.md) |
+| **🟡 Desenvolvedor** | [`docs/architecture/technical.md`](docs/architecture/technical.md) |
+| **🔴 Pesquisador** | [`docs/architecture/components.md`](docs/architecture/components.md) |
+| **📖 Usuário Final** | [`docs/guides/user-manual.md`](docs/guides/user-manual.md) |
+| **⚙️ Módulo Específico** | [`docs/modules/README.md`](docs/modules/README.md) |
+
+### 📊 **Documentação por Tipo**
+
+- **Visual & Diagramas**: [`docs/architecture/overview.md`](docs/architecture/overview.md)
+- **Técnica & Código**: [`docs/architecture/technical.md`](docs/architecture/technical.md)
+- **Análise de Módulos**: [`docs/architecture/components.md`](docs/architecture/components.md)
+- **Guias de Uso**: [`docs/guides/`](docs/guides/)
+- **Experimentos**: [`docs/reports/`](docs/reports/)
+
+**Relatórios Técnicos** (auto-gerados):
 - VQ-VAE Deep Analysis
 - Experimental Ablation Suite (A-D)
 - Module Integration Status

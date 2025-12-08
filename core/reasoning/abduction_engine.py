@@ -120,7 +120,7 @@ class AbductionEngine:
             "{source} is essential for understanding {target}",
             "{source} influences the development of {target}",
             "{source} creates opportunities for {target}",
-            "{source} is related to {target} through {intermediate}"
+            "{source} contributes to {target}"
         ]
         
         logging.basicConfig(level=logging.INFO)
@@ -162,6 +162,11 @@ class AbductionEngine:
     
     def _find_orphaned_clusters(self, min_score: float) -> List[KnowledgeGap]:
         """Identifica clusters sem conexões causais significativas"""
+        # Tentar carregar grafo existente primeiro
+        if not self.causal_engine.causal_graph:
+            self.causal_engine.load_causal_graph()  # Tenta carregar do arquivo
+        
+        # Se ainda não existe, construir
         if not self.causal_engine.causal_graph:
             self.causal_engine.build_causal_graph()
             
@@ -226,6 +231,8 @@ class AbductionEngine:
         gaps = []
         missing_count = 0
         
+        if not self.causal_engine.causal_graph:
+            self.causal_engine.load_causal_graph()
         if not self.causal_engine.causal_graph:
             self.causal_engine.build_causal_graph()
             
@@ -441,13 +448,24 @@ class AbductionEngine:
         related = []
         
         if not self.causal_engine.causal_graph:
+            self.causal_engine.load_causal_graph()
+        if not self.causal_engine.causal_graph:
             self.causal_engine.build_causal_graph()
-            
-        # Procurar clusters com palavras em comum ou padrões similares
+        
+        # 1. Primeiro: vizinhos DIRETOS no grafo causal (conexões existentes)
+        if target_cluster in self.causal_engine.causal_graph:
+            neighbors = self.causal_engine.causal_graph[target_cluster]
+            if isinstance(neighbors, dict):
+                # Ordenar por peso da conexão
+                sorted_neighbors = sorted(neighbors.items(), key=lambda x: x[1], reverse=True)
+                for neighbor, weight in sorted_neighbors[:3]:
+                    related.append((neighbor, 1.0))  # Prioridade máxima
+        
+        # 2. Depois: clusters similares por semântica
         for cluster_id in self.causal_engine.causal_graph.keys():
-            if cluster_id != target_cluster:
+            if cluster_id != target_cluster and cluster_id not in [r[0] for r in related]:
                 similarity = self._calculate_semantic_similarity(target_cluster, cluster_id)
-                if similarity > 0.3:  # Threshold mínimo
+                if similarity > 0.2:  # Threshold mais baixo
                     related.append((cluster_id, similarity))
                     
         # Ordenar por similaridade e retornar top 5
@@ -790,6 +808,8 @@ class AbductionEngine:
         """
         self.logger.info(f"📈 Expandindo grafo causal com {len(validated_hypotheses)} hipóteses validadas...")
         
+        if not self.causal_engine.causal_graph:
+            self.causal_engine.load_causal_graph()
         if not self.causal_engine.causal_graph:
             self.causal_engine.build_causal_graph()
             
