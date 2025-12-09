@@ -16,6 +16,9 @@ docs/core/
 │   ├── critic_agent.md
 │   └── neural_oracle.md
 │
+├── field/            → [NOVO] Campo Pré-Estrutural
+│   └── README.md     → Geometria diferencial para cognição
+│
 ├── learning/         → Módulos de aprendizado cognitivo
 │   ├── README.md
 │   ├── active_inference.md
@@ -25,6 +28,12 @@ docs/core/
 │   ├── integration_layer.md
 │   ├── profiles.md
 │   └── NEMESIS_MANUAL.md
+│
+├── loop/             → Self-Feeding Loop
+│   ├── README.md
+│   ├── self_feeding_loop.md
+│   ├── nemesis_integration.md
+│   └── feedback_collector.md
 │
 ├── memory/           → Sistemas de memória
 │   ├── semantic_memory.md
@@ -57,6 +66,17 @@ docs/core/
 | Bridge Agent | [bridge_agent.md](agents/bridge_agent.md) | Identificação e preenchimento de gaps |
 | Critic Agent | [critic_agent.md](agents/critic_agent.md) | Validação científica via Gemini |
 | Neural Oracle | [neural_oracle.md](agents/neural_oracle.md) | Síntese híbrida (local + cloud) |
+
+### 🌌 Field (`field/`) - NOVO
+
+| Módulo | Arquivo | Descrição |
+|--------|---------|-----------|
+| PreStructuralField | [README.md](field/README.md) | Campo geométrico contínuo |
+| DynamicManifold | [README.md](field/README.md#1-dynamicmanifold) | Variedade com dimensão variável |
+| RiemannianMetric | [README.md](field/README.md#2-riemannianmetric) | Métrica que deforma |
+| FreeEnergyField | [README.md](field/README.md#3-freeenergyfield) | Campo F(x) = E - T·S |
+| GeodesicFlow | [README.md](field/README.md#4-geodesicflow) | Propagação geodésica |
+| CycleDynamics | [README.md](field/README.md#5-cycledynamics) | Expansão→Config→Compressão |
 
 ### 🧠 Learning (`learning/`)
 
@@ -151,14 +171,16 @@ graph TB
 | Categoria | Módulos | Documentados | Cobertura |
 |-----------|---------|--------------|-----------|
 | Agents | 4 | 4 | ✅ 100% |
+| Field | 6 | 6 | ✅ 100% |
 | Learning | 7 | 7 | ✅ 100% |
-| Loop | 3 | 3 | ✅ 100% |
+| Loop | 6 | 6 | ✅ 100% |
 | Memory | 3 | 3 | ✅ 100% |
 | Reasoning | 5 | 5 | ✅ 100% |
 | Topology | 1 | 1 | ✅ 100% |
 | Utils | 3 | 3 | ✅ 100% |
-| **Total** | **26** | **26** | **✅ 100%** |
+| **Total** | **35** | **35** | **✅ 100%** |
 
 ---
 
-**Última atualização**: 2025-12-07
+**Última atualização**: 2025-12-08
+

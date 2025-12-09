@@ -42,9 +42,10 @@ A resposta foi surpreendente: **sim, mas de forma fundamentalmente diferente**.
 2. **Fase II**: VQ-VAE para compressão neural
 3. **Fase III**: Mycelial Network (Hebbian learning)
 4. **Fase IV**: Nemesis Core (Active Inference + Predictive Coding)
-5. **Fase Atual**: Integração completa e otimização
+5. **Fase V**: Pre-Structural Field (Geometria Diferencial)
+6. **Fase Atual**: Integração completa e otimização
 
-Hoje, Alexandria é um sistema cognitivo completo que combina 6 paradigmas teóricos em uma arquitetura unificada.
+Hoje, Alexandria é um sistema cognitivo completo que combina **7 paradigmas teóricos** em uma arquitetura unificada.
 
 ---
 
@@ -212,6 +213,15 @@ Alexandria combina múltiplas teorias de neurociência computacional e IA:
 
 ## 🏗️ Módulos Principais
 
+### Pre-Structural Field (Geometric Cognition) 🆕
+**Arquivos**: `core/field/`
+
+- **DynamicManifold**: Variedade com dimensão variável (384→416D)
+- **RiemannianMetric**: Métrica que deforma com ativação
+- **FreeEnergyField**: Campo F(x) = E - T·S
+- **CycleDynamics**: Expansão→Configuração→Compressão
+- **Status**: ✅ Operacional (testado com 352k docs)
+
 ### VQ-VAE (Neural Compression)
 **Arquivo**: `core/reasoning/vqvae/`
 
@@ -237,7 +247,7 @@ Alexandria combina múltiplas teorias de neurociência computacional e IA:
 ### LanceDB (Vector Storage)
 **Arquivo**: `core/memory/storage.py`
 
-- **193,502 documentos** indexados
+- **352,000+ documentos** indexados
 - **Busca**: <50ms (p99) para top-10
 - **Status**: ✅ Operacional
 

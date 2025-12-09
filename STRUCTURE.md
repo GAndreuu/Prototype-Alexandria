@@ -1,6 +1,6 @@
 # Alexandria - Project Structure
 
-**Last Updated**: 2025-12-07  
+**Last Updated**: 2025-12-08  
 **Technical Deep Dive**: See [TECHNICAL_ARCHITECTURE.md](docs/TECHNICAL_ARCHITECTURE.md)
 
 ---
@@ -16,6 +16,14 @@ alexandria/
 │   │   ├── critic_agent.py      # Hypothesis criticism
 │   │   └── oracle.py            # Knowledge oracle
 │   │
+│   ├── field/                    # [NEW] Pre-Structural Field
+│   │   ├── manifold.py          # Dynamic manifold with variable dims
+│   │   ├── metric.py            # Riemannian metric (deformable)
+│   │   ├── free_energy_field.py # F(x) = E - T·S
+│   │   ├── geodesic_flow.py     # Geodesic propagation
+│   │   ├── cycle_dynamics.py    # Expansion→Config→Compression
+│   │   └── pre_structural_field.py # Unified wrapper
+│   │
 │   ├── learning/                 # Nemesis Core (Bio-inspired learning)
 │   │   ├── active_inference.py  # FEP-based agent logic
 │   │   ├── predictive_coding.py # Hierarchical prediction
@@ -23,6 +31,14 @@ alexandria/
 │   │   ├── integration_layer.py # System orchestrator
 │   │   ├── free_energy.py       # Top-level governance
 │   │   └── profiles.py          # Cognitive personalities
+│   │
+│   ├── loop/                     # Self-Feeding Loop
+│   │   ├── self_feeding_loop.py # Main orchestrator
+│   │   ├── hypothesis_executor.py # Hypothesis → Action
+│   │   ├── feedback_collector.py # Reward collection
+│   │   ├── incremental_learner.py # Batch learning
+│   │   ├── loop_metrics.py      # Performance tracking
+│   │   └── nemesis_integration.py # Brain connector
 │   │
 │   ├── memory/                   # Semantic memory & storage
 │   │   ├── semantic_memory.py   # Multi-modal indexing

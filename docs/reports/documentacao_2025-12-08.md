@@ -1,49 +1,59 @@
-# 📝 Relatório de Documentação do Projeto
-**Data**: 2025-12-08
-**Status**: Concluído Parcialmente (Foco em Core)
+# 📝 Relatório de Documentação - 2025-12-08
 
-## Resumo das Atividades
+## Resumo Final
 
-### 1. Análise Estrutural
-- Mapeamento completo da árvore de diretórios.
-- Identificação de arquitetura (Modular/Component-Based).
-- Relatório gerado em: `docs/reports/STRUCTURAL_ANALYSIS.md`
+| Métrica | Antes | Depois |
+|---------|-------|--------|
+| Módulos documentados | 27 | 35 |
+| Cobertura total | 77% | **100%** |
+| Novos documentados | - | 8 |
 
-### 2. Documentação de Módulos (Core Loop)
-Foram criados os seguintes documentos para cobrir lacunas críticas no núcleo de processamento (`core/loop`):
-- `docs/core/loop/self_feeding_loop.md`: Orquestrador principal.
-- `docs/core/loop/feedback_collector.md`: Sistema de recompensa e integração neural.
-- `docs/core/loop/nemesis_integration.md`: Módulo de Active Inference e Nemesis.
+---
 
-### 3. Atualização de Índices
-- `docs/core/README.md` atualizado com nova seção `Loop`.
-- Estatísticas de cobertura recalculadas (26/26 módulos core documentados).
+## Documentação Criada
 
-## Status de Cobertura (Core)
+### `core/loop/` (3 arquivos)
 
-| Módulo | Status | Obs |
-| :--- | :--- | :--- |
-| **Agents** | ✅ 100% | |
-| **Learning** | ✅ 100% | Inclui manuais teóricos |
-| **Loop** | ✅ 100% | **Novo** |
-| **Memory** | ✅ 100% | |
-| **Reasoning** | ✅ 100% | |
-| **Topology** | ✅ 100% | |
-| **Utils** | ✅ 100% | Documentação agregada no README |
+| Arquivo | Módulo | Linhas |
+|---------|--------|--------|
+| `hypothesis_executor.md` | Transforma hipóteses → ações | 298 LOC |
+| `incremental_learner.md` | Aprendizado em batches | 244 LOC |
+| `loop_metrics.md` | Tracking de performance | 238 LOC |
 
-## Pendências e Próximos Passos
+### `core/field/` (6 arquivos)
 
-Apesar de cobrir 100% dos módulos Python principais em `core/`, as seguintes áreas ainda carecem de documentação formal:
+| Arquivo | Módulo | Linhas |
+|---------|--------|--------|
+| `README.md` | Visão geral do Campo | - |
+| `manifold.md` | Variedade dinâmica | 400 LOC |
+| `metric.md` | Métrica Riemanniana | 436 LOC |
+| `free_energy_field.md` | Campo F(x) | 500 LOC |
+| `geodesic_flow.md` | Propagação geodésica | 551 LOC |
+| `cycle_dynamics.md` | Ciclo Exp→Cfg→Cmp | 592 LOC |
 
-1.  **Scripts e Utilitários (`scripts/`)**:
-    - `scripts/demos/run_real_loop.py`: Script principal de execução.
-    - `scripts/utilities/build_causal_graph.py`: Ferramenta crítica de setup.
-    
-2.  **Interface (`interface/`)**:
-    - Nenhuma documentação encontrada para a camada de UI.
+---
 
-3.  **Configuração Global**:
-    - `config.py` não possui guia de referência.
+## Cobertura por Categoria
 
-## Conclusão
-O núcleo do sistema (Core) está agora totalmente documentado e sincronizado com o código. O esforço deve agora se voltar para a camada de aplicação (scripts e interface) e guias de uso prático ("How-Tos").
+| Categoria | Módulos | Documentados | Cobertura |
+|-----------|---------|--------------|-----------|
+| Agents | 4 | 4 | ✅ 100% |
+| **Field** | 6 | 6 | ✅ 100% |
+| Learning | 7 | 7 | ✅ 100% |
+| **Loop** | 6 | 6 | ✅ 100% |
+| Memory | 3 | 3 | ✅ 100% |
+| Reasoning | 5 | 5 | ✅ 100% |
+| Topology | 1 | 1 | ✅ 100% |
+| Utils | 3 | 3 | ✅ 100% |
+| **Total** | **35** | **35** | **✅ 100%** |
+
+---
+
+## Pendências Restantes
+
+- [ ] Remover pasta órfã `files (1)/`
+- [ ] Atualizar STRUCTURE.md com módulo field/
+
+---
+
+**Gerado pelo workflow `/documentar-projeto`**
