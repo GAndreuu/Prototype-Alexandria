@@ -1,407 +1,149 @@
-# 🏛️ Alexandria - Local AI Synthesis
+# 🏛️ Alexandria - Synergetic Cognitive Architecture
 
 <div align="center">
 
-![Status](https://img.shields.io/badge/status-production-success?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-active_development-success?style=for-the-badge&color=2ea44f)
 ![Python](https://img.shields.io/badge/python-3.10+-blue?style=for-the-badge&logo=python)
-![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)
+![Architecture](https://img.shields.io/badge/architecture-biocameral-purple?style=for-the-badge)
 
-**Síntese Local de IA através de Aprendizado Não-Supervisionado**
+**Arquitetura Cognitiva Sinergética para Raciocinio Local e Autônomo**
 
-*A cognitive architecture for local, self-improving AI systems*
+*Uma síntese de sistemas biológicos, geometria diferencial e inferência ativa.*
 
-[Objetivos](#-objetivos) • [Como Funciona](#-como-funciona) • [Teorias](#-fundamentos-teóricos) • [Documentação](#-documentação)
+[Conceitos Chave](#-pilares-do-sistema) • [Realidade vs Aspiração](#-reality-check-o-que-funciona) • [Operação](#-protocolo-operacional) • [Quick Start](#-quick-start)
 
 </div>
 
 ---
 
-## 🎯 Objetivos
+## 🎯 Visão Sintética
 
-Alexandria busca criar uma **síntese local de IA** através de:
+Alexandria não é apenas um RAG (Retrieval-Augmented Generation). É um **Sistema Cognitivo Biocameral** que separa memória (dados brutos) de raciocínio (grafo de conceitos), permitindo:
 
-1. **Autonomia Total**: Zero dependências de serviços cloud ou APIs externas
-2. **Aprendizado Contínuo**: Sistema que se aperfeiçoa com cada observação
-3. **Raciocínio Emergente**: Inteligência que surge de processos bio-inspirados simples
-4. **Transparência**: Visualização completa dos processos internos de decisão
-5. **Eficiência**: Compressão neural radical (96%) para operar localmente
-
-**Visão**: Uma IA autônoma e auto-aperfeiçoante que roda na sua máquina, sem cloud, sem censura, sem custo operacional.
+1.  **Resiliência Cognitiva**: O sistema "entende" conceitos mesmo se a memória bruta for apagada.
+2.  **Geometria do Pensamento**: O espaço vetorial se deforma para aproximar conceitos logicamente conectados.
+3.  **Sonho Autônomo**: Enquanto ocioso, o sistema cria novas conexões e hipóteses sozinho.
 
 ---
 
-## 📖 A História do Sistema
+## 🏛️ Pilares do Sistema
 
-Alexandria começou como um experimento em **composicionalidade semântica**: será que códigos discretos podem raciocinar como embeddings contínuos?
+### 1. 🍄 Raciocínio Micelial (The Mycelial Network)
+Baseado no aprendizado Hebbiano (*"Cells that fire together, wire together"*). O sistema constrói um grafo de pesos sinápticos entre conceitos quantizados (tokens VQ-VAE), criando uma estrutura de longo prazo independente dos dados originais.
+- [📄 Ler Conceito Completo](docs/concepts/cognitive_resilience.md)
 
-A resposta foi surpreendente: **sim, mas de forma fundamentalmente diferente**.
+### 2. 🌌 Cognição Geométrica (The Pre-Structural Field)
+Baseado em Geometria Diferencial. O sistema mantém um *manifold* dinâmico onde a distância entre dois conceitos muda baseada na "gravidade" da informação acumulada. Pensar é navegar geodésicas (curvas de menor resistência) neste espaço.
+- [📄 Ler Conceito Completo](docs/concepts/geometric_cognition.md)
 
-### Evolução
-
-1. **Fase I**: RAG básico com LanceDB
-2. **Fase II**: VQ-VAE para compressão neural
-3. **Fase III**: Mycelial Network (Hebbian learning)
-4. **Fase IV**: Nemesis Core (Active Inference + Predictive Coding)
-5. **Fase V**: Pre-Structural Field (Geometria Diferencial)
-6. **Fase Atual**: Integração completa e otimização
-
-Hoje, Alexandria é um sistema cognitivo completo que combina **7 paradigmas teóricos** em uma arquitetura unificada.
+### 3. 🧬 Autonomia Ativa (The Self-Feeding Loop)
+Baseado em Active Inference e Abduction. Um loop contínuo que observa o próprio grafo, detecta "ilhas" de conhecimento isolado e tenta criar pontes lógicas (hipóteses) para conectá-las, sem intervenção humana.
+- [📄 Ler Conceito Completo](docs/concepts/active_autonomy.md)
 
 ---
 
-## 🧠 Como Funciona
+## 🧠 Reality Check: O que Funciona?
 
-### Arquitetura Completa
+Para garantir transparência total, mantemos esta tabela de *Capabilities vs Aspirations*:
 
-```mermaid
-graph TB
-    subgraph Input["📥 INTERFACE DE ENTRADA"]
-        A[Documentos/Imagens]
-        B[Queries do Usuário]
-    end
-    
-    subgraph Processing["⚙️ PROCESSAMENTO MULTIMODAL"]
-        C[Sentence Transformer]
-        D[V11 Vision Encoder]
-        E[384D Embeddings]
-    end
-    
-    subgraph Compression["�️ COMPRESSÃO NEURAL"]
-        F[VQ-VAE Monolith V13]
-        G[Product Quantizer]
-        H[4 bytes/chunk]
-        I[4 heads × 256 codes]
-    end
-    
-    subgraph Memory["🗄️ MEMÓRIA SEMÂNTICA"]
-        J[LanceDB Vector Store]
-        K[193k documents indexed]
-    end
-    
-    subgraph Reasoning["🍄 RACIOCÍNIO MICELAR"]
-        L[Mycelial Network]
-        M[638k Hebbian Connections]
-        N[Activation Propagation]
-    end
-    
-    subgraph Nemesis["🧬 NEMESIS CORE"]
-        O[Active Inference Agents]
-        P[Predictive Coding]
-        Q[Free Energy Minimization]
-    end
-    
-    subgraph Intelligence["🎯 CAMADA DE INTELIGÊNCIA"]
-        R[Abduction Engine]
-        S[Causal Reasoning]
-        T[Meta-Hebbian Plasticity]
-    end
-    
-    subgraph Output["📤 SAÍDA"]
-        U[Respostas Enriquecidas]
-        V[Hipóteses Geradas]
-        W[Ações Autônomas]
-    end
-    
-    A --> C
-    A --> D
-    B --> J
-    C --> E
-    D --> E
-    E --> F
-    F --> G
-    G --> H
-    H --> I
-    I --> J
-    J --> L
-    L --> M
-    M --> N
-    N --> O
-    O --> P
-    P --> Q
-    Q --> R
-    R --> S
-    S --> T
-    T --> U
-    T --> V
-    T --> W
-    
-    style Input fill:#e3f2fd
-    style Processing fill:#fff3e0
-    style Compression fill:#f3e5f5
-    style Memory fill:#e8f5e9
-    style Reasoning fill:#fce4ec
-    style Nemesis fill:#fff9c4
-    style Intelligence fill:#e0f2f1
-    style Output fill:#fce4ec
-```
+| Componente | Status | Realidade do Código | Evidência |
+|:---|:---:|:---|:---|
+| **VQ-VAE Monolith** | ✅ Prod | Compressão neural 96% funcional. Codebook 99% ativo. | `core/reasoning/vqvae/` |
+| **Mycelial Network** | ✅ Prod | 600k+ conexões hebbianas. Persistência comprovada. | `core/reasoning/mycelial_reasoning.py` |
+| **PreStructuralField** | ⚠️ Beta | Métrica Riemanniana implementada, otimização pendente. | `core/field/` |
+| **SelfFeedingLoop** | ⚠️ Beta | Detecção de gaps funciona, geração de hipóteses básica. | `core/loop/` |
+| **Active Inference** | ⚠️ Alpha | Agentes (Scout/Weaver) existem mas são rudimentares. | `core/learning/nemesis_agents.py` |
+| **Meta-Consciousness** | ❌ Plan | Capacidade de auto-modificação de código ainda não existe. | N/A |
 
-### Fluxo de Dados
+---
+
+## ⚙️ Protocolo Operacional
+
+Alexandria opera em um modo **Agentic First**. A interação principal não é apenas rodar scripts, mas orquestrar fluxos de trabalho.
+
+### The Agentic Core (`.agent/`)
+O sistema possui workflows autônomos acessíveis via comandos:
+
+- **`/onboarding`**: O sistema lê toda a documentação ("Total Recall") e se situa.
+- **`/criar-feature`**: Cria automaticamente a estrutura de pastas, classes e testes para novos módulos.
+- **`/documentar-projeto`**: Varre o código, encontra falhas de documentação e escreve os manuais.
+- **`/review-completo`**: Realiza auditoria de código, segurança e performance antes de merges.
+- **`/debug-profundo`**: Rastreia dependências e fluxo de dados para resolver bugs complexos.
+
+> **Nota**: Estes workflows residem em `.agent/workflows/` e são executados pelo agente principal.
+
+---
+
+## 🏗️ Estrutura do Código
 
 ```
-1. INGESTÃO
-   └─> Document → Chunking (~1000 chars) → Embedding (384D)
-
-2. COMPRESSÃO
-   └─> Embedding → VQ-VAE → 4 bytes (96% compression)
-
-3. ARMAZENAMENTO
-   └─> LanceDB indexing + Mycelial observation
-
-4. RACIOCÍNIO
-   ├─> Semantic Search (LanceDB)
-   ├─> Hebbian Propagation (Mycelial)
-   └─> Active Inference (Nemesis)
-
-5. SÍNTESE
-   ├─> Abduction (Gap detection)
-   ├─> Causal Reasoning (Graph construction)
-   └─> Meta-Hebbian Plasticity (Self-optimization)
-
-6. AÇÃO
-   └─> Response | Hypothesis | Autonomous Action
-```
-
----
-
-## � Fundamentos Teóricos
-
-Alexandria combina múltiplas teorias de neurociência computacional e IA:
-
-### 1. **Hebbian Learning** (Donald Hebb, 1949)
-> *"Neurons that fire together, wire together"*
-
-- **Aplicação**: Mycelial Network aprende co-ocorrências de códigos VQ-VAE
-- **Vantagem**: Não-supervisionado, online, biologicamente plausível
-- **Status**: 638,130 conexões ativas, densidade <1%
-
-### 2. **Free Energy Principle** (Karl Friston, 2010)
-> Sistemas inteligentes minimizam surpresa variacional
-
-- **Aplicação**: Nemesis Core usa Active Inference para seleção de ações
-- **Vantagem**: Framework unificado para percepção, ação e aprendizado
-- **Status**: Operacional com overflow warnings esperados
-
-### 3. **Predictive Coding** (Rao & Ballard, 1999)
-> Cérebros são máquinas preditivas que minimizam erro
-
-- **Aplicação**: Hierarquia de 5 camadas prediz embeddings
-- **Vantagem**: Compressão + predição em uma única arquitetura
-- **Status**: 4 camadas construídas (384→256→128→64→32)
-
-### 4. **Vector Quantization** (VQ-VAE, van den Oord, 2017)
-> Compressão neural via codebook discreto
-
-- **Aplicação**: Monolith V13 com 4 heads × 256 codes
-- **Vantagem**: 96% compression mantendo reconstrução (MSE 0.0021)
-- **Status**: 255/256 códigos ativos, Head 0 dominante (67%)
-
-### 5. **Abductive Reasoning** (Charles Peirce, 1878)
-> Inferência à melhor explicação
-
-- **Aplicação**: Detecção automática de gaps e geração de hipóteses
-- **Vantagem**: Expansão autônoma de conhecimento
-- **Status**: Gap detection operacional
-
-### 6. **Meta-Learning** (Schmidhuber, 1987)
-> Aprender a aprender
-
-- **Aplicação**: Meta-Hebbian ajusta taxas de plasticidade dinamicamente
-- **Vantagem**: Auto-otimização sem intervenção manual
-- **Status**: Implementado, em teste
-
----
-
-## 🏗️ Módulos Principais
-
-### Pre-Structural Field (Geometric Cognition) 🆕
-**Arquivos**: `core/field/`
-
-- **DynamicManifold**: Variedade com dimensão variável (384→416D)
-- **RiemannianMetric**: Métrica que deforma com ativação
-- **FreeEnergyField**: Campo F(x) = E - T·S
-- **CycleDynamics**: Expansão→Configuração→Compressão
-- **Status**: ✅ Operacional (testado com 352k docs)
-
-### VQ-VAE (Neural Compression)
-**Arquivo**: `core/reasoning/vqvae/`
-
-- **Monolith V13**: 4 heads, 256 codes/head, 384D → 4 bytes
-- **Head Balance Regularization**: Previne colapso de codebook
-- **Status**: ✅ Produção (epoch 20, codebook 99.6% ativo)
-
-### Mycelial Network (Hebbian Reasoning)
-**Arquivo**: `core/reasoning/mycelial_reasoning.py`
-
-- **638,130 conexões** aprendidas via Hebb
-- **Propagação**: 3-5 steps para enriquecer queries
-- **Status**: ✅ Saudável (densidade <1%, hubs emergentes)
-
-### Nemesis Core (Active Inference)
-**Arquivos**: `core/learning/`
-
-- **Active Inference**: Scout, Judge, Weaver agents
-- **Predictive Coding**: 5-layer hierarchical prediction
-- **Free Energy**: Governança top-level
-- **Status**: ✅ Operacional (warnings numéricos esperados)
-
-### LanceDB (Vector Storage)
-**Arquivo**: `core/memory/storage.py`
-
-- **352,000+ documentos** indexados
-- **Busca**: <50ms (p99) para top-10
-- **Status**: ✅ Operacional
-
----
-
-## 📊 Métricas de Performance
-
-| Operação | Performance | Notas |
-|:---|:---:|:---|
-| **Indexação** | 1,000 chunks/s | Batch processing |
-| **Busca Vetorial** | <50ms (p99) | Top-10 resultados |
-| **Propagação Micelar** | <15ms | 3 steps |
-| **Compressão VQ-VAE** | 96% | 384D → 4 bytes |
-| **Codebook Ativo** | 99.6% | 255/256 codes |
-| **Conexões Hebbian** | 638,130 | Densidade <1% |
-
-### Escalabilidade
-
-| Documentos | RAM | Query Latency |
-|:---:|:---:|:---:|
-| 10K | 30 MB | 50ms |
-| 100K | 295 MB | 80ms |
-| 1M | 2.8 GB | 150ms |
-
----
-
-## 📚 Documentação
-
-A documentação está organizada topologicamente em [`docs/`](docs/):
-
-```
-docs/
-├── README.md                    # 🎯 Índice principal (COMECE AQUI)
+Alexandria/
+├── core/                  # O Cérebro
+│   ├── field/             # → Cognição Geométrica (Riemmanian Manifold)
+│   ├── loop/              # → Autonomia (Self-Feeding Loop)
+│   ├── reasoning/         # → VQ-VAE e Mycelial Network
+│   ├── memory/            # → LanceDB e SemanticFileSystem
+│   └── agents/            # → Agentes especializados
 │
-├── architecture/                # 🏗️ Arquitetura do Sistema
-│   ├── overview.md             #    → Diagramas visuais e fluxo
-│   ├── technical.md            #    → Análise técnica completa
-│   └── components.md           #    → Breakdown de módulos
+├── scripts/               # Ferramentas
+│   ├── mass_arxiv_ingest.py  # → Ingestão massiva de papers
+│   ├── system_runner_v2.py   # → Loop principal do sistema
+│   ├── maintenance/          # → Scripts de cura e limpeza
+│   ├── analysis/             # → Ferramentas de diagnóstico
+│   └── testing/              # → Scripts de validação
 │
-├── modules/                     # 📦 Documentação Técnica
-│   ├── README.md               #    → Índice navegável
-│   ├── 01-09_*.md              #    → Módulos core
-│   └── NEMESIS_MANUAL.md       #    → Bio-inspired learning
+├── docs/                  # Conhecimento
+│   ├── concepts/          # → Teoria profunda (Novos!)
+│   ├── architecture/      # → Diagramas técnicos
+│   └── reports/           # → Relatórios gerados pelo agente
 │
-├── guides/                      # 📘 Guias de Uso
-│   └── user-manual.md          #    → Manual do usuário
-│
-├── reports/                     # 🧪 Análises e Experimentos
-└── concepts/                    # 💡 Conceitos Avançados
+└── .agent/                # Protocolos
+    └── workflows/         # → Receitas de automação (/slash-commands)
 ```
-
-### 🎓 **Comece Aqui por Perfil**
-
-| Perfil | Documento Recomendado |
-|--------|----------------------|
-| **🟢 Iniciante** | [`docs/architecture/overview.md`](docs/architecture/overview.md) |
-| **🟡 Desenvolvedor** | [`docs/architecture/technical.md`](docs/architecture/technical.md) |
-| **🔴 Pesquisador** | [`docs/architecture/components.md`](docs/architecture/components.md) |
-| **📖 Usuário Final** | [`docs/guides/user-manual.md`](docs/guides/user-manual.md) |
-| **⚙️ Módulo Específico** | [`docs/modules/README.md`](docs/modules/README.md) |
-
-### 📊 **Documentação por Tipo**
-
-- **Visual & Diagramas**: [`docs/architecture/overview.md`](docs/architecture/overview.md)
-- **Técnica & Código**: [`docs/architecture/technical.md`](docs/architecture/technical.md)
-- **Análise de Módulos**: [`docs/architecture/components.md`](docs/architecture/components.md)
-- **Guias de Uso**: [`docs/guides/`](docs/guides/)
-- **Experimentos**: [`docs/reports/`](docs/reports/)
-
-**Relatórios Técnicos** (auto-gerados):
-- VQ-VAE Deep Analysis
-- Experimental Ablation Suite (A-D)
-- Module Integration Status
-- Cleanup Reports
 
 ---
 
-## � Quick Start
+## 🚀 Quick Start
 
+### 1. Instalação
 ```bash
-# Clone
 git clone https://github.com/GAndreuu/Prototype-Alexandria.git
 cd Alexandria
-
-# Setup
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-
-# Initialize
-python scripts/init_brain.py
-
-# Index documents
-from core.memory.semantic_memory import SemanticFileSystem
-from core.topology.topology_engine import TopologyEngine
-
-engine = TopologyEngine()
-memory = SemanticFileSystem(engine)
-memory.index_file("path/to/document.pdf")
-
-# Query
-results = memory.retrieve("quantum computing", limit=10)
 ```
 
-**Interface**:
+### 2. Ingestão de Dados (Alimentar o Cérebro)
 ```bash
-streamlit run interface/app.py
-# Access: http://localhost:8501
+# Baixa e processa papers do ArXiv sobre AI/ML
+python scripts/mass_arxiv_ingest.py --max-papers 100
 ```
 
----
+### 3. Iniciar o Sistema (Acordar a Mente)
+```bash
+# Inicia o loop autônomo e a API
+python scripts/system_runner_v2.py
+```
 
-## �️ Roadmap
-
-### ✅ Fase Atual: Production Ready
-- [x] VQ-VAE compression & balance
-- [x] Mycelial reasoning network
-- [x] Nemesis Core integration
-- [x] Complete system verification
-
-### 🔄 Próxima Fase: Enhanced Intelligence
-- [ ] Chain-of-Thought integration
-- [ ] Local LLM integration (Llama 3)
-- [ ] Tool use framework
-- [ ] Self-reflection loops
-
-### 🌟 Fase Futura: Meta-Learning
-- [ ] Performance tracking dashboard
-- [ ] Automated hyperparameter search
-- [ ] Curriculum generation
-- [ ] Multi-task learning
+### 4. Modo Manutenção (Opcional)
+```bash
+# Checar saúde da rede micelial
+python scripts/maintenance/check_mycelial_health.py
+```
 
 ---
 
 ## 🤝 Contribuindo
 
-Alexandria é open-source e aceita contribuições! Veja [CONTRIBUTING.md](CONTRIBUTING.md).
-
----
-
-## � Licença
-
-MIT License - Veja [LICENSE](LICENSE) para detalhes.
+Este é um projeto de pesquisa ativa.
+- Use `/criar-feature` para adicionar funcionalidades.
+- Use `/review-completo` antes de abrir PRs.
+- Leia `docs/concepts/` antes de tocar no Core.
 
 ---
 
 <div align="center">
-
-**Alexandria Cognitive System**
-
-*Building local AGI, one commit at a time*
-
-⭐ Star se Alexandria ajudou sua pesquisa!
-
-**Contato**: [gabrielandreu82@hotmail.com](mailto:gabrielandreu82@hotmail.com)
-
+    <b>Alexandria System</b><br>
+    <i>Meta-Cognição Local</i>
 </div>

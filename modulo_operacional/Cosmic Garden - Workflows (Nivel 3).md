@@ -34,13 +34,19 @@
 
 ## 📋 Estrutura de Workflows
 
-### Arquivo: `.cosmic_garden/WORKFLOWS.md`
+### Arquivo: `.cosmic_garden/WORKFLOWS.md` (Conceito) 
+> **Nota de Implementação**: No Alexandria, os workflows reais ficam em `.agent/workflows/*.md`.
 
 ```markdown
 # 🔮 Workflows Automatizados
 
 ## Sintaxe
 
+```
+/workflow_name
+```
+
+Ou via chat:
 ```
 (executar [workflow_name])
 ```

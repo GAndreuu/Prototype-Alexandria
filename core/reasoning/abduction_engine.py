@@ -75,15 +75,16 @@ class AbductionEngine:
     - Aprender continuamente das validações
     """
     
-    def __init__(self, sfs_path: str = "data/sfs_index.jsonl"):
+    def __init__(self, sfs_path: str = "data/sfs_index.jsonl", fast_mode: bool = False):
         self.sfs_path = sfs_path
+        self.fast_mode = fast_mode  # Skip slow LanceDB queries for evidence
         
         # Criar componentes mock se não existirem
         try:
             from core.topology.topology_engine import TopologyEngine
             from core.memory.semantic_memory import SemanticFileSystem
             engine = TopologyEngine()
-            memory = SemanticFileSystem(engine)
+            memory = SemanticFileSystem(engine) if not fast_mode else None
             self.causal_engine = CausalEngine(engine, memory)
             self.topology = engine
         except ImportError:
@@ -95,6 +96,9 @@ class AbductionEngine:
         self.validation_tests: Dict[str, ValidationTest] = {}
         self.generation_history: List[Dict] = []
         self.learning_feedback: Dict[str, float] = {}
+        
+        # Evidence cache - populated from graph weights
+        self._evidence_cache: Dict[Tuple[str, str], float] = {}
         
         # Configurações do motor de abdução
         self.min_confidence_threshold = 0.3
@@ -125,6 +129,46 @@ class AbductionEngine:
         
         logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger(__name__)
+        
+        # Load cluster labels for readable hypotheses
+        self.cluster_labels: Dict[str, str] = {}
+        self._load_cluster_labels()
+        
+        if fast_mode:
+            self.logger.info("AbductionEngine running in FAST MODE (no LanceDB queries)")
+    
+    def _load_cluster_labels(self, labels_path: str = "data/cluster_labels.json"):
+        """Load human-readable labels for clusters."""
+        import os
+        if os.path.exists(labels_path):
+            try:
+                with open(labels_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                self.cluster_labels = data.get('labels', {})
+                self.cluster_sample_papers = data.get('sample_papers', {})
+                self.logger.info(f"Loaded {len(self.cluster_labels)} cluster labels")
+            except Exception as e:
+                self.logger.warning(f"Could not load cluster labels: {e}")
+                self.cluster_labels = {}
+                self.cluster_sample_papers = {}
+        else:
+            self.logger.warning("No cluster_labels.json found - run cluster_labeler.py first")
+            self.cluster_labels = {}
+            self.cluster_sample_papers = {}
+    
+    def get_readable_label(self, cluster_id) -> str:
+        """Convert cluster ID to human-readable label."""
+        cluster_key = str(cluster_id)
+        if cluster_key in self.cluster_labels:
+            return self.cluster_labels[cluster_key]
+        return f"cluster_{cluster_id}"
+    
+    def get_sample_papers(self, cluster_id, limit: int = 3) -> List[str]:
+        """Get sample paper titles for a cluster."""
+        cluster_key = str(cluster_id)
+        if cluster_key in self.cluster_sample_papers:
+            return self.cluster_sample_papers[cluster_key][:limit]
+        return []
         
     def detect_knowledge_gaps(self, min_orphaned_score: float = 0.3) -> List[KnowledgeGap]:
         """
@@ -387,15 +431,19 @@ class AbductionEngine:
             # Calcular confiança baseada na similaridade e contexto
             confidence = self._calculate_hypothesis_confidence(cluster, related_cluster, "orphaned_connection")
             
+            # Get human-readable labels
+            source_label = self.get_readable_label(cluster)
+            target_label = self.get_readable_label(related_cluster)
+            
             hypothesis_text = random.choice(self.hypothesis_templates).format(
-                source=cluster,
-                target=related_cluster
+                source=source_label,
+                target=target_label
             )
             
             hypothesis = Hypothesis(
                 id=hypothesis_id,
-                source_cluster=cluster,
-                target_cluster=related_cluster,
+                source_cluster=f"{cluster} ({source_label})",
+                target_cluster=f"{related_cluster} ({target_label})",
                 hypothesis_text=hypothesis_text,
                 confidence_score=confidence,
                 evidence_strength=self._calculate_evidence_strength(cluster, related_cluster),
@@ -420,12 +468,16 @@ class AbductionEngine:
             
             confidence = self._calculate_hypothesis_confidence(source, target, "missing_connection")
             
-            hypothesis_text = f"{source} influences the development of {target}"
+            # Get human-readable labels
+            source_label = self.get_readable_label(source)
+            target_label = self.get_readable_label(target)
+            
+            hypothesis_text = f"{source_label} influences the development of {target_label}"
             
             hypothesis = Hypothesis(
                 id=hypothesis_id,
-                source_cluster=source,
-                target_cluster=target,
+                source_cluster=f"{source} ({source_label})",
+                target_cluster=f"{target} ({target_label})",
                 hypothesis_text=hypothesis_text,
                 confidence_score=confidence,
                 evidence_strength=self._calculate_evidence_strength(source, target),
@@ -503,7 +555,12 @@ class AbductionEngine:
     
     def _calculate_evidence_strength(self, source: str, target: str) -> float:
         """Calcula força da evidência para uma hipótese"""
-        # Implementação baseada em análise de dados do SFS
+        
+        # FAST MODE: Use graph weights and semantic similarity instead of LanceDB
+        if self.fast_mode:
+            return self._calculate_evidence_fast(source, target)
+        
+        # Regular mode with LanceDB queries
         evidence_score = 0.0
         
         try:
@@ -521,6 +578,45 @@ class AbductionEngine:
             evidence_score = 0.3  # Default conservative
             
         return evidence_score
+    
+    def _calculate_evidence_fast(self, source: str, target: str) -> float:
+        """
+        Fast evidence calculation using graph weights and semantic similarity.
+        No LanceDB queries - uses cached data only.
+        """
+        # Check cache first
+        cache_key = (source, target)
+        if cache_key in self._evidence_cache:
+            return self._evidence_cache[cache_key]
+        
+        evidence_score = 0.3  # Base score
+        
+        # 1. Check if there's a direct connection in causal graph
+        if self.causal_engine and self.causal_engine.causal_graph:
+            graph = self.causal_engine.causal_graph
+            if source in graph and isinstance(graph[source], dict):
+                if target in graph[source]:
+                    # Direct connection - strong evidence
+                    weight = graph[source][target]
+                    evidence_score = max(evidence_score, 0.6 + weight * 0.4)
+            
+            # Check reverse connection
+            if target in graph and isinstance(graph[target], dict):
+                if source in graph[target]:
+                    weight = graph[target][source]
+                    evidence_score = max(evidence_score, 0.5 + weight * 0.3)
+        
+        # 2. Use semantic similarity as supplementary evidence
+        similarity = self._calculate_semantic_similarity(source, target)
+        similarity_evidence = 0.2 + similarity * 0.4
+        
+        # Combine: take max of graph evidence and similarity evidence
+        final_score = max(evidence_score, similarity_evidence)
+        
+        # Cache result
+        self._evidence_cache[cache_key] = final_score
+        
+        return min(1.0, final_score)
     
     def consolidate_knowledge(self, hypothesis: Dict) -> bool:
         """

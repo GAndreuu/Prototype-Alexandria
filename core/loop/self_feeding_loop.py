@@ -255,15 +255,27 @@ class SelfFeedingLoop:
                 for i, gap in enumerate(gaps)
             ]
         
-        hypotheses = []
-        for gap in gaps:
-            try:
-                gap_hypotheses = self.abduction_engine.generate_hypotheses(gap)
-                hypotheses.extend(gap_hypotheses)
-            except Exception as e:
-                logger.error(f"Erro ao gerar hipóteses para gap: {e}")
-        
-        return hypotheses
+        # AbductionEngine.generate_hypotheses() reads gaps from internal state
+        # and returns Hypothesis objects - we need to call it once, not per-gap
+        try:
+            # generate_hypotheses reads from self.knowledge_gaps (populated by detect_knowledge_gaps)
+            hypothesis_objs = self.abduction_engine.generate_hypotheses(max_hypotheses=min(len(gaps), 10))
+            
+            # Convert Hypothesis objects to dicts for executor
+            hypotheses = []
+            for h in hypothesis_objs:
+                hypotheses.append({
+                    "id": h.id,
+                    "hypothesis_text": h.hypothesis_text,
+                    "source_cluster": h.source_cluster,
+                    "target_cluster": h.target_cluster,
+                    "confidence_score": h.confidence_score,
+                    "test_requirements": h.test_requirements
+                })
+            return hypotheses
+        except Exception as e:
+            logger.error(f"Erro ao gerar hipóteses: {e}")
+            return []
     
     def _save_metrics(self):
         """Salva métricas em arquivo"""

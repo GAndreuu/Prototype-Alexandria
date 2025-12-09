@@ -109,30 +109,32 @@ class OrthogonalProductQuantizer(nn.Module):
         encoding_indices = torch.argmin(distances, dim=-1) # [Batch, Heads]
 
         # --- Dead Code Revival (Training Only) ---
-        if self.training:
-             with torch.no_grad():
-                for h in range(self.num_heads):
-                    # Identify used indices in this batch
-                    used_indices = torch.unique(encoding_indices[:, h])
-                    
-                    # If we used all codes, great. If not, revive.
-                    if len(used_indices) < self.num_embeddings:
-                        # Find unused indices
-                        # (We can do this efficiently using a boolean mask)
-                        used_mask = torch.zeros(self.num_embeddings, dtype=torch.bool, device=z.device)
-                        used_mask[used_indices] = True
-                        unused_indices = torch.where(~used_mask)[0]
-                        
-                        n_unused = unused_indices.shape[0]
-                        
-                        # Select random data points from current batch to replace dead codes
-                        # We pick random indices from batch
-                        rand_batch_idx = torch.randint(0, bsz, (n_unused,), device=z.device)
-                        replacement_vecs = z_reshaped[rand_batch_idx, h, :]
-                        
-                        # Update codebook
-                        # We use .data to modify parameter in-place without affecting gradient graph
-                        self.codebooks.data[h, unused_indices] = replacement_vecs
+        # DISABLE because per-batch reset is too aggressive and prevents convergence.
+        # We will handle revival globally in the training loop.
+        # if self.training:
+        #      with torch.no_grad():
+        #         for h in range(self.num_heads):
+        #             # Identify used indices in this batch
+        #             used_indices = torch.unique(encoding_indices[:, h])
+        #             
+        #             # If we used all codes, great. If not, revive.
+        #             if len(used_indices) < self.num_embeddings:
+        #                 # Find unused indices
+        #                 # (We can do this efficiently using a boolean mask)
+        #                 used_mask = torch.zeros(self.num_embeddings, dtype=torch.bool, device=z.device)
+        #                 used_mask[used_indices] = True
+        #                 unused_indices = torch.where(~used_mask)[0]
+        #                 
+        #                 n_unused = unused_indices.shape[0]
+        #                 
+        #                 # Select random data points from current batch to replace dead codes
+        #                 # We pick random indices from batch
+        #                 rand_batch_idx = torch.randint(0, bsz, (n_unused,), device=z.device)
+        #                 replacement_vecs = z_reshaped[rand_batch_idx, h, :]
+        #                 
+        #                 # Update codebook
+        #                 # We use .data to modify parameter in-place without affecting gradient graph
+        #                 self.codebooks.data[h, unused_indices] = replacement_vecs
 
         # --- Reconstrução (Lookup) ---
         # Cria um tensor vazio e preenche com os vetores escolhidos

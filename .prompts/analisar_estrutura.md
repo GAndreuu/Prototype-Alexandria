@@ -36,6 +36,15 @@ Verifique:
 - [ ] Documentação ausente
 - [ ] Inconsistências na estrutura
 
+### FASE 5: Reality Check (Capabilities vs Concepts)
+CRÍTICO: Compare o código encontrado em `core/` com `docs/concepts/`.
+- [ ] O conceito descrito em `docs/concepts` realmente existe no código?
+- [ ] Existe código complexo sem conceito correspondente?
+- [ ] Classifique cada conceito como:
+    - ✅ **Realidade**: Código implementa fielmente o conceito.
+    - ⚠️ **Aspiração**: Conceito documentado mas implementação é mockup/stub.
+    - ❌ **Alucinação**: Conceito existe apenas na doc, zero código.
+
 ---
 
 ## FORMATO DE SAÍDA OBRIGATÓRIO
@@ -61,6 +70,12 @@ Verifique:
 
 ## Pontos de Atenção
 ⚠️ [Lista de problemas encontrados]
+
+## 🧠 Reality Check (Conceito vs Código)
+| Conceito | Status | Evidência no Código |
+|----------|--------|---------------------|
+| [Nome] | ✅/⚠️/❌ | `path/to/evidence.py` |
+
 
 ## Recomendações
 1. [Sugestão de melhoria]

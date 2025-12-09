@@ -372,5 +372,17 @@ class DeepProbe:
         print(f"\n✅ Report Saved: {self.config.report_path}")
 
 if __name__ == "__main__":
-    probe = DeepProbe(DeepProbeConfig())
+    import argparse
+    parser = argparse.ArgumentParser(description="Deep Probe VQ-VAE")
+    parser.add_argument("--model", type=str, default="data/monolith_v13_trained.pth", help="Path to model checkpoint")
+    parser.add_argument("--report", type=str, default="docs/reports/vqvae_deep_analysis.md", help="Path to output report")
+    
+    args = parser.parse_args()
+    
+    config = DeepProbeConfig(
+        model_path=args.model,
+        report_path=args.report
+    )
+    
+    probe = DeepProbe(config)
     probe.run()

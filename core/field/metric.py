@@ -22,6 +22,8 @@ from typing import Dict, List, Optional, Tuple, Callable
 from dataclasses import dataclass
 from scipy.sparse import csr_matrix, lil_matrix
 from scipy.ndimage import gaussian_filter
+from concurrent.futures import ThreadPoolExecutor
+import os
 
 from .manifold import DynamicManifold, ManifoldPoint
 
@@ -301,7 +303,7 @@ class RiemannianMetric:
     # SÍMBOLOS DE CHRISTOFFEL (para geodésicas)
     # =========================================================================
     
-    def christoffel_at(self, point: np.ndarray, epsilon: float = 0.01) -> np.ndarray:
+    def christoffel_at(self, point: np.ndarray, epsilon: float = 0.01, n_workers: int = 1) -> np.ndarray:
         """
         Computa símbolos de Christoffel Γ^k_ij em um ponto.
         
@@ -311,13 +313,10 @@ class RiemannianMetric:
         Args:
             point: Coordenadas [dim]
             epsilon: Step para diferenças finitas
+            n_workers: Número de workers para paralelização (default: 1)
             
         Returns:
             Tensor [dim, dim, dim] com Γ^k_ij
-            
-        TODO:
-            - Isso é O(dim³) - precisa de aproximação esparsa
-            - Cache para pontos frequentes
         """
         dim = len(point)
         
@@ -330,23 +329,48 @@ class RiemannianMetric:
         # g^{kl} (inverso da métrica)
         g_inv = self.metric_tensor_inverse(point)
         
-        # Derivadas da métrica
+        # Pré-computa todas as derivadas da métrica (o gargalo)
+        # Isso evita recomputar a mesma derivada múltiplas vezes
+        deriv_cache = {}
+        
+        def compute_derivative(args):
+            direction, i, j = args
+            key = (direction, i, j)
+            return key, self._metric_derivative(point, direction, i, j, epsilon)
+        
+        # Gera todas as combinações únicas de derivadas necessárias
+        deriv_args = []
+        for direction in range(dim):
+            for i in range(dim):
+                for j in range(i, dim + 1):  # j >= i para simetria
+                    if j < dim:
+                        deriv_args.append((direction, i, j))
+        
+        # Paraleliza o cálculo das derivadas
+        if n_workers > 1:
+            with ThreadPoolExecutor(max_workers=n_workers) as executor:
+                results = list(executor.map(compute_derivative, deriv_args))
+            for key, value in results:
+                deriv_cache[key] = value
+                # Simetria g_ij = g_ji
+                deriv_cache[(key[0], key[2], key[1])] = value
+        else:
+            for args in deriv_args:
+                key, value = compute_derivative(args)
+                deriv_cache[key] = value
+                deriv_cache[(key[0], key[2], key[1])] = value
+        
+        # Agora computa Christoffel usando o cache
         for i in range(dim):
             for j in range(dim):
                 for k in range(dim):
                     # Γ^k_ij = (1/2) g^{kl} (∂_i g_{jl} + ∂_j g_{il} - ∂_l g_{ij})
-                    
                     sum_term = 0.0
                     for l in range(dim):
-                        # ∂_i g_{jl}
-                        dg_i = self._metric_derivative(point, i, j, l, epsilon)
-                        # ∂_j g_{il}
-                        dg_j = self._metric_derivative(point, j, i, l, epsilon)
-                        # ∂_l g_{ij}
-                        dg_l = self._metric_derivative(point, l, i, j, epsilon)
-                        
+                        dg_i = deriv_cache.get((i, j, l), 0.0)
+                        dg_j = deriv_cache.get((j, i, l), 0.0)
+                        dg_l = deriv_cache.get((l, i, j), 0.0)
                         sum_term += g_inv[k, l] * (dg_i + dg_j - dg_l)
-                        
                     gamma[k, i, j] = 0.5 * sum_term
                     
         return gamma

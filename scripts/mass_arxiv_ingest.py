@@ -54,106 +54,22 @@ EXISTING_FILES_NORMALIZED = set()
 
 
 # ==========================
-# MACRO-TÓPICOS (Original + Meta-Learning)
+# MACRO-TÓPICOS (Alexandria v2.0)
 # ==========================
 
-# Importar tópicos de meta-learning
+# Importar tópicos Alexandria v2.0
 try:
-    from meta_learning_topics import META_LEARNING_TOPICS
-    HAS_META_TOPICS = True
+    from alexandria_topics import ALEXANDRIA_TOPICS
+    TOPICS = ALEXANDRIA_TOPICS
+    print(f"[INFO] Alexandria Topics v2.0: {len(TOPICS)} tópicos carregados")
 except ImportError:
-    META_LEARNING_TOPICS = {}
-    HAS_META_TOPICS = False
-
-# Tópicos originais do projeto Alexandria
-ORIGINAL_TOPICS = {
-    "neural_dynamics_and_control": (
-        '('
-        '(all:"spiking neural network" OR all:"spiking neuron" OR all:neuromorphic) '
-        'OR '
-        '((all:"control barrier function" OR all:"control barrier certificate") '
-        ' AND (all:"neural network" OR all:"learning-based control"))'
-        ')'
-    ),
-    "geometric_and_physical_ml": (
-        '('
-        '(all:"geometric deep learning" OR all:"manifold learning" OR all:"Riemannian") '
-        'OR '
-        '((all:"finite-strain" OR all:"finite strain") '
-        ' AND (all:"microelasticity" OR all:"micro-elasticity" OR all:"microstructure"))'
-        ')'
-    ),
-    "planning_and_cps": (
-        '('
-        '((all:"AI planning" OR all:"automated planning") '
-        '  AND (all:"cyber-physical system" OR all:CPS)) '
-        'OR '
-        '((all:"implicit planning" OR all:"planning ability") '
-        '  AND (all:"language model" OR all:"LLM"))'
-        ')'
-    ),
-    "llm_instruction_kr_reasoning": (
-        '('
-        '(all:"in-context learning" OR all:"instruction following" OR all:"instruction tuning" '
-        ' OR all:"chain-of-thought prompting" OR all:"rule learning" OR all:"symbolic rules" '
-        ' OR all:"knowledge representation" OR all:"knowledge graph" OR all:ontology '
-        ' OR all:"neuro-symbolic" OR all:"neurosymbolic") '
-        'AND '
-        '(all:"language model" OR all:"large language model" OR all:"LLM agent" OR all:"LLM")'
-        ')'
-    ),
-    "vision_reasoning_and_iqa": (
-        '('
-        '((all:"image quality assessment" OR all:IQA) '
-        '  AND (all:"causal" OR all:"counterfactual" OR all:"abductive reasoning")) '
-        'OR '
-        '((all:"visual puzzle" OR all:"puzzle-based visual" OR all:"visual abstract reasoning") '
-        '  AND (all:"chain-of-thought" OR all:"step-by-step reasoning" OR all:"error detection")) '
-        'OR '
-        '((all:"probabilistic abduction" OR all:"abductive reasoning") '
-        '  AND (all:"vector symbolic architecture" OR all:"Holographic Reduced Representation" OR all:VSA)) '
-        'OR '
-        '((all:"3D object detection" AND all:"multi-view") '
-        '  OR (all:"BEV" AND all:"multi-camera"))'
-        ')'
-    ),
-    "medical_and_domain_reasoning": (
-        '('
-        '(all:"medical dialogue" OR all:"clinical conversation" OR all:"doctor-patient dialogue") '
-        'AND '
-        '(all:"diagnostic reasoning" OR all:"clinical reasoning")'
-        ')'
-    ),
-    "sparse_and_discrete_representations": (
-        '('
-        '((all:"sparse dictionary learning" OR all:"dictionary learning" OR all:"sparse coding" '
-        '   OR all:"compressive sensing" OR all:"compressed sensing") '
-        '  AND '
-        ' (all:"image reconstruction" OR all:"inverse problem" OR all:"sparse" OR all:"Tikhonov")) '
-        'OR '
-        '(all:"VQ-VAE" OR all:"vector quantized variational autoencoder" OR all:"discrete representation learning")'
-        ')'
-    ),
-    "epistemic_logic_and_rationality": (
-        '('
-        '(all:"epistemic logic" OR all:"common knowledge" OR all:"knowledge and belief") '
-        'AND '
-        '(all:"game theory" OR all:"rationality")'
-        ')'
-    ),
-    "astro_and_dark_matter": (
-        '('
-        '(all:"dark matter halo" OR all:"galactic halo" OR all:"Dehnen profile") '
-        'AND '
-        '(all:"black hole" OR all:"gravitational lensing")'
-        ')'
-    ),
-}
-
-# Combinar tópicos: Original (9) + Meta-Learning (36) = 45 tópicos
-TOPICS = {**ORIGINAL_TOPICS, **META_LEARNING_TOPICS}
-
-print(f"[INFO] Tópicos carregados: {len(ORIGINAL_TOPICS)} originais + {len(META_LEARNING_TOPICS)} meta-learning = {len(TOPICS)} total")
+    print("[WARN] alexandria_topics.py não encontrado, usando tópicos básicos")
+    TOPICS = {
+        "free_energy_principle": '(all:"free energy principle")',
+        "active_inference": '(all:"active inference")',
+        "predictive_coding": '(all:"predictive coding")',
+        "vq_vae": '(all:"VQ-VAE")',
+    }
 
 # ==========================
 # UTILITÁRIOS

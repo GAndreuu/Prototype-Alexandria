@@ -34,8 +34,8 @@ class MycelialConfig:
     num_heads: int = 4
     codebook_size: int = 256
     learning_rate: float = 0.1      # eta
-    decay_rate: float = 0.999       # decay factor (multiplicativo)
-    min_weight: float = 1e-6        # threshold para poda
+    decay_rate: float = 0.99        # decay factor (mais agressivo para manter esparsidade)
+    min_weight: float = 0.1         # threshold para poda (mais alto)
     propagation_steps: int = 2
     activation_threshold: float = 0.05
     save_path: str = "data/mycelial_state.pkl"

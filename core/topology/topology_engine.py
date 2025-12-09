@@ -47,13 +47,14 @@ class TopologyEngine:
     4. Indexação semântica real
     """
     
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2", device: Optional[str] = None):
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2", device: Optional[str] = None, auto_load: bool = True):
         """
         Inicializa TopologyEngine com modelo real
         
         Args:
             model_name: Nome do modelo sentence-transformers
             device: Device para processamento (cuda/cpu)
+            auto_load: Tentar carregar topologia salva automaticamente
         """
         self.model_name = model_name
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
@@ -76,6 +77,12 @@ class TopologyEngine:
         else:
             logger.warning("sentence-transformers não disponível. Usando fallback limitado.")
             self._setup_fallback()
+        
+        # Auto-load topologia se existir
+        if auto_load:
+            default_path = "data/topology.json"
+            if os.path.exists(default_path):
+                self.load_topology(default_path)
     
     def _load_model(self):
         """Carrega modelo sentence-transformers real"""

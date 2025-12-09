@@ -34,6 +34,7 @@ class GeodesicConfig:
     min_velocity: float = 0.001        # Velocidade mínima (para de propagar)
     damping: float = 0.01              # Amortecimento da velocidade
     use_scipy_integrator: bool = False # Usar integrador scipy (mais preciso, mais lento)
+    n_workers: int = 1                 # Workers para paralelizar Christoffel
 
 
 @dataclass
@@ -132,7 +133,7 @@ class GeodesicFlow:
         
         for step in range(max_steps):
             # Símbolos de Christoffel no ponto atual
-            gamma = self.metric.christoffel_at(x)
+            gamma = self.metric.christoffel_at(x, n_workers=self.config.n_workers)
             
             # Aceleração geodésica: a^k = -Γ^k_ij v^i v^j
             acceleration = np.zeros(dim)
@@ -191,7 +192,7 @@ class GeodesicFlow:
             v = state[dim:]
             
             # Christoffel
-            gamma = self.metric.christoffel_at(x)
+            gamma = self.metric.christoffel_at(x, n_workers=self.config.n_workers)
             
             # dx/dt = v
             dx_dt = v
