@@ -105,6 +105,12 @@
 ### 📄 `nemesis_integration.md`
 **Resumo**: Cérebro executivo do loop. Seleciona a melhor ação baseada em EFE. Fecha o ciclo de feedback atualizando o modelo generativo com recompensas.
 
+### 📄 `active_inference_adapter.md`
+**Resumo**: Adaptador que conecta a teoria da Active Inference (FEP) com o loop pragmático. Implementa o protocolo `ActionSelectionAdapter` para permitir que o sistema alterne entre heurísticas e inferência profunda.
+
+### 📄 `action_selection.md`
+**Resumo**: Protocolo unificado de tipos de ação (`QUERY_SEARCH`, `BRIDGE_CONCEPTS`, etc.). Define o contrato para qualquer agente que queira controlar o corpo do Alexandria.
+
 ---
 
 ## 💾 SEÇÃO: MEMORY (`core/memory/`)
@@ -133,6 +139,9 @@
 
 ### 📄 `causal_reasoning.md`
 **Resumo**: Grafo Causal. Tenta inferir direção (A causa B) usando padrões temporais em textos e verbos causais. Detecta variáveis latentes (causas ocultas de correlação).
+
+### 📄 `symbol_grounding.md`
+**Resumo**: O elo perdido entre texto e grafo. Converte strings arbitrárias ("autonomy") em códigos VQ-VAE concretos ((Head, Code)). Permite que o executor realize ações precisas no grafo baseadas em comandos abstratos.
 
 ---
 

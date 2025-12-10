@@ -23,9 +23,11 @@ Alexandria/
 │   │   ├── active_inference.py  # Agentes FEP
 │   │   └── predictive_coding.py # Hierarquia Preditiva
 │   │
-│   ├── loop/                     # [Beta] Autonomia
-│   │   ├── self_feeding_loop.py # Orquestrador de Sonhos
-│   │   └── nemesis_integration.py # Ponte Cérebro-Mente
+│   ├── loop/                     # [Prod] Autonomia
+│   │   ├── self_feeding_loop.py # Orquestrador
+│   │   ├── action_selection.py  # Protocolo de Ação
+│   │   ├── active_inference_adapter.py # Adaptador AI
+│   │   └── hypothesis_executor.py # Executor Grounded
 │   │
 │   ├── memory/                   # [Prod] Memória Semântica
 │   │   ├── storage.py           # LanceDB Wrapper
@@ -33,6 +35,7 @@ Alexandria/
 │   │
 │   ├── reasoning/                # [Prod] Motores de Raciocínio
 │   │   ├── mycelial_reasoning.py # Rede Hebbiana
+│   │   ├── symbol_grounding.py   # [NEW] Text -> Node Grounding
 │   │   └── vqvae/               # Compressão Neural (Monolith)
 │   │
 │   ├── topology/                 # [Prod] Gestão de Espaço

@@ -50,9 +50,10 @@ Para garantir transparência total, mantemos esta tabela de *Capabilities vs Asp
 |:---|:---:|:---|:---|
 | **VQ-VAE Monolith** | ✅ Prod | Compressão neural 96% funcional. Codebook 99% ativo. | `core/reasoning/vqvae/` |
 | **Mycelial Network** | ✅ Prod | 600k+ conexões hebbianas. Persistência comprovada. | `core/reasoning/mycelial_reasoning.py` |
-| **PreStructuralField** | ⚠️ Beta | Métrica Riemanniana implementada, otimização pendente. | `core/field/` |
-| **SelfFeedingLoop** | ⚠️ Beta | Detecção de gaps funciona, geração de hipóteses básica. | `core/loop/` |
-| **Active Inference** | ⚠️ Alpha | Agentes (Scout/Weaver) existem mas são rudimentares. | `core/learning/nemesis_agents.py` |
+| **PreStructuralField** | ✅ Prod | Feedback Loop fechado (Geometria → Rede). | `core/field/` |
+| **SelfFeedingLoop** | ✅ Prod | Autonomia Total (Active Inference + Shadow Mode). | `core/loop/` |
+| **Active Inference** | ✅ Prod | Integrado via Adapter. Decisão baseada em EFE. | `core/learning/active_inference.py` |
+| **Symbol Grounding** | ✅ Prod | Mapeamento Texto → Grafo comprovado (+8 edges). | `core/reasoning/symbol_grounding.py` |
 | **Meta-Consciousness** | ❌ Plan | Capacidade de auto-modificação de código ainda não existe. | N/A |
 
 ---
@@ -124,6 +125,12 @@ python scripts/mass_arxiv_ingest.py --max-papers 100
 ```bash
 # Inicia o loop autônomo e a API
 python scripts/system_runner_v2.py
+```
+
+### 4. Verificar Autonomia (Smoke Test)
+```bash
+# Roda um ciclo completo "Day in the Life" com Symbol Grounding
+python scripts/verify_autonomy.py --topic "autonomy demo"
 ```
 
 ### 4. Modo Manutenção (Opcional)
