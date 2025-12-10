@@ -7,8 +7,12 @@ Conecta abduction_engine → action_agent
 
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple, Union
 from enum import Enum, auto
+try:
+    from core.reasoning.symbol_grounding import SymbolGrounder
+except ImportError:
+    SymbolGrounder = None
 
 logger = logging.getLogger(__name__)
 
@@ -81,18 +85,28 @@ class HypothesisExecutor:
         self,
         semantic_memory=None,
         topology_engine=None,
+        mycelial_reasoning=None,  # New dependency
         low_confidence_threshold: float = 0.3,
         medium_confidence_threshold: float = 0.5,
         high_confidence_threshold: float = 0.8
     ):
         self.semantic_memory = semantic_memory
         self.topology_engine = topology_engine
+        self.mycelial = mycelial_reasoning
         self.low_threshold = low_confidence_threshold
         self.medium_threshold = medium_confidence_threshold
         self.high_threshold = high_confidence_threshold
         
         self.execution_count = 0
         self.success_count = 0
+        
+        # Initialize Symbol Grounder
+        self.grounder = None
+        if SymbolGrounder:
+            try:
+                self.grounder = SymbolGrounder()
+            except Exception as e:
+                logger.warning(f"Failed to init SymbolGrounder: {e}")
         
         logger.info("HypothesisExecutor inicializado")
     
@@ -221,16 +235,74 @@ class HypothesisExecutor:
                 evidence = [f"Evidence for: {action.target}"]
                 
         elif action.action_type == ExecutionActionType.EXPLORE_CLUSTER:
-            if self.semantic_memory:
+            if self.mycelial and "node_id" in action.parameters:
+                # Real traversal in Mycelial Graph
+                node = action.parameters["node_id"]  # Expecting tuple (head, code)
+                if isinstance(node, list): node = tuple(node)
+                neighbors = self.mycelial.get_neighbors(node, top_k=5)
+                evidence = [f"Neighbor: {n['node']} w={n['weight']:.2f}" for n in neighbors]
+                new_connections = len(neighbors)
+            elif self.mycelial and self.grounder and "cluster_id" in action.parameters:
+                # Ground text cluster_id
+                cluster_id = action.parameters["cluster_id"]
+                nodes = self.grounder.ground(cluster_id)
+                if nodes:
+                    # Explore from first Head (heuristic)
+                    neighbors = self.mycelial.get_neighbors(nodes[0], top_k=5)
+                    evidence = [f"Grounded Neighbor of {cluster_id}: {n['node']}" for n in neighbors]
+                    new_connections = len(neighbors)
+            elif self.semantic_memory:
                 results = self._explore_cluster(action.parameters.get("cluster_id", ""))
                 evidence = [r.get("content", "") for r in results[:5]]
             else:
                 evidence = [f"Cluster exploration: {action.target}"]
                 
         elif action.action_type == ExecutionActionType.BRIDGE_CONCEPTS:
-            # Criar conexão - isso modifica o grafo
-            new_connections = 1
-            evidence = [f"Connection created: {action.parameters.get('source')} -> {action.parameters.get('target')}"]
+            # Connect in Mycelial Graph
+            source_node = action.parameters.get("source_node")
+            target_node = action.parameters.get("target_node")
+            source_txt = action.parameters.get("source")
+            target_txt = action.parameters.get("target")
+            
+            # Grounding Logic
+            if self.mycelial and self.grounder:
+                if not source_node and source_txt:
+                    source_nodes = self.grounder.ground(source_txt)
+                else:
+                    source_nodes = [source_node] if source_node else []
+                    
+                if not target_node and target_txt:
+                    target_nodes = self.grounder.ground(target_txt)
+                else:
+                    target_nodes = [target_node] if target_node else []
+
+                # Flatten and Validate
+                s_nodes = [n for n in source_nodes if isinstance(n, tuple)]
+                t_nodes = [n for n in target_nodes if isinstance(n, tuple)]
+
+                if s_nodes and t_nodes:
+                    count = 0
+                    for na in s_nodes:
+                        for nb in t_nodes:
+                            # Connect corresponding heads (Heuristic)
+                            if na[0] == nb[0]: 
+                                w = self.mycelial.connect_nodes(na, nb, weight_delta=0.1)
+                                count += 1
+                    
+                    if count > 0:
+                        new_connections = count
+                        evidence = [f"Grounded Bridge: {source_txt} <-> {target_txt} ({count} edges)"]
+                        logger.info(f"[EXEC] BRIDGE_CONCEPTS: {source_txt} <-> {target_txt} ({count} edges)")
+
+            if new_connections == 0:
+                # Fallback: old logic or simulation
+                if self.mycelial and source_node and target_node and isinstance(source_node, tuple) and isinstance(target_node, tuple):
+                     w = self.mycelial.connect_nodes(source_node, target_node, weight_delta=0.1)
+                     new_connections = 1
+                     evidence = [f"Direct Bridge: {source_node} <-> {target_node}"]
+                else:
+                     new_connections = 1
+                     evidence = [f"Logical Connection created: {source_txt} -> {target_txt}"]
             
         elif action.action_type == ExecutionActionType.DEEPEN_TOPIC:
             if self.semantic_memory:

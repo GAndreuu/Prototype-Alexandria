@@ -16,6 +16,7 @@ from .hypothesis_executor import HypothesisExecutor, ActionResult
 from .feedback_collector import ActionFeedbackCollector
 from .incremental_learner import IncrementalLearner
 from .loop_metrics import LoopMetrics, CycleMetrics
+from .action_selection import ActionSelectionAdapter, LoopState, AgentAction
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +32,9 @@ class LoopConfig:
     log_every_n_cycles: int = 1
     save_metrics_every_n_cycles: int = 10
     metrics_save_path: str = "data/loop_metrics.json"
+    # Active Inference modes
+    use_active_inference_shadow: bool = False  # Log AI suggestions without changing behavior
+    use_active_inference: bool = False          # Use AI as primary decision source
 
 
 class SelfFeedingLoop:
@@ -55,7 +59,10 @@ class SelfFeedingLoop:
         incremental_learner: Optional[IncrementalLearner] = None,
         config: Optional[LoopConfig] = None,
         on_cycle_complete: Optional[Callable] = None,
-        on_action_complete: Optional[Callable] = None
+        on_action_complete: Optional[Callable] = None,
+        active_inference_adapter: Optional[ActionSelectionAdapter] = None,
+        mycelial=None,  # Optional MycelialReasoning for stats
+        field=None      # Optional PreStructuralField for stats
     ):
         self.abduction_engine = abduction_engine
         self.executor = hypothesis_executor or HypothesisExecutor()
@@ -70,6 +77,16 @@ class SelfFeedingLoop:
         self.is_running = False
         self.current_cycle = 0
         self.last_run_summary: Dict[str, Any] = {}
+        
+        # Active Inference
+        self.active_inference_adapter = active_inference_adapter
+        self.shadow_actions: List[AgentAction] = []
+        self.ai_primary_actions: List[AgentAction] = []  # Actions used when AI is primary
+        self.ai_fallback_count: int = 0  # Count of times heuristic was used as fallback
+        
+        # External components for stats
+        self.mycelial = mycelial  # MycelialReasoning instance
+        self.field = field        # PreStructuralField instance
         
         logger.info("SelfFeedingLoop inicializado")
     
@@ -102,6 +119,24 @@ class SelfFeedingLoop:
             total_evidence = 0
             total_connections = 0
             rewards = []
+            
+            # Shadow mode: call Active Inference once per cycle (logging only)
+            if self.config.use_active_inference_shadow and not self.config.use_active_inference:
+                if self.active_inference_adapter:
+                    loop_state = self._build_loop_state(gaps, hypotheses, 0.0)
+                    try:
+                        ai_action = self.active_inference_adapter.select_action(loop_state)
+                        self.shadow_actions.append(ai_action)
+                        logger.info(
+                            f"[SHADOW] ActiveInference: {ai_action.action_type.name} "
+                            f"target={ai_action.target} EFE={ai_action.expected_free_energy:.3f}"
+                        )
+                    except Exception as e:
+                        logger.warning(f"[SHADOW] ActiveInference failed: {e}")
+            
+            # Primary mode: use Active Inference as main decision source
+            if self.config.use_active_inference and self.active_inference_adapter:
+                hypotheses = self._get_ai_hypotheses(gaps, hypotheses)
             
             for hypothesis in hypotheses:
                 result = self.executor.execute(hypothesis)
@@ -284,13 +319,165 @@ class SelfFeedingLoop:
         except Exception as e:
             logger.error(f"Erro ao salvar métricas: {e}")
     
+    def _build_loop_state(
+        self, 
+        gaps: List[Dict], 
+        hypotheses: List[Dict], 
+        last_reward: float
+    ) -> LoopState:
+        """
+        Build LoopState for Active Inference adapter.
+        
+        Extracts real stats from mycelial and field components if available.
+        """
+        return LoopState(
+            cycle=self.current_cycle,
+            gaps=gaps,
+            hypotheses=hypotheses,
+            mycelial_stats=self._get_mycelial_stats(),
+            field_stats=self._get_field_stats(),
+            last_reward=last_reward,
+            recent_actions=self.shadow_actions[-5:] if self.shadow_actions else []
+        )
+    
+    def _get_mycelial_stats(self) -> Dict[str, Any]:
+        """
+        Extract stats from MycelialReasoning if available.
+        
+        Returns empty dict if mycelial is not connected.
+        """
+        if not self.mycelial:
+            return {}
+        
+        try:
+            stats = self.mycelial.get_network_stats()
+            return {
+                "active_nodes": stats.get("active_nodes", 0),
+                "active_edges": stats.get("active_edges", 0),
+                "total_observations": stats.get("total_observations", 0),
+                "mean_weight": stats.get("mean_weight", 0.0),
+                "max_weight": stats.get("max_weight", 0.0),
+            }
+        except Exception as e:
+            logger.debug(f"Could not get mycelial stats: {e}")
+            return {}
+    
+    def _get_field_stats(self) -> Dict[str, Any]:
+        """
+        Extract stats from PreStructuralField if available.
+        
+        Returns empty dict if field is not connected.
+        """
+        if not self.field:
+            return {}
+        
+        try:
+            stats = {}
+            
+            # Get manifold stats
+            if hasattr(self.field, 'manifold') and self.field.manifold:
+                stats["manifold_points"] = len(self.field.manifold.points)
+                stats["manifold_dim"] = getattr(self.field.manifold, 'current_dim', 0)
+            
+            # Get trigger count
+            if hasattr(self.field, 'trigger_count'):
+                stats["trigger_count"] = self.field.trigger_count
+            
+            # Get free energy if available
+            if hasattr(self.field, 'free_energy') and self.field.free_energy:
+                try:
+                    if hasattr(self.field.free_energy, 'last_F'):
+                        stats["last_free_energy"] = float(self.field.free_energy.last_F)
+                except:
+                    pass
+            
+            return stats
+        except Exception as e:
+            logger.debug(f"Could not get field stats: {e}")
+            return {}
+    
+    def _get_ai_hypotheses(
+        self, 
+        gaps: List[Dict], 
+        fallback_hypotheses: List[Dict]
+    ) -> List[Dict]:
+        """
+        Get hypotheses from Active Inference agent (primary mode).
+        
+        Falls back to heuristic hypotheses if AI fails.
+        
+        Returns:
+            List of hypothesis dicts ready for HypothesisExecutor
+        """
+        try:
+            loop_state = self._build_loop_state(gaps, fallback_hypotheses, 0.0)
+            ai_action = self.active_inference_adapter.select_action(loop_state)
+            
+            # Track AI action
+            self.ai_primary_actions.append(ai_action)
+            
+            # Convert to hypothesis for executor
+            hypothesis = self._action_to_hypothesis(ai_action)
+            
+            logger.info(
+                f"[AI-PRIMARY] ActiveInference: {ai_action.action_type.name} "
+                f"target={ai_action.target} EFE={ai_action.expected_free_energy:.3f}"
+            )
+            
+            # Return AI-selected action as the only hypothesis
+            return [hypothesis]
+            
+        except Exception as e:
+            logger.warning(f"[AI-FALLBACK] Heuristic used due to: {e}")
+            self.ai_fallback_count += 1
+            return fallback_hypotheses
+    
+    def _action_to_hypothesis(self, agent_action: AgentAction) -> Dict[str, Any]:
+        """
+        Convert an AgentAction to a hypothesis dict for HypothesisExecutor.
+        
+        Convention:
+        - id: "ai_{action_type}_{target_hash}"
+        - hypothesis_text: describes the action
+        - source_cluster: from action parameters or target
+        - target_cluster: from action parameters or target  
+        - confidence_score: from action.confidence
+        - test_requirements: empty list
+        - _source: "active_inference" (metadata field)
+        
+        Args:
+            agent_action: AgentAction from adapter
+            
+        Returns:
+            Dict compatible with HypothesisExecutor.execute()
+        """
+        # Extract source/target from parameters or use action target
+        params = agent_action.parameters or {}
+        source = params.get("source", params.get("concept1", agent_action.target))
+        target = params.get("target", params.get("concept2", agent_action.target))
+        
+        return {
+            "id": f"ai_{agent_action.action_type.name}_{hash(agent_action.target) % 10000}",
+            "hypothesis_text": f"AI-selected action: {agent_action.action_type.name} on {agent_action.target}",
+            "source_cluster": str(source),
+            "target_cluster": str(target),
+            "confidence_score": agent_action.confidence,
+            "test_requirements": [],
+            "_source": "active_inference",
+            "_action_type": agent_action.action_type.name,
+            "_expected_free_energy": agent_action.expected_free_energy
+        }
+    
     def get_status(self) -> Dict[str, Any]:
         """Retorna status atual do loop"""
         return {
             "is_running": self.is_running,
             "current_cycle": self.current_cycle,
             "metrics_summary": self.metrics.get_summary(),
-            "last_run_summary": self.last_run_summary
+            "last_run_summary": self.last_run_summary,
+            "shadow_actions_count": len(self.shadow_actions),
+            "ai_primary_actions_count": len(self.ai_primary_actions),
+            "ai_fallback_count": self.ai_fallback_count
         }
     
     def reset(self):
@@ -298,6 +485,9 @@ class SelfFeedingLoop:
         self.is_running = False
         self.current_cycle = 0
         self.last_run_summary = {}
+        self.shadow_actions = []
+        self.ai_primary_actions = []
+        self.ai_fallback_count = 0
         self.metrics.reset()
         self.executor.reset_stats()
         self.collector.reset_stats()

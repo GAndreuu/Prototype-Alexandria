@@ -163,6 +163,40 @@ class MycelialReasoning:
             del self.graph[node_a]
 
     # =========================================================================
+    # MANIPULAÇÃO EXPLÍCITA (API para Agentes)
+    # =========================================================================
+
+    def connect_nodes(self, node_a: Node, node_b: Node, weight_delta: float = 0.1) -> float:
+        """
+        Cria ou reforça uma conexão explicitamente.
+        Retorna o novo peso da aresta.
+        """
+        # Garantir simetria
+        new_weight = self.graph[node_a][node_b] + weight_delta
+        self.graph[node_a][node_b] = new_weight
+        self.graph[node_b][node_a] = new_weight
+        return new_weight
+
+    def get_neighbors(self, node: Node, top_k: int = 10) -> List[Dict]:
+        """
+        Retorna vizinhos de um nó ordenados por força.
+        """
+        if node not in self.graph:
+            return []
+
+        neighbors = []
+        for neighbor, weight in self.graph[node].items():
+            neighbors.append({
+                'node': neighbor,
+                'weight': weight,
+                'head': neighbor[0],
+                'code': neighbor[1]
+            })
+
+        neighbors.sort(key=lambda x: x['weight'], reverse=True)
+        return neighbors[:top_k]
+
+    # =========================================================================
     # PROPAGAÇÃO E RACIOCÍNIO
     # =========================================================================
     

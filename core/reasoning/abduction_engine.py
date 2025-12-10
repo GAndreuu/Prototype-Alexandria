@@ -536,7 +536,7 @@ class AbductionEngine:
         # Ajuste baseado no gap type
         type_adjustments = {
             "orphaned_connection": 0.1,
-            "missing_connection": 0.2,
+            "missing_connection": 0.4,
             "broken_chain": 0.15
         }
         type_bonus = type_adjustments.get(gap_type, 0.0)

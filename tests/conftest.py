@@ -1,9 +1,15 @@
 import pytest
 import os
 import shutil
-from core.topology_engine import TopologyEngine
-from core.semantic_memory import SemanticFileSystem
-from core.oracle import NeuralOracle
+import sys
+from pathlib import Path
+
+# Ensure project root is in path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from core.topology.topology_engine import TopologyEngine
+from core.memory.semantic_memory import SemanticFileSystem
+from core.agents.oracle import NeuralOracle
 from config import settings
 
 @pytest.fixture(scope="session")

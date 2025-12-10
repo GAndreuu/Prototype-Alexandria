@@ -343,14 +343,133 @@ class PreStructuralField:
         
         return graph
     
-    def _incorporate_to_mycelial(self, graph: Dict):
-        """Incorpora grafo cristalizado no Mycelial."""
-        # Para cada edge no grafo cristalizado,
-        # cria/fortalece conexão no Mycelial
+    def _incorporate_to_mycelial(self, graph: Dict) -> None:
+        """
+        Incorpora o grafo cristalizado no MycelialReasoning.
+
+        Ideia:
+        - Cada nó do grafo (coordenadas de atrator) é aproximado pelo ponto mais próximo
+          na variedade dinâmica.
+        - Usamos os discrete_codes desse ponto como "representante" VQ-VAE do nó.
+        - Para cada aresta (source, target, weight), fortalecemos conexões entre os
+          códigos correspondentes no grafo micelial, ponderando pelo peso da aresta.
+        """
+        if self.mycelial is None:
+            logger.warning("Mycelial não conectado; ignorando incorporação do campo.")
+            return
+
+        # Garantir que temos pontos suficientes na variedade
+        if not self.manifold.points:
+            logger.warning(
+                "Manifold sem pontos ativos; não há como mapear nós -> códigos VQ-VAE."
+            )
+            return
+
+        nodes = graph.get("nodes", [])
+        edges = graph.get("edges", [])
+        if not nodes or not edges:
+            # Nada para incorporar
+            logger.info(
+                f"Grafos sem nós/arestas significativos: "
+                f"{len(nodes)} nós, {len(edges)} arestas."
+            )
+            return
+
+        # -------------------------------------------------------------------------
+        # 1) Mapear cada nó cristalizado -> discrete_codes do ponto mais próximo
+        # -------------------------------------------------------------------------
+        from .manifold import ManifoldPoint
         
-        # Isso requer mapear coordenadas → códigos VQ-VAE
-        # Por agora, apenas loga
-        logger.info(f"Cristalizado: {len(graph['nodes'])} nós, {len(graph['edges'])} arestas")
+        node_to_codes: Dict[str, np.ndarray] = {}
+        num_heads = getattr(self.manifold.config, "num_heads", 4)
+        codebook_size = getattr(self.mycelial.c, "codebook_size", 256)
+
+        for node in nodes:
+            node_id = node.get("id")
+            coords = np.array(node.get("coordinates"), dtype=np.float32)
+
+            # Criamos um ManifoldPoint sintético apenas para consulta de vizinhos
+            probe = ManifoldPoint(
+                coordinates=coords,
+                discrete_codes=np.zeros(num_heads, dtype=np.int32),
+                activation=0.0,
+            )
+
+            neighbors = self.manifold.get_neighbors(probe, k=1)
+            if not neighbors:
+                logger.debug(f"Sem vizinhos no manifold para nó {node_id}")
+                continue
+
+            nearest_id, dist = neighbors[0]
+            manifold_point = self.manifold.get_point(nearest_id)
+            if manifold_point is None:
+                continue
+
+            codes = np.array(manifold_point.discrete_codes, dtype=np.int32)
+
+            # Checagem básica de sanidade
+            if codes.shape[0] != num_heads:
+                logger.debug(
+                    f"Nó {node_id} mapeado para ponto com códigos de shape estranho: "
+                    f"{codes.shape}"
+                )
+                continue
+
+            node_to_codes[node_id] = codes
+
+        if not node_to_codes:
+            logger.warning(
+                "Nenhum nó do grafo pôde ser mapeado para códigos VQ-VAE; "
+                "incorporação abortada."
+            )
+            return
+
+        # -------------------------------------------------------------------------
+        # 2) Refletir arestas do grafo em reforços Hebbianos no Mycelial
+        # -------------------------------------------------------------------------
+        updated_edges = 0
+        learning_rate = getattr(self.mycelial.c, "learning_rate", 0.1)
+
+        # O grafo micelial é um dicionário esparso: {Node -> {Node -> weight}}
+        graph_sparse = self.mycelial.graph
+
+        for edge in edges:
+            src_id = edge.get("source")
+            tgt_id = edge.get("target")
+            weight = float(edge.get("weight", 0.0))
+
+            if weight <= 0.0:
+                continue
+
+            src_codes = node_to_codes.get(src_id)
+            tgt_codes = node_to_codes.get(tgt_id)
+            if src_codes is None or tgt_codes is None:
+                continue
+
+            # Força de reforço proporcional ao peso da aresta
+            delta = learning_rate * weight
+
+            for h in range(num_heads):
+                c_src = int(src_codes[h])
+                c_tgt = int(tgt_codes[h])
+
+                # Ignora códigos fora do codebook
+                if not (0 <= c_src < codebook_size and 0 <= c_tgt < codebook_size):
+                    continue
+
+                node_a = (h, c_src)
+                node_b = (h, c_tgt)
+
+                # Conexão bidirecional
+                graph_sparse[node_a][node_b] += delta
+                graph_sparse[node_b][node_a] += delta
+                updated_edges += 1
+
+        logger.info(
+            f"Incorporação do campo no Mycelial concluída: "
+            f"{len(nodes)} nós, {len(edges)} arestas, "
+            f"{updated_edges} conexões reforçadas."
+        )
     
     # =========================================================================
     # QUERIES
