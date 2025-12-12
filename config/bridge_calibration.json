@@ -1,0 +1,10 @@
+{
+  "pull_strength": 0.5,
+  "pull_radius": 0.3,
+  "deformation_strength": 0.3,
+  "deformation_radius": 0.2,
+  "num_nearest_anchors": 4,
+  "projection_mode": "weighted",
+  "calibration_score": 0.88,
+  "calibration_date": "2025-12-10T22:50:00"
+}

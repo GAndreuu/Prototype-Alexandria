@@ -103,7 +103,7 @@ class CriticAgent:
         # Debug: Log status da chave
         logger.info(f"🔑 Gemini API Key inicializada: {'✅ Configurada' if self.gemini_api_key else '❌ Não configurada'}")
         if self.gemini_api_key:
-            logger.info(f"🔑 Primeiros caracteres da chave: {self.gemini_api_key[:10]}...")
+            logger.info(f"🔑 Primeiros caracteres da chave: {self.gemini_api_key[:4]}...")
         
         # Histórico de avaliações
         self.assessment_history: List[CriticalAssessment] = []

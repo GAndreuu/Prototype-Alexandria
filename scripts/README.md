@@ -47,6 +47,30 @@ scripts/
 │   ├── count_papers.py         (1.0 KB) - Count indexed papers
 │   └── finetune_llm.py         (4.0 KB) - Fine-tune local LLM
 │
+├── debug/             # Debugging and inspection [NEW]
+│   ├── analyze_coverage.py, check_lancedb.py, ...
+│   └── (10 scripts for system diagnostics)
+│
+├── maintenance/       # System maintenance [NEW]
+│   ├── check_missing_papers.py, check_mycelial_health.py, ...
+│   └── (7 scripts for health checks)
+│
+├── benchmarks/        # Performance benchmarks [NEW]
+│   └── geodesic_gpu_bench.py
+│
+├── calibration/       # Calibration scripts [NEW]
+│   └── calibrate_bridge.py
+│
+├── diagnostics/       # Deep diagnostics [NEW]
+│   └── check_lancedb.py
+│
+├── (Root scripts)     # Top-level runners
+│   ├── system_runner_v2.py     (13.1 KB) - Main runner
+│   ├── mass_arxiv_ingest.py    (9.9 KB)  - arXiv bulk ingest
+│   ├── multi_api_ingest.py     (18.5 KB) - Multi-API ingest
+│   ├── verify_autonomy.py      (10.2 KB) - Verify autonomous loop
+│   └── ...
+│
 └── entrypoint.sh      # Docker entrypoint
 ```
 
@@ -131,16 +155,21 @@ python scripts/utilities/count_papers.py
 ## 📊 Statistics
 
 ```
-Total Scripts: 27
-├─ Training: 2
-├─ Testing: 6
-├─ Analysis: 4
-├─ Ingestion: 5
-├─ Demos: 4
-└─ Utilities: 6
+Total Scripts: 85
+├─ Training: 6
+├─ Testing: 13
+├─ Analysis: 22
+├─ Ingestion: (via utilities)
+├─ Demos: 7
+├─ Utilities: 8
+├─ Debug: 10
+├─ Maintenance: 7
+├─ Benchmarks: 1
+├─ Calibration: 1
+├─ Diagnostics: 1
+└─ Root Scripts: 9
 
-Total Size: ~150 KB
-Average: ~5.6 KB per script
+Total Size: ~350 KB
 ```
 
 ---

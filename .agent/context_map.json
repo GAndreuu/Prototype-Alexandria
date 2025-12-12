@@ -1,0 +1,4799 @@
+{
+  "metadata": {
+    "generated_at": "runtime",
+    "total_files": 239,
+    "total_terms": 256
+  },
+  "topology": [
+    {
+      "path": ".env",
+      "name": ".env",
+      "type": "file",
+      "size": 1427,
+      "tokens": [
+        "env"
+      ]
+    },
+    {
+      "path": ".env.example",
+      "name": ".env.example",
+      "type": "file",
+      "size": 1346,
+      "tokens": [
+        "env",
+        "example"
+      ]
+    },
+    {
+      "path": ".gitignore",
+      "name": ".gitignore",
+      "type": "file",
+      "size": 1018,
+      "tokens": [
+        "gitignore"
+      ]
+    },
+    {
+      "path": ".gitkeep",
+      "name": ".gitkeep",
+      "type": "file",
+      "size": 1127,
+      "tokens": [
+        "gitkeep"
+      ]
+    },
+    {
+      "path": "config.py",
+      "name": "config.py",
+      "type": "file",
+      "size": 2160,
+      "tokens": [
+        "py",
+        "config"
+      ]
+    },
+    {
+      "path": "docker-compose.yml",
+      "name": "docker-compose.yml",
+      "type": "file",
+      "size": 531,
+      "tokens": [
+        "docker",
+        "compose",
+        "yml"
+      ]
+    },
+    {
+      "path": "Dockerfile",
+      "name": "Dockerfile",
+      "type": "file",
+      "size": 982,
+      "tokens": [
+        "dockerfile"
+      ]
+    },
+    {
+      "path": "failed_papers_list.txt",
+      "name": "failed_papers_list.txt",
+      "type": "file",
+      "size": 4206,
+      "tokens": [
+        "failed",
+        "list",
+        "papers",
+        "txt"
+      ]
+    },
+    {
+      "path": "LICENSE",
+      "name": "LICENSE",
+      "type": "file",
+      "size": 1103,
+      "tokens": [
+        "license"
+      ]
+    },
+    {
+      "path": "README.md",
+      "name": "README.md",
+      "type": "file",
+      "size": 6830,
+      "tokens": [
+        "readme",
+        "md"
+      ]
+    },
+    {
+      "path": "requirements.txt",
+      "name": "requirements.txt",
+      "type": "file",
+      "size": 886,
+      "tokens": [
+        "requirements",
+        "txt"
+      ]
+    },
+    {
+      "path": "RESUMO_SISTEMA.md",
+      "name": "RESUMO_SISTEMA.md",
+      "type": "file",
+      "size": 9932,
+      "tokens": [
+        "sistema",
+        "resumo",
+        "md"
+      ]
+    },
+    {
+      "path": "run_interface.bat",
+      "name": "run_interface.bat",
+      "type": "file",
+      "size": 263,
+      "tokens": [
+        "bat",
+        "interface",
+        "run"
+      ]
+    },
+    {
+      "path": "smoke_test_log.txt",
+      "name": "smoke_test_log.txt",
+      "type": "file",
+      "size": 14026,
+      "tokens": [
+        "test",
+        "smoke",
+        "log",
+        "txt"
+      ]
+    },
+    {
+      "path": "STRUCTURE.md",
+      "name": "STRUCTURE.md",
+      "type": "file",
+      "size": 5586,
+      "tokens": [
+        "structure",
+        "md"
+      ]
+    },
+    {
+      "path": "synthesis_data.txt",
+      "name": "synthesis_data.txt",
+      "type": "file",
+      "size": 81452,
+      "tokens": [
+        "synthesis",
+        "txt",
+        "data"
+      ]
+    },
+    {
+      "path": "mapper_output.txt",
+      "name": "mapper_output.txt",
+      "type": "file",
+      "size": 0,
+      "tokens": [
+        "output",
+        "txt",
+        "mapper"
+      ]
+    },
+    {
+      "path": ".agent/context_map.json",
+      "name": "context_map.json",
+      "type": "file",
+      "size": 117194,
+      "tokens": [
+        "context",
+        "json",
+        "agent",
+        "map"
+      ]
+    },
+    {
+      "path": ".prompts/analisar_estrutura.md",
+      "name": "analisar_estrutura.md",
+      "type": "file",
+      "size": 2771,
+      "tokens": [
+        "analisar",
+        "prompts",
+        "md",
+        "estrutura"
+      ]
+    },
+    {
+      "path": ".prompts/atualizar_documentacao.md",
+      "name": "atualizar_documentacao.md",
+      "type": "file",
+      "size": 2878,
+      "tokens": [
+        "documentacao",
+        "prompts",
+        "atualizar",
+        "md"
+      ]
+    },
+    {
+      "path": ".prompts/code_review.md",
+      "name": "code_review.md",
+      "type": "file",
+      "size": 2433,
+      "tokens": [
+        "review",
+        "code",
+        "prompts",
+        "md"
+      ]
+    },
+    {
+      "path": ".prompts/criar_documentacao.md",
+      "name": "criar_documentacao.md",
+      "type": "file",
+      "size": 2436,
+      "tokens": [
+        "criar",
+        "documentacao",
+        "prompts",
+        "md"
+      ]
+    },
+    {
+      "path": ".prompts/criar_modulo.md",
+      "name": "criar_modulo.md",
+      "type": "file",
+      "size": 1977,
+      "tokens": [
+        "criar",
+        "prompts",
+        "md",
+        "modulo"
+      ]
+    },
+    {
+      "path": ".prompts/debug_completo.md",
+      "name": "debug_completo.md",
+      "type": "file",
+      "size": 2090,
+      "tokens": [
+        "prompts",
+        "debug",
+        "completo",
+        "md"
+      ]
+    },
+    {
+      "path": ".prompts/documentar_modulo.md",
+      "name": "documentar_modulo.md",
+      "type": "file",
+      "size": 5268,
+      "tokens": [
+        "documentar",
+        "prompts",
+        "md",
+        "modulo"
+      ]
+    },
+    {
+      "path": ".prompts/README.md",
+      "name": "README.md",
+      "type": "file",
+      "size": 2519,
+      "tokens": [
+        "prompts",
+        "readme",
+        "md"
+      ]
+    },
+    {
+      "path": "core/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 335,
+      "tokens": [
+        "init",
+        "core",
+        "py"
+      ]
+    },
+    {
+      "path": "interface/app.py",
+      "name": "app.py",
+      "type": "file",
+      "size": 2148,
+      "tokens": [
+        "py",
+        "interface",
+        "app"
+      ]
+    },
+    {
+      "path": "interface/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 20,
+      "tokens": [
+        "init",
+        "interface",
+        "py"
+      ]
+    },
+    {
+      "path": "modulo_operacional/Cosmic Garden - Workflows (Nivel 3).md",
+      "name": "Cosmic Garden - Workflows (Nivel 3).md",
+      "type": "file",
+      "size": 13378,
+      "tokens": [
+        "operacional",
+        "nivel",
+        "workflows",
+        "cosmic",
+        "modulo",
+        "3",
+        "garden",
+        "md"
+      ]
+    },
+    {
+      "path": "modulo_operacional/Gerenciamento topologico de contexto - cosmic garden.md",
+      "name": "Gerenciamento topologico de contexto - cosmic garden.md",
+      "type": "file",
+      "size": 16349,
+      "tokens": [
+        "operacional",
+        "topologico",
+        "contexto",
+        "de",
+        "cosmic",
+        "modulo",
+        "gerenciamento",
+        "garden",
+        "md"
+      ]
+    },
+    {
+      "path": "modulo_operacional/Teste gerenciamento de prompt ide - cosmic garden.md",
+      "name": "Teste gerenciamento de prompt ide - cosmic garden.md",
+      "type": "file",
+      "size": 28657,
+      "tokens": [
+        "operacional",
+        "teste",
+        "de",
+        "prompt",
+        "cosmic",
+        "modulo",
+        "gerenciamento",
+        "ide",
+        "garden",
+        "md"
+      ]
+    },
+    {
+      "path": "scripts/check_status.py",
+      "name": "check_status.py",
+      "type": "file",
+      "size": 968,
+      "tokens": [
+        "py",
+        "scripts",
+        "check",
+        "status"
+      ]
+    },
+    {
+      "path": "scripts/entrypoint.sh",
+      "name": "entrypoint.sh",
+      "type": "file",
+      "size": 314,
+      "tokens": [
+        "scripts",
+        "entrypoint",
+        "sh"
+      ]
+    },
+    {
+      "path": "scripts/gather_metrics.py",
+      "name": "gather_metrics.py",
+      "type": "file",
+      "size": 2617,
+      "tokens": [
+        "scripts",
+        "metrics",
+        "py",
+        "gather"
+      ]
+    },
+    {
+      "path": "scripts/ingest_incremental.py",
+      "name": "ingest_incremental.py",
+      "type": "file",
+      "size": 5098,
+      "tokens": [
+        "ingest",
+        "scripts",
+        "py",
+        "incremental"
+      ]
+    },
+    {
+      "path": "scripts/inspect_connections.py",
+      "name": "inspect_connections.py",
+      "type": "file",
+      "size": 2847,
+      "tokens": [
+        "py",
+        "scripts",
+        "inspect",
+        "connections"
+      ]
+    },
+    {
+      "path": "scripts/mass_arxiv_ingest.py",
+      "name": "mass_arxiv_ingest.py",
+      "type": "file",
+      "size": 9898,
+      "tokens": [
+        "scripts",
+        "mass",
+        "arxiv",
+        "ingest",
+        "py"
+      ]
+    },
+    {
+      "path": "scripts/multi_api_ingest.py",
+      "name": "multi_api_ingest.py",
+      "type": "file",
+      "size": 18499,
+      "tokens": [
+        "scripts",
+        "api",
+        "ingest",
+        "py",
+        "multi"
+      ]
+    },
+    {
+      "path": "scripts/README.md",
+      "name": "README.md",
+      "type": "file",
+      "size": 5265,
+      "tokens": [
+        "scripts",
+        "readme",
+        "md"
+      ]
+    },
+    {
+      "path": "scripts/system_runner_v2.py",
+      "name": "system_runner_v2.py",
+      "type": "file",
+      "size": 13146,
+      "tokens": [
+        "scripts",
+        "runner",
+        "py",
+        "v2",
+        "system"
+      ]
+    },
+    {
+      "path": "scripts/verify_autonomy.py",
+      "name": "verify_autonomy.py",
+      "type": "file",
+      "size": 10195,
+      "tokens": [
+        "py",
+        "scripts",
+        "autonomy",
+        "verify"
+      ]
+    },
+    {
+      "path": "tests/conftest.py",
+      "name": "conftest.py",
+      "type": "file",
+      "size": 1405,
+      "tokens": [
+        "py",
+        "conftest",
+        "tests"
+      ]
+    },
+    {
+      "path": "tests/test_action_agent_refactor.py",
+      "name": "test_action_agent_refactor.py",
+      "type": "file",
+      "size": 6202,
+      "tokens": [
+        "refactor",
+        "agent",
+        "py",
+        "tests",
+        "test",
+        "action"
+      ]
+    },
+    {
+      "path": "tests/test_active_inference_integration.py",
+      "name": "test_active_inference_integration.py",
+      "type": "file",
+      "size": 14613,
+      "tokens": [
+        "py",
+        "tests",
+        "test",
+        "inference",
+        "active",
+        "integration"
+      ]
+    },
+    {
+      "path": "tests/test_core.py",
+      "name": "test_core.py",
+      "type": "file",
+      "size": 2628,
+      "tokens": [
+        "test",
+        "core",
+        "py",
+        "tests"
+      ]
+    },
+    {
+      "path": "tests/test_executor_real.py",
+      "name": "test_executor_real.py",
+      "type": "file",
+      "size": 3290,
+      "tokens": [
+        "py",
+        "tests",
+        "real",
+        "test",
+        "executor"
+      ]
+    },
+    {
+      "path": "tests/test_mycelial.py",
+      "name": "test_mycelial.py",
+      "type": "file",
+      "size": 15394,
+      "tokens": [
+        "mycelial",
+        "test",
+        "py",
+        "tests"
+      ]
+    },
+    {
+      "path": "tests/test_storage.py",
+      "name": "test_storage.py",
+      "type": "file",
+      "size": 2634,
+      "tokens": [
+        "test",
+        "storage",
+        "py",
+        "tests"
+      ]
+    },
+    {
+      "path": "tests/test_symbol_grounding.py",
+      "name": "test_symbol_grounding.py",
+      "type": "file",
+      "size": 2596,
+      "tokens": [
+        "grounding",
+        "py",
+        "tests",
+        "test",
+        "symbol"
+      ]
+    },
+    {
+      "path": "tests/test_system_integration.py",
+      "name": "test_system_integration.py",
+      "type": "file",
+      "size": 6089,
+      "tokens": [
+        "py",
+        "tests",
+        "test",
+        "system",
+        "integration"
+      ]
+    },
+    {
+      "path": "tests/test_v2_cycle.py",
+      "name": "test_v2_cycle.py",
+      "type": "file",
+      "size": 3482,
+      "tokens": [
+        "py",
+        "tests",
+        "test",
+        "v2",
+        "cycle"
+      ]
+    },
+    {
+      "path": "tests/test_viz.py",
+      "name": "test_viz.py",
+      "type": "file",
+      "size": 1928,
+      "tokens": [
+        "test",
+        "viz",
+        "py",
+        "tests"
+      ]
+    },
+    {
+      "path": "scripts/analysis/alexandria_topics.py",
+      "name": "alexandria_topics.py",
+      "type": "file",
+      "size": 8977,
+      "tokens": [
+        "scripts",
+        "alexandria",
+        "topics",
+        "py",
+        "analysis"
+      ]
+    },
+    {
+      "path": "scripts/analysis/analyze_code_semantics.py",
+      "name": "analyze_code_semantics.py",
+      "type": "file",
+      "size": 11718,
+      "tokens": [
+        "scripts",
+        "code",
+        "py",
+        "semantics",
+        "analyze",
+        "analysis"
+      ]
+    },
+    {
+      "path": "scripts/analysis/analyze_db_stats.py",
+      "name": "analyze_db_stats.py",
+      "type": "file",
+      "size": 2902,
+      "tokens": [
+        "scripts",
+        "py",
+        "analyze",
+        "analysis",
+        "db",
+        "stats"
+      ]
+    },
+    {
+      "path": "scripts/analysis/bootstrap_mycelial.py",
+      "name": "bootstrap_mycelial.py",
+      "type": "file",
+      "size": 16388,
+      "tokens": [
+        "scripts",
+        "bootstrap",
+        "py",
+        "analysis",
+        "mycelial"
+      ]
+    },
+    {
+      "path": "scripts/analysis/check_truncation.py",
+      "name": "check_truncation.py",
+      "type": "file",
+      "size": 2841,
+      "tokens": [
+        "scripts",
+        "truncation",
+        "py",
+        "analysis",
+        "check"
+      ]
+    },
+    {
+      "path": "scripts/analysis/check_vector_norms.py",
+      "name": "check_vector_norms.py",
+      "type": "file",
+      "size": 2123,
+      "tokens": [
+        "scripts",
+        "py",
+        "analysis",
+        "vector",
+        "check",
+        "norms"
+      ]
+    },
+    {
+      "path": "scripts/analysis/cluster_labeler.py",
+      "name": "cluster_labeler.py",
+      "type": "file",
+      "size": 11119,
+      "tokens": [
+        "scripts",
+        "labeler",
+        "py",
+        "analysis",
+        "cluster"
+      ]
+    },
+    {
+      "path": "scripts/analysis/domain_classifier.py",
+      "name": "domain_classifier.py",
+      "type": "file",
+      "size": 3560,
+      "tokens": [
+        "classifier",
+        "scripts",
+        "domain",
+        "py",
+        "analysis"
+      ]
+    },
+    {
+      "path": "scripts/analysis/domain_classifier_fs.py",
+      "name": "domain_classifier_fs.py",
+      "type": "file",
+      "size": 3753,
+      "tokens": [
+        "classifier",
+        "scripts",
+        "domain",
+        "py",
+        "analysis",
+        "fs"
+      ]
+    },
+    {
+      "path": "scripts/analysis/experiment_A_ablation.py",
+      "name": "experiment_A_ablation.py",
+      "type": "file",
+      "size": 2728,
+      "tokens": [
+        "scripts",
+        "py",
+        "analysis",
+        "ablation",
+        "experiment",
+        "a"
+      ]
+    },
+    {
+      "path": "scripts/analysis/experiment_B_rescaling.py",
+      "name": "experiment_B_rescaling.py",
+      "type": "file",
+      "size": 3619,
+      "tokens": [
+        "scripts",
+        "b",
+        "py",
+        "analysis",
+        "experiment",
+        "rescaling"
+      ]
+    },
+    {
+      "path": "scripts/analysis/experiment_CD_combined.py",
+      "name": "experiment_CD_combined.py",
+      "type": "file",
+      "size": 5578,
+      "tokens": [
+        "scripts",
+        "py",
+        "analysis",
+        "experiment",
+        "cd",
+        "combined"
+      ]
+    },
+    {
+      "path": "scripts/analysis/geometric_topics.py",
+      "name": "geometric_topics.py",
+      "type": "file",
+      "size": 13712,
+      "tokens": [
+        "scripts",
+        "topics",
+        "py",
+        "analysis",
+        "geometric"
+      ]
+    },
+    {
+      "path": "scripts/analysis/meta_learning_topics.py",
+      "name": "meta_learning_topics.py",
+      "type": "file",
+      "size": 24346,
+      "tokens": [
+        "learning",
+        "scripts",
+        "topics",
+        "meta",
+        "py",
+        "analysis"
+      ]
+    },
+    {
+      "path": "scripts/analysis/probe_vqvae_advanced.py",
+      "name": "probe_vqvae_advanced.py",
+      "type": "file",
+      "size": 10392,
+      "tokens": [
+        "scripts",
+        "vqvae",
+        "py",
+        "probe",
+        "analysis",
+        "advanced"
+      ]
+    },
+    {
+      "path": "scripts/analysis/probe_vqvae_deep.py",
+      "name": "probe_vqvae_deep.py",
+      "type": "file",
+      "size": 15849,
+      "tokens": [
+        "scripts",
+        "deep",
+        "vqvae",
+        "py",
+        "probe",
+        "analysis"
+      ]
+    },
+    {
+      "path": "scripts/analysis/query_criticality.py",
+      "name": "query_criticality.py",
+      "type": "file",
+      "size": 7703,
+      "tokens": [
+        "scripts",
+        "py",
+        "analysis",
+        "criticality",
+        "query"
+      ]
+    },
+    {
+      "path": "scripts/analysis/test_mycelial_reasoning.py",
+      "name": "test_mycelial_reasoning.py",
+      "type": "file",
+      "size": 18425,
+      "tokens": [
+        "scripts",
+        "reasoning",
+        "py",
+        "analysis",
+        "test",
+        "mycelial"
+      ]
+    },
+    {
+      "path": "scripts/analysis/visualize_bridge.py",
+      "name": "visualize_bridge.py",
+      "type": "file",
+      "size": 11261,
+      "tokens": [
+        "scripts",
+        "visualize",
+        "py",
+        "analysis",
+        "bridge"
+      ]
+    },
+    {
+      "path": "scripts/analysis/visualize_knowledge_graph.py",
+      "name": "visualize_knowledge_graph.py",
+      "type": "file",
+      "size": 6236,
+      "tokens": [
+        "scripts",
+        "visualize",
+        "graph",
+        "py",
+        "knowledge",
+        "analysis"
+      ]
+    },
+    {
+      "path": "scripts/analysis/visualize_mycelial.py",
+      "name": "visualize_mycelial.py",
+      "type": "file",
+      "size": 22113,
+      "tokens": [
+        "scripts",
+        "visualize",
+        "py",
+        "analysis",
+        "mycelial"
+      ]
+    },
+    {
+      "path": "scripts/analysis/visualize_structure.py",
+      "name": "visualize_structure.py",
+      "type": "file",
+      "size": 10561,
+      "tokens": [
+        "scripts",
+        "visualize",
+        "py",
+        "analysis",
+        "structure"
+      ]
+    },
+    {
+      "path": "scripts/debug/analyze_coverage.py",
+      "name": "analyze_coverage.py",
+      "type": "file",
+      "size": 4005,
+      "tokens": [
+        "scripts",
+        "py",
+        "analyze",
+        "debug",
+        "coverage"
+      ]
+    },
+    {
+      "path": "scripts/debug/analyze_training_metrics.py",
+      "name": "analyze_training_metrics.py",
+      "type": "file",
+      "size": 2405,
+      "tokens": [
+        "scripts",
+        "py",
+        "analyze",
+        "training",
+        "metrics",
+        "debug"
+      ]
+    },
+    {
+      "path": "scripts/debug/check_columns.py",
+      "name": "check_columns.py",
+      "type": "file",
+      "size": 367,
+      "tokens": [
+        "scripts",
+        "columns",
+        "py",
+        "debug",
+        "check"
+      ]
+    },
+    {
+      "path": "scripts/debug/check_lancedb.py",
+      "name": "check_lancedb.py",
+      "type": "file",
+      "size": 1524,
+      "tokens": [
+        "scripts",
+        "py",
+        "lancedb",
+        "debug",
+        "check"
+      ]
+    },
+    {
+      "path": "scripts/debug/inspect_metadata.py",
+      "name": "inspect_metadata.py",
+      "type": "file",
+      "size": 1283,
+      "tokens": [
+        "scripts",
+        "py",
+        "metadata",
+        "debug",
+        "inspect"
+      ]
+    },
+    {
+      "path": "scripts/debug/probe_reasoning.py",
+      "name": "probe_reasoning.py",
+      "type": "file",
+      "size": 4024,
+      "tokens": [
+        "scripts",
+        "reasoning",
+        "py",
+        "probe",
+        "debug"
+      ]
+    },
+    {
+      "path": "scripts/debug/status_check.py",
+      "name": "status_check.py",
+      "type": "file",
+      "size": 1635,
+      "tokens": [
+        "scripts",
+        "status",
+        "py",
+        "debug",
+        "check"
+      ]
+    },
+    {
+      "path": "scripts/debug/test_nemesis_integration.py",
+      "name": "test_nemesis_integration.py",
+      "type": "file",
+      "size": 5188,
+      "tokens": [
+        "scripts",
+        "py",
+        "test",
+        "debug",
+        "nemesis",
+        "integration"
+      ]
+    },
+    {
+      "path": "scripts/debug/verify_learning_stack.py",
+      "name": "verify_learning_stack.py",
+      "type": "file",
+      "size": 1485,
+      "tokens": [
+        "learning",
+        "scripts",
+        "verify",
+        "stack",
+        "py",
+        "debug"
+      ]
+    },
+    {
+      "path": "scripts/debug/verify_nemesis.py",
+      "name": "verify_nemesis.py",
+      "type": "file",
+      "size": 1965,
+      "tokens": [
+        "scripts",
+        "verify",
+        "py",
+        "debug",
+        "nemesis"
+      ]
+    },
+    {
+      "path": "scripts/demos/collide.py",
+      "name": "collide.py",
+      "type": "file",
+      "size": 7353,
+      "tokens": [
+        "collide",
+        "scripts",
+        "py",
+        "demos"
+      ]
+    },
+    {
+      "path": "scripts/demos/collide_v2.py",
+      "name": "collide_v2.py",
+      "type": "file",
+      "size": 9341,
+      "tokens": [
+        "scripts",
+        "demos",
+        "py",
+        "v2",
+        "collide"
+      ]
+    },
+    {
+      "path": "scripts/demos/demo_capabilities.py",
+      "name": "demo_capabilities.py",
+      "type": "file",
+      "size": 5128,
+      "tokens": [
+        "scripts",
+        "capabilities",
+        "demos",
+        "demo",
+        "py"
+      ]
+    },
+    {
+      "path": "scripts/demos/demo_full_system.py",
+      "name": "demo_full_system.py",
+      "type": "file",
+      "size": 8492,
+      "tokens": [
+        "scripts",
+        "demos",
+        "demo",
+        "py",
+        "full",
+        "system"
+      ]
+    },
+    {
+      "path": "scripts/demos/demo_self_feeding_loop.py",
+      "name": "demo_self_feeding_loop.py",
+      "type": "file",
+      "size": 3265,
+      "tokens": [
+        "scripts",
+        "feeding",
+        "demos",
+        "loop",
+        "demo",
+        "py",
+        "self"
+      ]
+    },
+    {
+      "path": "scripts/demos/run_real_loop.py",
+      "name": "run_real_loop.py",
+      "type": "file",
+      "size": 21543,
+      "tokens": [
+        "scripts",
+        "demos",
+        "loop",
+        "py",
+        "real",
+        "run"
+      ]
+    },
+    {
+      "path": "scripts/diagnostics/check_lancedb.py",
+      "name": "check_lancedb.py",
+      "type": "file",
+      "size": 1716,
+      "tokens": [
+        "scripts",
+        "py",
+        "lancedb",
+        "diagnostics",
+        "check"
+      ]
+    },
+    {
+      "path": "scripts/maintenance/check_missing_papers.py",
+      "name": "check_missing_papers.py",
+      "type": "file",
+      "size": 1988,
+      "tokens": [
+        "scripts",
+        "papers",
+        "missing",
+        "py",
+        "maintenance",
+        "check"
+      ]
+    },
+    {
+      "path": "scripts/maintenance/check_mycelial_health.py",
+      "name": "check_mycelial_health.py",
+      "type": "file",
+      "size": 1396,
+      "tokens": [
+        "health",
+        "scripts",
+        "py",
+        "mycelial",
+        "maintenance",
+        "check"
+      ]
+    },
+    {
+      "path": "scripts/maintenance/process_missing_papers.py",
+      "name": "process_missing_papers.py",
+      "type": "file",
+      "size": 2542,
+      "tokens": [
+        "scripts",
+        "papers",
+        "missing",
+        "process",
+        "py",
+        "maintenance"
+      ]
+    },
+    {
+      "path": "scripts/maintenance/prune_mycelial.py",
+      "name": "prune_mycelial.py",
+      "type": "file",
+      "size": 2439,
+      "tokens": [
+        "scripts",
+        "py",
+        "prune",
+        "mycelial",
+        "maintenance"
+      ]
+    },
+    {
+      "path": "scripts/maintenance/recover_knowledge.py",
+      "name": "recover_knowledge.py",
+      "type": "file",
+      "size": 3744,
+      "tokens": [
+        "scripts",
+        "py",
+        "knowledge",
+        "recover",
+        "maintenance"
+      ]
+    },
+    {
+      "path": "scripts/maintenance/retry_ingest.py",
+      "name": "retry_ingest.py",
+      "type": "file",
+      "size": 3699,
+      "tokens": [
+        "scripts",
+        "ingest",
+        "py",
+        "retry",
+        "maintenance"
+      ]
+    },
+    {
+      "path": "scripts/testing/integration_test.py",
+      "name": "integration_test.py",
+      "type": "file",
+      "size": 10323,
+      "tokens": [
+        "scripts",
+        "testing",
+        "py",
+        "test",
+        "integration"
+      ]
+    },
+    {
+      "path": "scripts/testing/stress_test.py",
+      "name": "stress_test.py",
+      "type": "file",
+      "size": 6503,
+      "tokens": [
+        "scripts",
+        "testing",
+        "py",
+        "test",
+        "stress"
+      ]
+    },
+    {
+      "path": "scripts/testing/test_field.py",
+      "name": "test_field.py",
+      "type": "file",
+      "size": 3927,
+      "tokens": [
+        "scripts",
+        "testing",
+        "py",
+        "field",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/testing/test_field_real.py",
+      "name": "test_field_real.py",
+      "type": "file",
+      "size": 6313,
+      "tokens": [
+        "scripts",
+        "testing",
+        "py",
+        "field",
+        "real",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/testing/test_field_simple.py",
+      "name": "test_field_simple.py",
+      "type": "file",
+      "size": 2024,
+      "tokens": [
+        "scripts",
+        "testing",
+        "simple",
+        "py",
+        "field",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/testing/test_geodesic_bridge.py",
+      "name": "test_geodesic_bridge.py",
+      "type": "file",
+      "size": 7656,
+      "tokens": [
+        "scripts",
+        "testing",
+        "py",
+        "geodesic",
+        "test",
+        "bridge"
+      ]
+    },
+    {
+      "path": "scripts/testing/test_model_loading.py",
+      "name": "test_model_loading.py",
+      "type": "file",
+      "size": 3544,
+      "tokens": [
+        "scripts",
+        "model",
+        "testing",
+        "py",
+        "loading",
+        "test"
+      ]
+    },
+    {
+      "path": "scripts/testing/test_predictive_coding.py",
+      "name": "test_predictive_coding.py",
+      "type": "file",
+      "size": 1965,
+      "tokens": [
+        "scripts",
+        "testing",
+        "py",
+        "test",
+        "predictive",
+        "coding"
+      ]
+    },
+    {
+      "path": "scripts/testing/validate_alexandria.py",
+      "name": "validate_alexandria.py",
+      "type": "file",
+      "size": 16698,
+      "tokens": [
+        "scripts",
+        "alexandria",
+        "testing",
+        "py",
+        "validate"
+      ]
+    },
+    {
+      "path": "scripts/testing/validate_concepts.py",
+      "name": "validate_concepts.py",
+      "type": "file",
+      "size": 7566,
+      "tokens": [
+        "scripts",
+        "testing",
+        "py",
+        "concepts",
+        "validate"
+      ]
+    },
+    {
+      "path": "scripts/testing/verify_fineweb_model.py",
+      "name": "verify_fineweb_model.py",
+      "type": "file",
+      "size": 2493,
+      "tokens": [
+        "scripts",
+        "model",
+        "testing",
+        "verify",
+        "py",
+        "fineweb"
+      ]
+    },
+    {
+      "path": "scripts/testing/view_connections.py",
+      "name": "view_connections.py",
+      "type": "file",
+      "size": 1025,
+      "tokens": [
+        "scripts",
+        "testing",
+        "py",
+        "view",
+        "connections"
+      ]
+    },
+    {
+      "path": "scripts/training/finetune_vqvae.py",
+      "name": "finetune_vqvae.py",
+      "type": "file",
+      "size": 9864,
+      "tokens": [
+        "scripts",
+        "vqvae",
+        "finetune",
+        "py",
+        "training"
+      ]
+    },
+    {
+      "path": "scripts/training/test_balanced_training.py",
+      "name": "test_balanced_training.py",
+      "type": "file",
+      "size": 441,
+      "tokens": [
+        "scripts",
+        "py",
+        "test",
+        "training",
+        "balanced"
+      ]
+    },
+    {
+      "path": "scripts/training/train_mycelial.py",
+      "name": "train_mycelial.py",
+      "type": "file",
+      "size": 21432,
+      "tokens": [
+        "scripts",
+        "py",
+        "train",
+        "training",
+        "mycelial"
+      ]
+    },
+    {
+      "path": "scripts/training/train_nemesis_vqvae.py",
+      "name": "train_nemesis_vqvae.py",
+      "type": "file",
+      "size": 17188,
+      "tokens": [
+        "scripts",
+        "vqvae",
+        "py",
+        "train",
+        "training",
+        "nemesis"
+      ]
+    },
+    {
+      "path": "scripts/training/train_topology_mycelial.py",
+      "name": "train_topology_mycelial.py",
+      "type": "file",
+      "size": 4461,
+      "tokens": [
+        "scripts",
+        "py",
+        "train",
+        "topology",
+        "training",
+        "mycelial"
+      ]
+    },
+    {
+      "path": "scripts/training/train_vqvae.py",
+      "name": "train_vqvae.py",
+      "type": "file",
+      "size": 6211,
+      "tokens": [
+        "scripts",
+        "vqvae",
+        "py",
+        "train",
+        "training"
+      ]
+    },
+    {
+      "path": "scripts/utilities/build_causal_graph.py",
+      "name": "build_causal_graph.py",
+      "type": "file",
+      "size": 4467,
+      "tokens": [
+        "build",
+        "scripts",
+        "utilities",
+        "graph",
+        "py",
+        "causal"
+      ]
+    },
+    {
+      "path": "scripts/utilities/convert_wiki_weights.py",
+      "name": "convert_wiki_weights.py",
+      "type": "file",
+      "size": 2479,
+      "tokens": [
+        "scripts",
+        "weights",
+        "utilities",
+        "convert",
+        "py",
+        "wiki"
+      ]
+    },
+    {
+      "path": "scripts/utilities/count_papers.py",
+      "name": "count_papers.py",
+      "type": "file",
+      "size": 1014,
+      "tokens": [
+        "scripts",
+        "papers",
+        "utilities",
+        "py",
+        "count"
+      ]
+    },
+    {
+      "path": "scripts/utilities/export_embeddings.py",
+      "name": "export_embeddings.py",
+      "type": "file",
+      "size": 4618,
+      "tokens": [
+        "scripts",
+        "utilities",
+        "py",
+        "export",
+        "embeddings"
+      ]
+    },
+    {
+      "path": "scripts/utilities/extract_causal_relations.py",
+      "name": "extract_causal_relations.py",
+      "type": "file",
+      "size": 5430,
+      "tokens": [
+        "scripts",
+        "utilities",
+        "py",
+        "relations",
+        "causal",
+        "extract"
+      ]
+    },
+    {
+      "path": "scripts/utilities/finetune_llm.py",
+      "name": "finetune_llm.py",
+      "type": "file",
+      "size": 3955,
+      "tokens": [
+        "scripts",
+        "utilities",
+        "finetune",
+        "py",
+        "llm"
+      ]
+    },
+    {
+      "path": "scripts/utilities/init_brain.py",
+      "name": "init_brain.py",
+      "type": "file",
+      "size": 1322,
+      "tokens": [
+        "scripts",
+        "utilities",
+        "brain",
+        "py",
+        "init"
+      ]
+    },
+    {
+      "path": "scripts/utilities/reset_db.py",
+      "name": "reset_db.py",
+      "type": "file",
+      "size": 678,
+      "tokens": [
+        "scripts",
+        "utilities",
+        "py",
+        "db",
+        "reset"
+      ]
+    },
+    {
+      "path": "interface/components/sidebar.py",
+      "name": "sidebar.py",
+      "type": "file",
+      "size": 1695,
+      "tokens": [
+        "components",
+        "interface",
+        "py",
+        "sidebar"
+      ]
+    },
+    {
+      "path": "interface/components/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 21,
+      "tokens": [
+        "init",
+        "interface",
+        "py",
+        "components"
+      ]
+    },
+    {
+      "path": "interface/pages/1_🧠_Dashboard.py",
+      "name": "1_🧠_Dashboard.py",
+      "type": "file",
+      "size": 2131,
+      "tokens": [
+        "dashboard",
+        "1",
+        "py",
+        "interface",
+        "pages"
+      ]
+    },
+    {
+      "path": "interface/pages/2_🍄_Mycelial_Brain.py",
+      "name": "2_🍄_Mycelial_Brain.py",
+      "type": "file",
+      "size": 3860,
+      "tokens": [
+        "2",
+        "brain",
+        "py",
+        "interface",
+        "mycelial",
+        "pages"
+      ]
+    },
+    {
+      "path": "interface/pages/3_🕸️_Knowledge_Graph.py",
+      "name": "3_🕸️_Knowledge_Graph.py",
+      "type": "file",
+      "size": 1468,
+      "tokens": [
+        "graph",
+        "py",
+        "knowledge",
+        "interface",
+        "3",
+        "pages"
+      ]
+    },
+    {
+      "path": "interface/pages/4_🔮_Abduction.py",
+      "name": "4_🔮_Abduction.py",
+      "type": "file",
+      "size": 2304,
+      "tokens": [
+        "py",
+        "abduction",
+        "interface",
+        "4",
+        "pages"
+      ]
+    },
+    {
+      "path": "interface/pages/5_💥_Collider.py",
+      "name": "5_💥_Collider.py",
+      "type": "file",
+      "size": 1454,
+      "tokens": [
+        "py",
+        "interface",
+        "5",
+        "collider",
+        "pages"
+      ]
+    },
+    {
+      "path": "interface/pages/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 16,
+      "tokens": [
+        "init",
+        "interface",
+        "py",
+        "pages"
+      ]
+    },
+    {
+      "path": "interface/utils/state_manager.py",
+      "name": "state_manager.py",
+      "type": "file",
+      "size": 2059,
+      "tokens": [
+        "py",
+        "interface",
+        "utils",
+        "state",
+        "manager"
+      ]
+    },
+    {
+      "path": "interface/utils/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 16,
+      "tokens": [
+        "init",
+        "interface",
+        "py",
+        "utils"
+      ]
+    },
+    {
+      "path": "docs/concepts/active_autonomy.md",
+      "name": "active_autonomy.md",
+      "type": "file",
+      "size": 2128,
+      "tokens": [
+        "active",
+        "autonomy",
+        "docs",
+        "concepts",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/concepts/cognitive_resilience.md",
+      "name": "cognitive_resilience.md",
+      "type": "file",
+      "size": 2992,
+      "tokens": [
+        "resilience",
+        "cognitive",
+        "docs",
+        "concepts",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/concepts/geometric_cognition.md",
+      "name": "geometric_cognition.md",
+      "type": "file",
+      "size": 2627,
+      "tokens": [
+        "cognition",
+        "geometric",
+        "docs",
+        "concepts",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/README.md",
+      "name": "README.md",
+      "type": "file",
+      "size": 7136,
+      "tokens": [
+        "docs",
+        "core",
+        "readme",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/scripts/validate_alexandria.md",
+      "name": "validate_alexandria.md",
+      "type": "file",
+      "size": 962,
+      "tokens": [
+        "scripts",
+        "alexandria",
+        "docs",
+        "validate",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/agents/action_agent.md",
+      "name": "action_agent.md",
+      "type": "file",
+      "size": 5464,
+      "tokens": [
+        "agents",
+        "agent",
+        "action",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/agents/bridge_agent.md",
+      "name": "bridge_agent.md",
+      "type": "file",
+      "size": 2689,
+      "tokens": [
+        "agents",
+        "agent",
+        "core",
+        "docs",
+        "bridge",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/agents/critic_agent.md",
+      "name": "critic_agent.md",
+      "type": "file",
+      "size": 4066,
+      "tokens": [
+        "agents",
+        "critic",
+        "agent",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/agents/neural_oracle.md",
+      "name": "neural_oracle.md",
+      "type": "file",
+      "size": 3247,
+      "tokens": [
+        "oracle",
+        "agents",
+        "neural",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/field/cycle_dynamics.md",
+      "name": "cycle_dynamics.md",
+      "type": "file",
+      "size": 2769,
+      "tokens": [
+        "field",
+        "cycle",
+        "core",
+        "docs",
+        "dynamics",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/field/free_energy_field.md",
+      "name": "free_energy_field.md",
+      "type": "file",
+      "size": 2230,
+      "tokens": [
+        "field",
+        "free",
+        "energy",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/field/geodesic_flow.md",
+      "name": "geodesic_flow.md",
+      "type": "file",
+      "size": 1531,
+      "tokens": [
+        "geodesic",
+        "field",
+        "core",
+        "docs",
+        "flow",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/field/manifold.md",
+      "name": "manifold.md",
+      "type": "file",
+      "size": 2508,
+      "tokens": [
+        "manifold",
+        "field",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/field/metric.md",
+      "name": "metric.md",
+      "type": "file",
+      "size": 1885,
+      "tokens": [
+        "metric",
+        "field",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/field/README.md",
+      "name": "README.md",
+      "type": "file",
+      "size": 8449,
+      "tokens": [
+        "field",
+        "readme",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/learning/active_inference.md",
+      "name": "active_inference.md",
+      "type": "file",
+      "size": 8374,
+      "tokens": [
+        "learning",
+        "core",
+        "docs",
+        "inference",
+        "active",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/learning/free_energy.md",
+      "name": "free_energy.md",
+      "type": "file",
+      "size": 7708,
+      "tokens": [
+        "learning",
+        "free",
+        "energy",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/learning/integration_layer.md",
+      "name": "integration_layer.md",
+      "type": "file",
+      "size": 4168,
+      "tokens": [
+        "learning",
+        "layer",
+        "core",
+        "docs",
+        "integration",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/learning/meta_hebbian.md",
+      "name": "meta_hebbian.md",
+      "type": "file",
+      "size": 5413,
+      "tokens": [
+        "learning",
+        "meta",
+        "core",
+        "hebbian",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/learning/NEMESIS_MANUAL.md",
+      "name": "NEMESIS_MANUAL.md",
+      "type": "file",
+      "size": 3377,
+      "tokens": [
+        "learning",
+        "core",
+        "manual",
+        "docs",
+        "nemesis",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/learning/predictive_coding.md",
+      "name": "predictive_coding.md",
+      "type": "file",
+      "size": 8523,
+      "tokens": [
+        "learning",
+        "predictive",
+        "core",
+        "docs",
+        "coding",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/learning/profiles.md",
+      "name": "profiles.md",
+      "type": "file",
+      "size": 2697,
+      "tokens": [
+        "profiles",
+        "learning",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/learning/README.md",
+      "name": "README.md",
+      "type": "file",
+      "size": 2632,
+      "tokens": [
+        "learning",
+        "readme",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/loop/feedback_collector.md",
+      "name": "feedback_collector.md",
+      "type": "file",
+      "size": 2165,
+      "tokens": [
+        "feedback",
+        "loop",
+        "core",
+        "collector",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/loop/hypothesis_executor.md",
+      "name": "hypothesis_executor.md",
+      "type": "file",
+      "size": 3106,
+      "tokens": [
+        "loop",
+        "core",
+        "hypothesis",
+        "docs",
+        "executor",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/loop/incremental_learner.md",
+      "name": "incremental_learner.md",
+      "type": "file",
+      "size": 2636,
+      "tokens": [
+        "loop",
+        "incremental",
+        "core",
+        "learner",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/loop/loop_metrics.md",
+      "name": "loop_metrics.md",
+      "type": "file",
+      "size": 2547,
+      "tokens": [
+        "loop",
+        "metrics",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/loop/nemesis_integration.md",
+      "name": "nemesis_integration.md",
+      "type": "file",
+      "size": 3309,
+      "tokens": [
+        "loop",
+        "core",
+        "docs",
+        "nemesis",
+        "integration",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/loop/README.md",
+      "name": "README.md",
+      "type": "file",
+      "size": 1998,
+      "tokens": [
+        "loop",
+        "readme",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/loop/self_feeding_loop.md",
+      "name": "self_feeding_loop.md",
+      "type": "file",
+      "size": 3667,
+      "tokens": [
+        "feeding",
+        "loop",
+        "core",
+        "docs",
+        "self",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/memory/semantic_memory.md",
+      "name": "semantic_memory.md",
+      "type": "file",
+      "size": 10435,
+      "tokens": [
+        "semantic",
+        "memory",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/memory/storage.md",
+      "name": "storage.md",
+      "type": "file",
+      "size": 2096,
+      "tokens": [
+        "memory",
+        "core",
+        "docs",
+        "storage",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/memory/v11_vision_encoder.md",
+      "name": "v11_vision_encoder.md",
+      "type": "file",
+      "size": 3349,
+      "tokens": [
+        "v11",
+        "vision",
+        "memory",
+        "encoder",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/reasoning/abduction_engine.md",
+      "name": "abduction_engine.md",
+      "type": "file",
+      "size": 13237,
+      "tokens": [
+        "reasoning",
+        "engine",
+        "abduction",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/reasoning/causal_reasoning.md",
+      "name": "causal_reasoning.md",
+      "type": "file",
+      "size": 10138,
+      "tokens": [
+        "reasoning",
+        "core",
+        "causal",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/reasoning/mycelial_reasoning.md",
+      "name": "mycelial_reasoning.md",
+      "type": "file",
+      "size": 8906,
+      "tokens": [
+        "reasoning",
+        "core",
+        "docs",
+        "mycelial",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/reasoning/neural_learner.md",
+      "name": "neural_learner.md",
+      "type": "file",
+      "size": 2069,
+      "tokens": [
+        "neural",
+        "reasoning",
+        "core",
+        "learner",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/reasoning/vqvae.md",
+      "name": "vqvae.md",
+      "type": "file",
+      "size": 6546,
+      "tokens": [
+        "reasoning",
+        "vqvae",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/topology/topology_engine.md",
+      "name": "topology_engine.md",
+      "type": "file",
+      "size": 9880,
+      "tokens": [
+        "engine",
+        "topology",
+        "core",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "docs/core/utils/README.md",
+      "name": "README.md",
+      "type": "file",
+      "size": 1651,
+      "tokens": [
+        "readme",
+        "core",
+        "utils",
+        "docs",
+        "md"
+      ]
+    },
+    {
+      "path": "core/agents/action_agent.py",
+      "name": "action_agent.py",
+      "type": "file",
+      "size": 1974,
+      "tokens": [
+        "agents",
+        "agent",
+        "py",
+        "core",
+        "action"
+      ]
+    },
+    {
+      "path": "core/agents/bridge_agent.py",
+      "name": "bridge_agent.py",
+      "type": "file",
+      "size": 10268,
+      "tokens": [
+        "agents",
+        "agent",
+        "py",
+        "core",
+        "bridge"
+      ]
+    },
+    {
+      "path": "core/agents/critic_agent.py",
+      "name": "critic_agent.py",
+      "type": "file",
+      "size": 31551,
+      "tokens": [
+        "agents",
+        "critic",
+        "agent",
+        "py",
+        "core"
+      ]
+    },
+    {
+      "path": "core/agents/oracle.py",
+      "name": "oracle.py",
+      "type": "file",
+      "size": 7050,
+      "tokens": [
+        "core",
+        "oracle",
+        "py",
+        "agents"
+      ]
+    },
+    {
+      "path": "core/field/cycle_dynamics.py",
+      "name": "cycle_dynamics.py",
+      "type": "file",
+      "size": 21456,
+      "tokens": [
+        "field",
+        "py",
+        "core",
+        "cycle",
+        "dynamics"
+      ]
+    },
+    {
+      "path": "core/field/free_energy_field.py",
+      "name": "free_energy_field.py",
+      "type": "file",
+      "size": 16987,
+      "tokens": [
+        "py",
+        "field",
+        "free",
+        "energy",
+        "core"
+      ]
+    },
+    {
+      "path": "core/field/geodesic_flow.py",
+      "name": "geodesic_flow.py",
+      "type": "file",
+      "size": 19549,
+      "tokens": [
+        "py",
+        "field",
+        "geodesic",
+        "core",
+        "flow"
+      ]
+    },
+    {
+      "path": "core/field/manifold.py",
+      "name": "manifold.py",
+      "type": "file",
+      "size": 15434,
+      "tokens": [
+        "field",
+        "core",
+        "manifold",
+        "py"
+      ]
+    },
+    {
+      "path": "core/field/metric.py",
+      "name": "metric.py",
+      "type": "file",
+      "size": 16990,
+      "tokens": [
+        "field",
+        "core",
+        "py",
+        "metric"
+      ]
+    },
+    {
+      "path": "core/field/pre_structural_field.py",
+      "name": "pre_structural_field.py",
+      "type": "file",
+      "size": 19232,
+      "tokens": [
+        "structural",
+        "py",
+        "field",
+        "core",
+        "pre"
+      ]
+    },
+    {
+      "path": "core/field/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 1667,
+      "tokens": [
+        "init",
+        "core",
+        "py",
+        "field"
+      ]
+    },
+    {
+      "path": "core/learning/active_inference.py",
+      "name": "active_inference.py",
+      "type": "file",
+      "size": 53979,
+      "tokens": [
+        "learning",
+        "py",
+        "core",
+        "inference",
+        "active"
+      ]
+    },
+    {
+      "path": "core/learning/free_energy.py",
+      "name": "free_energy.py",
+      "type": "file",
+      "size": 46207,
+      "tokens": [
+        "learning",
+        "py",
+        "free",
+        "energy",
+        "core"
+      ]
+    },
+    {
+      "path": "core/learning/integration_layer.py",
+      "name": "integration_layer.py",
+      "type": "file",
+      "size": 45835,
+      "tokens": [
+        "learning",
+        "layer",
+        "py",
+        "core",
+        "integration"
+      ]
+    },
+    {
+      "path": "core/learning/meta_hebbian.py",
+      "name": "meta_hebbian.py",
+      "type": "file",
+      "size": 29259,
+      "tokens": [
+        "learning",
+        "meta",
+        "py",
+        "core",
+        "hebbian"
+      ]
+    },
+    {
+      "path": "core/learning/predictive_coding.py",
+      "name": "predictive_coding.py",
+      "type": "file",
+      "size": 35115,
+      "tokens": [
+        "learning",
+        "py",
+        "predictive",
+        "core",
+        "coding"
+      ]
+    },
+    {
+      "path": "core/learning/profiles.py",
+      "name": "profiles.py",
+      "type": "file",
+      "size": 3633,
+      "tokens": [
+        "profiles",
+        "core",
+        "learning",
+        "py"
+      ]
+    },
+    {
+      "path": "core/loop/action_selection.py",
+      "name": "action_selection.py",
+      "type": "file",
+      "size": 2379,
+      "tokens": [
+        "loop",
+        "selection",
+        "py",
+        "core",
+        "action"
+      ]
+    },
+    {
+      "path": "core/loop/active_inference_adapter.py",
+      "name": "active_inference_adapter.py",
+      "type": "file",
+      "size": 6712,
+      "tokens": [
+        "loop",
+        "py",
+        "adapter",
+        "core",
+        "inference",
+        "active"
+      ]
+    },
+    {
+      "path": "core/loop/feedback_collector.py",
+      "name": "feedback_collector.py",
+      "type": "file",
+      "size": 7787,
+      "tokens": [
+        "feedback",
+        "loop",
+        "py",
+        "core",
+        "collector"
+      ]
+    },
+    {
+      "path": "core/loop/hypothesis_executor.py",
+      "name": "hypothesis_executor.py",
+      "type": "file",
+      "size": 15010,
+      "tokens": [
+        "loop",
+        "py",
+        "core",
+        "hypothesis",
+        "executor"
+      ]
+    },
+    {
+      "path": "core/loop/incremental_learner.py",
+      "name": "incremental_learner.py",
+      "type": "file",
+      "size": 8159,
+      "tokens": [
+        "loop",
+        "py",
+        "core",
+        "learner",
+        "incremental"
+      ]
+    },
+    {
+      "path": "core/loop/loop_metrics.py",
+      "name": "loop_metrics.py",
+      "type": "file",
+      "size": 7796,
+      "tokens": [
+        "metrics",
+        "core",
+        "py",
+        "loop"
+      ]
+    },
+    {
+      "path": "core/loop/nemesis_integration.py",
+      "name": "nemesis_integration.py",
+      "type": "file",
+      "size": 14289,
+      "tokens": [
+        "loop",
+        "py",
+        "core",
+        "nemesis",
+        "integration"
+      ]
+    },
+    {
+      "path": "core/loop/self_feeding_loop.py",
+      "name": "self_feeding_loop.py",
+      "type": "file",
+      "size": 19658,
+      "tokens": [
+        "feeding",
+        "loop",
+        "py",
+        "core",
+        "self"
+      ]
+    },
+    {
+      "path": "core/loop/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 652,
+      "tokens": [
+        "init",
+        "core",
+        "py",
+        "loop"
+      ]
+    },
+    {
+      "path": "core/memory/semantic_memory.py",
+      "name": "semantic_memory.py",
+      "type": "file",
+      "size": 19293,
+      "tokens": [
+        "core",
+        "semantic",
+        "py",
+        "memory"
+      ]
+    },
+    {
+      "path": "core/memory/storage.py",
+      "name": "storage.py",
+      "type": "file",
+      "size": 5786,
+      "tokens": [
+        "storage",
+        "core",
+        "py",
+        "memory"
+      ]
+    },
+    {
+      "path": "core/memory/v11_vision_encoder.py",
+      "name": "v11_vision_encoder.py",
+      "type": "file",
+      "size": 23956,
+      "tokens": [
+        "v11",
+        "vision",
+        "memory",
+        "py",
+        "encoder",
+        "core"
+      ]
+    },
+    {
+      "path": "core/reasoning/abduction_engine.py",
+      "name": "abduction_engine.py",
+      "type": "file",
+      "size": 48623,
+      "tokens": [
+        "reasoning",
+        "py",
+        "engine",
+        "abduction",
+        "core"
+      ]
+    },
+    {
+      "path": "core/reasoning/causal_reasoning.py",
+      "name": "causal_reasoning.py",
+      "type": "file",
+      "size": 22640,
+      "tokens": [
+        "reasoning",
+        "core",
+        "causal",
+        "py"
+      ]
+    },
+    {
+      "path": "core/reasoning/mycelial_reasoning.py",
+      "name": "mycelial_reasoning.py",
+      "type": "file",
+      "size": 21600,
+      "tokens": [
+        "mycelial",
+        "reasoning",
+        "core",
+        "py"
+      ]
+    },
+    {
+      "path": "core/reasoning/neural_learner.py",
+      "name": "neural_learner.py",
+      "type": "file",
+      "size": 6356,
+      "tokens": [
+        "neural",
+        "reasoning",
+        "py",
+        "core",
+        "learner"
+      ]
+    },
+    {
+      "path": "core/reasoning/symbol_grounding.py",
+      "name": "symbol_grounding.py",
+      "type": "file",
+      "size": 3961,
+      "tokens": [
+        "reasoning",
+        "grounding",
+        "py",
+        "core",
+        "symbol"
+      ]
+    },
+    {
+      "path": "core/reasoning/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 0,
+      "tokens": [
+        "init",
+        "core",
+        "reasoning",
+        "py"
+      ]
+    },
+    {
+      "path": "core/topology/topology_engine.py",
+      "name": "topology_engine.py",
+      "type": "file",
+      "size": 17630,
+      "tokens": [
+        "engine",
+        "topology",
+        "py",
+        "core"
+      ]
+    },
+    {
+      "path": "core/topology/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 0,
+      "tokens": [
+        "init",
+        "core",
+        "topology",
+        "py"
+      ]
+    },
+    {
+      "path": "core/utils/harvester.py",
+      "name": "harvester.py",
+      "type": "file",
+      "size": 4559,
+      "tokens": [
+        "core",
+        "harvester",
+        "py",
+        "utils"
+      ]
+    },
+    {
+      "path": "core/utils/local_llm.py",
+      "name": "local_llm.py",
+      "type": "file",
+      "size": 7527,
+      "tokens": [
+        "local",
+        "py",
+        "core",
+        "utils",
+        "llm"
+      ]
+    },
+    {
+      "path": "core/utils/logger.py",
+      "name": "logger.py",
+      "type": "file",
+      "size": 1339,
+      "tokens": [
+        "utils",
+        "core",
+        "py",
+        "logger"
+      ]
+    },
+    {
+      "path": "core/reasoning/vqvae/layers.py",
+      "name": "layers.py",
+      "type": "file",
+      "size": 7598,
+      "tokens": [
+        "reasoning",
+        "vqvae",
+        "py",
+        "layers",
+        "core"
+      ]
+    },
+    {
+      "path": "core/reasoning/vqvae/loss.py",
+      "name": "loss.py",
+      "type": "file",
+      "size": 4148,
+      "tokens": [
+        "reasoning",
+        "vqvae",
+        "py",
+        "loss",
+        "core"
+      ]
+    },
+    {
+      "path": "core/reasoning/vqvae/model.py",
+      "name": "model.py",
+      "type": "file",
+      "size": 3201,
+      "tokens": [
+        "model",
+        "reasoning",
+        "vqvae",
+        "py",
+        "core"
+      ]
+    },
+    {
+      "path": "core/reasoning/vqvae/model_wiki.py",
+      "name": "model_wiki.py",
+      "type": "file",
+      "size": 3752,
+      "tokens": [
+        "model",
+        "reasoning",
+        "vqvae",
+        "py",
+        "wiki",
+        "core"
+      ]
+    },
+    {
+      "path": "core/reasoning/vqvae/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 32,
+      "tokens": [
+        "reasoning",
+        "vqvae",
+        "py",
+        "core",
+        "init"
+      ]
+    },
+    {
+      "path": "core/agents/action/agent.py",
+      "name": "agent.py",
+      "type": "file",
+      "size": 14506,
+      "tokens": [
+        "agents",
+        "agent",
+        "py",
+        "core",
+        "action"
+      ]
+    },
+    {
+      "path": "core/agents/action/evidence_registrar.py",
+      "name": "evidence_registrar.py",
+      "type": "file",
+      "size": 5255,
+      "tokens": [
+        "agents",
+        "py",
+        "core",
+        "registrar",
+        "action",
+        "evidence"
+      ]
+    },
+    {
+      "path": "core/agents/action/parameter_controller.py",
+      "name": "parameter_controller.py",
+      "type": "file",
+      "size": 3754,
+      "tokens": [
+        "agents",
+        "py",
+        "controller",
+        "core",
+        "parameter",
+        "action"
+      ]
+    },
+    {
+      "path": "core/agents/action/security_controller.py",
+      "name": "security_controller.py",
+      "type": "file",
+      "size": 3251,
+      "tokens": [
+        "agents",
+        "py",
+        "controller",
+        "security",
+        "core",
+        "action"
+      ]
+    },
+    {
+      "path": "core/agents/action/test_simulator.py",
+      "name": "test_simulator.py",
+      "type": "file",
+      "size": 7492,
+      "tokens": [
+        "agents",
+        "simulator",
+        "py",
+        "test",
+        "core",
+        "action"
+      ]
+    },
+    {
+      "path": "core/agents/action/types.py",
+      "name": "types.py",
+      "type": "file",
+      "size": 2205,
+      "tokens": [
+        "agents",
+        "py",
+        "types",
+        "core",
+        "action"
+      ]
+    },
+    {
+      "path": "core/agents/action/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 1575,
+      "tokens": [
+        "agents",
+        "py",
+        "core",
+        "action",
+        "init"
+      ]
+    },
+    {
+      "path": "core/agents/action/execution/api_executor.py",
+      "name": "api_executor.py",
+      "type": "file",
+      "size": 2685,
+      "tokens": [
+        "agents",
+        "api",
+        "py",
+        "core",
+        "execution",
+        "action",
+        "executor"
+      ]
+    },
+    {
+      "path": "core/agents/action/execution/data_executor.py",
+      "name": "data_executor.py",
+      "type": "file",
+      "size": 5710,
+      "tokens": [
+        "agents",
+        "py",
+        "data",
+        "core",
+        "execution",
+        "action",
+        "executor"
+      ]
+    },
+    {
+      "path": "core/agents/action/execution/model_executor.py",
+      "name": "model_executor.py",
+      "type": "file",
+      "size": 4824,
+      "tokens": [
+        "model",
+        "agents",
+        "py",
+        "core",
+        "execution",
+        "action",
+        "executor"
+      ]
+    },
+    {
+      "path": "core/agents/action/execution/simulation_executor.py",
+      "name": "simulation_executor.py",
+      "type": "file",
+      "size": 6784,
+      "tokens": [
+        "agents",
+        "simulation",
+        "py",
+        "core",
+        "execution",
+        "action",
+        "executor"
+      ]
+    },
+    {
+      "path": "core/agents/action/execution/__init__.py",
+      "name": "__init__.py",
+      "type": "file",
+      "size": 621,
+      "tokens": [
+        "agents",
+        "py",
+        "core",
+        "execution",
+        "action",
+        "init"
+      ]
+    },
+    {
+      "path": ".agent/workflows/criar-feature.md",
+      "name": "criar-feature.md",
+      "type": "file",
+      "size": 1244,
+      "tokens": [
+        "feature",
+        "agent",
+        "criar",
+        "workflows",
+        "md"
+      ]
+    },
+    {
+      "path": ".agent/workflows/debug-profundo.md",
+      "name": "debug-profundo.md",
+      "type": "file",
+      "size": 1165,
+      "tokens": [
+        "profundo",
+        "agent",
+        "debug",
+        "workflows",
+        "md"
+      ]
+    },
+    {
+      "path": ".agent/workflows/documentar-projeto.md",
+      "name": "documentar-projeto.md",
+      "type": "file",
+      "size": 1053,
+      "tokens": [
+        "documentar",
+        "agent",
+        "projeto",
+        "workflows",
+        "md"
+      ]
+    },
+    {
+      "path": ".agent/workflows/onboarding.md",
+      "name": "onboarding.md",
+      "type": "file",
+      "size": 1226,
+      "tokens": [
+        "onboarding",
+        "workflows",
+        "agent",
+        "md"
+      ]
+    },
+    {
+      "path": ".agent/workflows/review-completo.md",
+      "name": "review-completo.md",
+      "type": "file",
+      "size": 988,
+      "tokens": [
+        "agent",
+        "completo",
+        "review",
+        "workflows",
+        "md"
+      ]
+    },
+    {
+      "path": ".agent/workflows/how-to-think.md",
+      "name": "how-to-think.md",
+      "type": "file",
+      "size": 1734,
+      "tokens": [
+        "to",
+        "how",
+        "agent",
+        "think",
+        "workflows",
+        "md"
+      ]
+    },
+    {
+      "path": ".agent/workflows/mapear-contexto.md",
+      "name": "mapear-contexto.md",
+      "type": "file",
+      "size": 705,
+      "tokens": [
+        "contexto",
+        "agent",
+        "mapear",
+        "workflows",
+        "md"
+      ]
+    },
+    {
+      "path": ".agent/scripts/context_mapper.py",
+      "name": "context_mapper.py",
+      "type": "file",
+      "size": 4135,
+      "tokens": [
+        "scripts",
+        "context",
+        "agent",
+        "py",
+        "mapper"
+      ]
+    }
+  ],
+  "inverted_index": {
+    "env": [
+      ".env",
+      ".env.example"
+    ],
+    "example": [
+      ".env.example"
+    ],
+    "gitignore": [
+      ".gitignore"
+    ],
+    "gitkeep": [
+      ".gitkeep"
+    ],
+    "py": [
+      "config.py",
+      "core/__init__.py",
+      "interface/app.py",
+      "interface/__init__.py",
+      "scripts/check_status.py",
+      "scripts/gather_metrics.py",
+      "scripts/ingest_incremental.py",
+      "scripts/inspect_connections.py",
+      "scripts/mass_arxiv_ingest.py",
+      "scripts/multi_api_ingest.py",
+      "scripts/system_runner_v2.py",
+      "scripts/verify_autonomy.py",
+      "tests/conftest.py",
+      "tests/test_action_agent_refactor.py",
+      "tests/test_active_inference_integration.py",
+      "tests/test_core.py",
+      "tests/test_executor_real.py",
+      "tests/test_mycelial.py",
+      "tests/test_storage.py",
+      "tests/test_symbol_grounding.py",
+      "tests/test_system_integration.py",
+      "tests/test_v2_cycle.py",
+      "tests/test_viz.py",
+      "scripts/analysis/alexandria_topics.py",
+      "scripts/analysis/analyze_code_semantics.py",
+      "scripts/analysis/analyze_db_stats.py",
+      "scripts/analysis/bootstrap_mycelial.py",
+      "scripts/analysis/check_truncation.py",
+      "scripts/analysis/check_vector_norms.py",
+      "scripts/analysis/cluster_labeler.py",
+      "scripts/analysis/domain_classifier.py",
+      "scripts/analysis/domain_classifier_fs.py",
+      "scripts/analysis/experiment_A_ablation.py",
+      "scripts/analysis/experiment_B_rescaling.py",
+      "scripts/analysis/experiment_CD_combined.py",
+      "scripts/analysis/geometric_topics.py",
+      "scripts/analysis/meta_learning_topics.py",
+      "scripts/analysis/probe_vqvae_advanced.py",
+      "scripts/analysis/probe_vqvae_deep.py",
+      "scripts/analysis/query_criticality.py",
+      "scripts/analysis/test_mycelial_reasoning.py",
+      "scripts/analysis/visualize_bridge.py",
+      "scripts/analysis/visualize_knowledge_graph.py",
+      "scripts/analysis/visualize_mycelial.py",
+      "scripts/analysis/visualize_structure.py",
+      "scripts/debug/analyze_coverage.py",
+      "scripts/debug/analyze_training_metrics.py",
+      "scripts/debug/check_columns.py",
+      "scripts/debug/check_lancedb.py",
+      "scripts/debug/inspect_metadata.py",
+      "scripts/debug/probe_reasoning.py",
+      "scripts/debug/status_check.py",
+      "scripts/debug/test_nemesis_integration.py",
+      "scripts/debug/verify_learning_stack.py",
+      "scripts/debug/verify_nemesis.py",
+      "scripts/demos/collide.py",
+      "scripts/demos/collide_v2.py",
+      "scripts/demos/demo_capabilities.py",
+      "scripts/demos/demo_full_system.py",
+      "scripts/demos/demo_self_feeding_loop.py",
+      "scripts/demos/run_real_loop.py",
+      "scripts/diagnostics/check_lancedb.py",
+      "scripts/maintenance/check_missing_papers.py",
+      "scripts/maintenance/check_mycelial_health.py",
+      "scripts/maintenance/process_missing_papers.py",
+      "scripts/maintenance/prune_mycelial.py",
+      "scripts/maintenance/recover_knowledge.py",
+      "scripts/maintenance/retry_ingest.py",
+      "scripts/testing/integration_test.py",
+      "scripts/testing/stress_test.py",
+      "scripts/testing/test_field.py",
+      "scripts/testing/test_field_real.py",
+      "scripts/testing/test_field_simple.py",
+      "scripts/testing/test_geodesic_bridge.py",
+      "scripts/testing/test_model_loading.py",
+      "scripts/testing/test_predictive_coding.py",
+      "scripts/testing/validate_alexandria.py",
+      "scripts/testing/validate_concepts.py",
+      "scripts/testing/verify_fineweb_model.py",
+      "scripts/testing/view_connections.py",
+      "scripts/training/finetune_vqvae.py",
+      "scripts/training/test_balanced_training.py",
+      "scripts/training/train_mycelial.py",
+      "scripts/training/train_nemesis_vqvae.py",
+      "scripts/training/train_topology_mycelial.py",
+      "scripts/training/train_vqvae.py",
+      "scripts/utilities/build_causal_graph.py",
+      "scripts/utilities/convert_wiki_weights.py",
+      "scripts/utilities/count_papers.py",
+      "scripts/utilities/export_embeddings.py",
+      "scripts/utilities/extract_causal_relations.py",
+      "scripts/utilities/finetune_llm.py",
+      "scripts/utilities/init_brain.py",
+      "scripts/utilities/reset_db.py",
+      "interface/components/sidebar.py",
+      "interface/components/__init__.py",
+      "interface/pages/1_🧠_Dashboard.py",
+      "interface/pages/2_🍄_Mycelial_Brain.py",
+      "interface/pages/3_🕸️_Knowledge_Graph.py",
+      "interface/pages/4_🔮_Abduction.py",
+      "interface/pages/5_💥_Collider.py",
+      "interface/pages/__init__.py",
+      "interface/utils/state_manager.py",
+      "interface/utils/__init__.py",
+      "core/agents/action_agent.py",
+      "core/agents/bridge_agent.py",
+      "core/agents/critic_agent.py",
+      "core/agents/oracle.py",
+      "core/field/cycle_dynamics.py",
+      "core/field/free_energy_field.py",
+      "core/field/geodesic_flow.py",
+      "core/field/manifold.py",
+      "core/field/metric.py",
+      "core/field/pre_structural_field.py",
+      "core/field/__init__.py",
+      "core/learning/active_inference.py",
+      "core/learning/free_energy.py",
+      "core/learning/integration_layer.py",
+      "core/learning/meta_hebbian.py",
+      "core/learning/predictive_coding.py",
+      "core/learning/profiles.py",
+      "core/loop/action_selection.py",
+      "core/loop/active_inference_adapter.py",
+      "core/loop/feedback_collector.py",
+      "core/loop/hypothesis_executor.py",
+      "core/loop/incremental_learner.py",
+      "core/loop/loop_metrics.py",
+      "core/loop/nemesis_integration.py",
+      "core/loop/self_feeding_loop.py",
+      "core/loop/__init__.py",
+      "core/memory/semantic_memory.py",
+      "core/memory/storage.py",
+      "core/memory/v11_vision_encoder.py",
+      "core/reasoning/abduction_engine.py",
+      "core/reasoning/causal_reasoning.py",
+      "core/reasoning/mycelial_reasoning.py",
+      "core/reasoning/neural_learner.py",
+      "core/reasoning/symbol_grounding.py",
+      "core/reasoning/__init__.py",
+      "core/topology/topology_engine.py",
+      "core/topology/__init__.py",
+      "core/utils/harvester.py",
+      "core/utils/local_llm.py",
+      "core/utils/logger.py",
+      "core/reasoning/vqvae/layers.py",
+      "core/reasoning/vqvae/loss.py",
+      "core/reasoning/vqvae/model.py",
+      "core/reasoning/vqvae/model_wiki.py",
+      "core/reasoning/vqvae/__init__.py",
+      "core/agents/action/agent.py",
+      "core/agents/action/evidence_registrar.py",
+      "core/agents/action/parameter_controller.py",
+      "core/agents/action/security_controller.py",
+      "core/agents/action/test_simulator.py",
+      "core/agents/action/types.py",
+      "core/agents/action/__init__.py",
+      "core/agents/action/execution/api_executor.py",
+      "core/agents/action/execution/data_executor.py",
+      "core/agents/action/execution/model_executor.py",
+      "core/agents/action/execution/simulation_executor.py",
+      "core/agents/action/execution/__init__.py",
+      ".agent/scripts/context_mapper.py"
+    ],
+    "config": [
+      "config.py"
+    ],
+    "docker": [
+      "docker-compose.yml"
+    ],
+    "compose": [
+      "docker-compose.yml"
+    ],
+    "yml": [
+      "docker-compose.yml"
+    ],
+    "dockerfile": [
+      "Dockerfile"
+    ],
+    "failed": [
+      "failed_papers_list.txt"
+    ],
+    "list": [
+      "failed_papers_list.txt"
+    ],
+    "papers": [
+      "failed_papers_list.txt",
+      "scripts/maintenance/check_missing_papers.py",
+      "scripts/maintenance/process_missing_papers.py",
+      "scripts/utilities/count_papers.py"
+    ],
+    "txt": [
+      "failed_papers_list.txt",
+      "requirements.txt",
+      "smoke_test_log.txt",
+      "synthesis_data.txt",
+      "mapper_output.txt"
+    ],
+    "license": [
+      "LICENSE"
+    ],
+    "readme": [
+      "README.md",
+      ".prompts/README.md",
+      "scripts/README.md",
+      "docs/core/README.md",
+      "docs/core/field/README.md",
+      "docs/core/learning/README.md",
+      "docs/core/loop/README.md",
+      "docs/core/utils/README.md"
+    ],
+    "md": [
+      "README.md",
+      "RESUMO_SISTEMA.md",
+      "STRUCTURE.md",
+      ".prompts/analisar_estrutura.md",
+      ".prompts/atualizar_documentacao.md",
+      ".prompts/code_review.md",
+      ".prompts/criar_documentacao.md",
+      ".prompts/criar_modulo.md",
+      ".prompts/debug_completo.md",
+      ".prompts/documentar_modulo.md",
+      ".prompts/README.md",
+      "modulo_operacional/Cosmic Garden - Workflows (Nivel 3).md",
+      "modulo_operacional/Gerenciamento topologico de contexto - cosmic garden.md",
+      "modulo_operacional/Teste gerenciamento de prompt ide - cosmic garden.md",
+      "scripts/README.md",
+      "docs/concepts/active_autonomy.md",
+      "docs/concepts/cognitive_resilience.md",
+      "docs/concepts/geometric_cognition.md",
+      "docs/core/README.md",
+      "docs/scripts/validate_alexandria.md",
+      "docs/core/agents/action_agent.md",
+      "docs/core/agents/bridge_agent.md",
+      "docs/core/agents/critic_agent.md",
+      "docs/core/agents/neural_oracle.md",
+      "docs/core/field/cycle_dynamics.md",
+      "docs/core/field/free_energy_field.md",
+      "docs/core/field/geodesic_flow.md",
+      "docs/core/field/manifold.md",
+      "docs/core/field/metric.md",
+      "docs/core/field/README.md",
+      "docs/core/learning/active_inference.md",
+      "docs/core/learning/free_energy.md",
+      "docs/core/learning/integration_layer.md",
+      "docs/core/learning/meta_hebbian.md",
+      "docs/core/learning/NEMESIS_MANUAL.md",
+      "docs/core/learning/predictive_coding.md",
+      "docs/core/learning/profiles.md",
+      "docs/core/learning/README.md",
+      "docs/core/loop/feedback_collector.md",
+      "docs/core/loop/hypothesis_executor.md",
+      "docs/core/loop/incremental_learner.md",
+      "docs/core/loop/loop_metrics.md",
+      "docs/core/loop/nemesis_integration.md",
+      "docs/core/loop/README.md",
+      "docs/core/loop/self_feeding_loop.md",
+      "docs/core/memory/semantic_memory.md",
+      "docs/core/memory/storage.md",
+      "docs/core/memory/v11_vision_encoder.md",
+      "docs/core/reasoning/abduction_engine.md",
+      "docs/core/reasoning/causal_reasoning.md",
+      "docs/core/reasoning/mycelial_reasoning.md",
+      "docs/core/reasoning/neural_learner.md",
+      "docs/core/reasoning/vqvae.md",
+      "docs/core/topology/topology_engine.md",
+      "docs/core/utils/README.md",
+      ".agent/workflows/criar-feature.md",
+      ".agent/workflows/debug-profundo.md",
+      ".agent/workflows/documentar-projeto.md",
+      ".agent/workflows/onboarding.md",
+      ".agent/workflows/review-completo.md",
+      ".agent/workflows/how-to-think.md",
+      ".agent/workflows/mapear-contexto.md"
+    ],
+    "requirements": [
+      "requirements.txt"
+    ],
+    "sistema": [
+      "RESUMO_SISTEMA.md"
+    ],
+    "resumo": [
+      "RESUMO_SISTEMA.md"
+    ],
+    "bat": [
+      "run_interface.bat"
+    ],
+    "interface": [
+      "run_interface.bat",
+      "interface/app.py",
+      "interface/__init__.py",
+      "interface/components/sidebar.py",
+      "interface/components/__init__.py",
+      "interface/pages/1_🧠_Dashboard.py",
+      "interface/pages/2_🍄_Mycelial_Brain.py",
+      "interface/pages/3_🕸️_Knowledge_Graph.py",
+      "interface/pages/4_🔮_Abduction.py",
+      "interface/pages/5_💥_Collider.py",
+      "interface/pages/__init__.py",
+      "interface/utils/state_manager.py",
+      "interface/utils/__init__.py"
+    ],
+    "run": [
+      "run_interface.bat",
+      "scripts/demos/run_real_loop.py"
+    ],
+    "test": [
+      "smoke_test_log.txt",
+      "tests/test_action_agent_refactor.py",
+      "tests/test_active_inference_integration.py",
+      "tests/test_core.py",
+      "tests/test_executor_real.py",
+      "tests/test_mycelial.py",
+      "tests/test_storage.py",
+      "tests/test_symbol_grounding.py",
+      "tests/test_system_integration.py",
+      "tests/test_v2_cycle.py",
+      "tests/test_viz.py",
+      "scripts/analysis/test_mycelial_reasoning.py",
+      "scripts/debug/test_nemesis_integration.py",
+      "scripts/testing/integration_test.py",
+      "scripts/testing/stress_test.py",
+      "scripts/testing/test_field.py",
+      "scripts/testing/test_field_real.py",
+      "scripts/testing/test_field_simple.py",
+      "scripts/testing/test_geodesic_bridge.py",
+      "scripts/testing/test_model_loading.py",
+      "scripts/testing/test_predictive_coding.py",
+      "scripts/training/test_balanced_training.py",
+      "core/agents/action/test_simulator.py"
+    ],
+    "smoke": [
+      "smoke_test_log.txt"
+    ],
+    "log": [
+      "smoke_test_log.txt"
+    ],
+    "structure": [
+      "STRUCTURE.md",
+      "scripts/analysis/visualize_structure.py"
+    ],
+    "synthesis": [
+      "synthesis_data.txt"
+    ],
+    "data": [
+      "synthesis_data.txt",
+      "core/agents/action/execution/data_executor.py"
+    ],
+    "output": [
+      "mapper_output.txt"
+    ],
+    "mapper": [
+      "mapper_output.txt",
+      ".agent/scripts/context_mapper.py"
+    ],
+    "context": [
+      ".agent/context_map.json",
+      ".agent/scripts/context_mapper.py"
+    ],
+    "json": [
+      ".agent/context_map.json"
+    ],
+    "agent": [
+      ".agent/context_map.json",
+      "tests/test_action_agent_refactor.py",
+      "docs/core/agents/action_agent.md",
+      "docs/core/agents/bridge_agent.md",
+      "docs/core/agents/critic_agent.md",
+      "core/agents/action_agent.py",
+      "core/agents/bridge_agent.py",
+      "core/agents/critic_agent.py",
+      "core/agents/action/agent.py",
+      ".agent/workflows/criar-feature.md",
+      ".agent/workflows/debug-profundo.md",
+      ".agent/workflows/documentar-projeto.md",
+      ".agent/workflows/onboarding.md",
+      ".agent/workflows/review-completo.md",
+      ".agent/workflows/how-to-think.md",
+      ".agent/workflows/mapear-contexto.md",
+      ".agent/scripts/context_mapper.py"
+    ],
+    "map": [
+      ".agent/context_map.json"
+    ],
+    "analisar": [
+      ".prompts/analisar_estrutura.md"
+    ],
+    "prompts": [
+      ".prompts/analisar_estrutura.md",
+      ".prompts/atualizar_documentacao.md",
+      ".prompts/code_review.md",
+      ".prompts/criar_documentacao.md",
+      ".prompts/criar_modulo.md",
+      ".prompts/debug_completo.md",
+      ".prompts/documentar_modulo.md",
+      ".prompts/README.md"
+    ],
+    "estrutura": [
+      ".prompts/analisar_estrutura.md"
+    ],
+    "documentacao": [
+      ".prompts/atualizar_documentacao.md",
+      ".prompts/criar_documentacao.md"
+    ],
+    "atualizar": [
+      ".prompts/atualizar_documentacao.md"
+    ],
+    "review": [
+      ".prompts/code_review.md",
+      ".agent/workflows/review-completo.md"
+    ],
+    "code": [
+      ".prompts/code_review.md",
+      "scripts/analysis/analyze_code_semantics.py"
+    ],
+    "criar": [
+      ".prompts/criar_documentacao.md",
+      ".prompts/criar_modulo.md",
+      ".agent/workflows/criar-feature.md"
+    ],
+    "modulo": [
+      ".prompts/criar_modulo.md",
+      ".prompts/documentar_modulo.md",
+      "modulo_operacional/Cosmic Garden - Workflows (Nivel 3).md",
+      "modulo_operacional/Gerenciamento topologico de contexto - cosmic garden.md",
+      "modulo_operacional/Teste gerenciamento de prompt ide - cosmic garden.md"
+    ],
+    "debug": [
+      ".prompts/debug_completo.md",
+      "scripts/debug/analyze_coverage.py",
+      "scripts/debug/analyze_training_metrics.py",
+      "scripts/debug/check_columns.py",
+      "scripts/debug/check_lancedb.py",
+      "scripts/debug/inspect_metadata.py",
+      "scripts/debug/probe_reasoning.py",
+      "scripts/debug/status_check.py",
+      "scripts/debug/test_nemesis_integration.py",
+      "scripts/debug/verify_learning_stack.py",
+      "scripts/debug/verify_nemesis.py",
+      ".agent/workflows/debug-profundo.md"
+    ],
+    "completo": [
+      ".prompts/debug_completo.md",
+      ".agent/workflows/review-completo.md"
+    ],
+    "documentar": [
+      ".prompts/documentar_modulo.md",
+      ".agent/workflows/documentar-projeto.md"
+    ],
+    "init": [
+      "core/__init__.py",
+      "interface/__init__.py",
+      "scripts/utilities/init_brain.py",
+      "interface/components/__init__.py",
+      "interface/pages/__init__.py",
+      "interface/utils/__init__.py",
+      "core/field/__init__.py",
+      "core/loop/__init__.py",
+      "core/reasoning/__init__.py",
+      "core/topology/__init__.py",
+      "core/reasoning/vqvae/__init__.py",
+      "core/agents/action/__init__.py",
+      "core/agents/action/execution/__init__.py"
+    ],
+    "core": [
+      "core/__init__.py",
+      "tests/test_core.py",
+      "docs/core/README.md",
+      "docs/core/agents/action_agent.md",
+      "docs/core/agents/bridge_agent.md",
+      "docs/core/agents/critic_agent.md",
+      "docs/core/agents/neural_oracle.md",
+      "docs/core/field/cycle_dynamics.md",
+      "docs/core/field/free_energy_field.md",
+      "docs/core/field/geodesic_flow.md",
+      "docs/core/field/manifold.md",
+      "docs/core/field/metric.md",
+      "docs/core/field/README.md",
+      "docs/core/learning/active_inference.md",
+      "docs/core/learning/free_energy.md",
+      "docs/core/learning/integration_layer.md",
+      "docs/core/learning/meta_hebbian.md",
+      "docs/core/learning/NEMESIS_MANUAL.md",
+      "docs/core/learning/predictive_coding.md",
+      "docs/core/learning/profiles.md",
+      "docs/core/learning/README.md",
+      "docs/core/loop/feedback_collector.md",
+      "docs/core/loop/hypothesis_executor.md",
+      "docs/core/loop/incremental_learner.md",
+      "docs/core/loop/loop_metrics.md",
+      "docs/core/loop/nemesis_integration.md",
+      "docs/core/loop/README.md",
+      "docs/core/loop/self_feeding_loop.md",
+      "docs/core/memory/semantic_memory.md",
+      "docs/core/memory/storage.md",
+      "docs/core/memory/v11_vision_encoder.md",
+      "docs/core/reasoning/abduction_engine.md",
+      "docs/core/reasoning/causal_reasoning.md",
+      "docs/core/reasoning/mycelial_reasoning.md",
+      "docs/core/reasoning/neural_learner.md",
+      "docs/core/reasoning/vqvae.md",
+      "docs/core/topology/topology_engine.md",
+      "docs/core/utils/README.md",
+      "core/agents/action_agent.py",
+      "core/agents/bridge_agent.py",
+      "core/agents/critic_agent.py",
+      "core/agents/oracle.py",
+      "core/field/cycle_dynamics.py",
+      "core/field/free_energy_field.py",
+      "core/field/geodesic_flow.py",
+      "core/field/manifold.py",
+      "core/field/metric.py",
+      "core/field/pre_structural_field.py",
+      "core/field/__init__.py",
+      "core/learning/active_inference.py",
+      "core/learning/free_energy.py",
+      "core/learning/integration_layer.py",
+      "core/learning/meta_hebbian.py",
+      "core/learning/predictive_coding.py",
+      "core/learning/profiles.py",
+      "core/loop/action_selection.py",
+      "core/loop/active_inference_adapter.py",
+      "core/loop/feedback_collector.py",
+      "core/loop/hypothesis_executor.py",
+      "core/loop/incremental_learner.py",
+      "core/loop/loop_metrics.py",
+      "core/loop/nemesis_integration.py",
+      "core/loop/self_feeding_loop.py",
+      "core/loop/__init__.py",
+      "core/memory/semantic_memory.py",
+      "core/memory/storage.py",
+      "core/memory/v11_vision_encoder.py",
+      "core/reasoning/abduction_engine.py",
+      "core/reasoning/causal_reasoning.py",
+      "core/reasoning/mycelial_reasoning.py",
+      "core/reasoning/neural_learner.py",
+      "core/reasoning/symbol_grounding.py",
+      "core/reasoning/__init__.py",
+      "core/topology/topology_engine.py",
+      "core/topology/__init__.py",
+      "core/utils/harvester.py",
+      "core/utils/local_llm.py",
+      "core/utils/logger.py",
+      "core/reasoning/vqvae/layers.py",
+      "core/reasoning/vqvae/loss.py",
+      "core/reasoning/vqvae/model.py",
+      "core/reasoning/vqvae/model_wiki.py",
+      "core/reasoning/vqvae/__init__.py",
+      "core/agents/action/agent.py",
+      "core/agents/action/evidence_registrar.py",
+      "core/agents/action/parameter_controller.py",
+      "core/agents/action/security_controller.py",
+      "core/agents/action/test_simulator.py",
+      "core/agents/action/types.py",
+      "core/agents/action/__init__.py",
+      "core/agents/action/execution/api_executor.py",
+      "core/agents/action/execution/data_executor.py",
+      "core/agents/action/execution/model_executor.py",
+      "core/agents/action/execution/simulation_executor.py",
+      "core/agents/action/execution/__init__.py"
+    ],
+    "app": [
+      "interface/app.py"
+    ],
+    "operacional": [
+      "modulo_operacional/Cosmic Garden - Workflows (Nivel 3).md",
+      "modulo_operacional/Gerenciamento topologico de contexto - cosmic garden.md",
+      "modulo_operacional/Teste gerenciamento de prompt ide - cosmic garden.md"
+    ],
+    "nivel": [
+      "modulo_operacional/Cosmic Garden - Workflows (Nivel 3).md"
+    ],
+    "workflows": [
+      "modulo_operacional/Cosmic Garden - Workflows (Nivel 3).md",
+      ".agent/workflows/criar-feature.md",
+      ".agent/workflows/debug-profundo.md",
+      ".agent/workflows/documentar-projeto.md",
+      ".agent/workflows/onboarding.md",
+      ".agent/workflows/review-completo.md",
+      ".agent/workflows/how-to-think.md",
+      ".agent/workflows/mapear-contexto.md"
+    ],
+    "cosmic": [
+      "modulo_operacional/Cosmic Garden - Workflows (Nivel 3).md",
+      "modulo_operacional/Gerenciamento topologico de contexto - cosmic garden.md",
+      "modulo_operacional/Teste gerenciamento de prompt ide - cosmic garden.md"
+    ],
+    "3": [
+      "modulo_operacional/Cosmic Garden - Workflows (Nivel 3).md",
+      "interface/pages/3_🕸️_Knowledge_Graph.py"
+    ],
+    "garden": [
+      "modulo_operacional/Cosmic Garden - Workflows (Nivel 3).md",
+      "modulo_operacional/Gerenciamento topologico de contexto - cosmic garden.md",
+      "modulo_operacional/Teste gerenciamento de prompt ide - cosmic garden.md"
+    ],
+    "topologico": [
+      "modulo_operacional/Gerenciamento topologico de contexto - cosmic garden.md"
+    ],
+    "contexto": [
+      "modulo_operacional/Gerenciamento topologico de contexto - cosmic garden.md",
+      ".agent/workflows/mapear-contexto.md"
+    ],
+    "de": [
+      "modulo_operacional/Gerenciamento topologico de contexto - cosmic garden.md",
+      "modulo_operacional/Teste gerenciamento de prompt ide - cosmic garden.md"
+    ],
+    "gerenciamento": [
+      "modulo_operacional/Gerenciamento topologico de contexto - cosmic garden.md",
+      "modulo_operacional/Teste gerenciamento de prompt ide - cosmic garden.md"
+    ],
+    "teste": [
+      "modulo_operacional/Teste gerenciamento de prompt ide - cosmic garden.md"
+    ],
+    "prompt": [
+      "modulo_operacional/Teste gerenciamento de prompt ide - cosmic garden.md"
+    ],
+    "ide": [
+      "modulo_operacional/Teste gerenciamento de prompt ide - cosmic garden.md"
+    ],
+    "scripts": [
+      "scripts/check_status.py",
+      "scripts/entrypoint.sh",
+      "scripts/gather_metrics.py",
+      "scripts/ingest_incremental.py",
+      "scripts/inspect_connections.py",
+      "scripts/mass_arxiv_ingest.py",
+      "scripts/multi_api_ingest.py",
+      "scripts/README.md",
+      "scripts/system_runner_v2.py",
+      "scripts/verify_autonomy.py",
+      "scripts/analysis/alexandria_topics.py",
+      "scripts/analysis/analyze_code_semantics.py",
+      "scripts/analysis/analyze_db_stats.py",
+      "scripts/analysis/bootstrap_mycelial.py",
+      "scripts/analysis/check_truncation.py",
+      "scripts/analysis/check_vector_norms.py",
+      "scripts/analysis/cluster_labeler.py",
+      "scripts/analysis/domain_classifier.py",
+      "scripts/analysis/domain_classifier_fs.py",
+      "scripts/analysis/experiment_A_ablation.py",
+      "scripts/analysis/experiment_B_rescaling.py",
+      "scripts/analysis/experiment_CD_combined.py",
+      "scripts/analysis/geometric_topics.py",
+      "scripts/analysis/meta_learning_topics.py",
+      "scripts/analysis/probe_vqvae_advanced.py",
+      "scripts/analysis/probe_vqvae_deep.py",
+      "scripts/analysis/query_criticality.py",
+      "scripts/analysis/test_mycelial_reasoning.py",
+      "scripts/analysis/visualize_bridge.py",
+      "scripts/analysis/visualize_knowledge_graph.py",
+      "scripts/analysis/visualize_mycelial.py",
+      "scripts/analysis/visualize_structure.py",
+      "scripts/debug/analyze_coverage.py",
+      "scripts/debug/analyze_training_metrics.py",
+      "scripts/debug/check_columns.py",
+      "scripts/debug/check_lancedb.py",
+      "scripts/debug/inspect_metadata.py",
+      "scripts/debug/probe_reasoning.py",
+      "scripts/debug/status_check.py",
+      "scripts/debug/test_nemesis_integration.py",
+      "scripts/debug/verify_learning_stack.py",
+      "scripts/debug/verify_nemesis.py",
+      "scripts/demos/collide.py",
+      "scripts/demos/collide_v2.py",
+      "scripts/demos/demo_capabilities.py",
+      "scripts/demos/demo_full_system.py",
+      "scripts/demos/demo_self_feeding_loop.py",
+      "scripts/demos/run_real_loop.py",
+      "scripts/diagnostics/check_lancedb.py",
+      "scripts/maintenance/check_missing_papers.py",
+      "scripts/maintenance/check_mycelial_health.py",
+      "scripts/maintenance/process_missing_papers.py",
+      "scripts/maintenance/prune_mycelial.py",
+      "scripts/maintenance/recover_knowledge.py",
+      "scripts/maintenance/retry_ingest.py",
+      "scripts/testing/integration_test.py",
+      "scripts/testing/stress_test.py",
+      "scripts/testing/test_field.py",
+      "scripts/testing/test_field_real.py",
+      "scripts/testing/test_field_simple.py",
+      "scripts/testing/test_geodesic_bridge.py",
+      "scripts/testing/test_model_loading.py",
+      "scripts/testing/test_predictive_coding.py",
+      "scripts/testing/validate_alexandria.py",
+      "scripts/testing/validate_concepts.py",
+      "scripts/testing/verify_fineweb_model.py",
+      "scripts/testing/view_connections.py",
+      "scripts/training/finetune_vqvae.py",
+      "scripts/training/test_balanced_training.py",
+      "scripts/training/train_mycelial.py",
+      "scripts/training/train_nemesis_vqvae.py",
+      "scripts/training/train_topology_mycelial.py",
+      "scripts/training/train_vqvae.py",
+      "scripts/utilities/build_causal_graph.py",
+      "scripts/utilities/convert_wiki_weights.py",
+      "scripts/utilities/count_papers.py",
+      "scripts/utilities/export_embeddings.py",
+      "scripts/utilities/extract_causal_relations.py",
+      "scripts/utilities/finetune_llm.py",
+      "scripts/utilities/init_brain.py",
+      "scripts/utilities/reset_db.py",
+      "docs/scripts/validate_alexandria.md",
+      ".agent/scripts/context_mapper.py"
+    ],
+    "check": [
+      "scripts/check_status.py",
+      "scripts/analysis/check_truncation.py",
+      "scripts/analysis/check_vector_norms.py",
+      "scripts/debug/check_columns.py",
+      "scripts/debug/check_lancedb.py",
+      "scripts/debug/status_check.py",
+      "scripts/diagnostics/check_lancedb.py",
+      "scripts/maintenance/check_missing_papers.py",
+      "scripts/maintenance/check_mycelial_health.py"
+    ],
+    "status": [
+      "scripts/check_status.py",
+      "scripts/debug/status_check.py"
+    ],
+    "entrypoint": [
+      "scripts/entrypoint.sh"
+    ],
+    "sh": [
+      "scripts/entrypoint.sh"
+    ],
+    "metrics": [
+      "scripts/gather_metrics.py",
+      "scripts/debug/analyze_training_metrics.py",
+      "docs/core/loop/loop_metrics.md",
+      "core/loop/loop_metrics.py"
+    ],
+    "gather": [
+      "scripts/gather_metrics.py"
+    ],
+    "ingest": [
+      "scripts/ingest_incremental.py",
+      "scripts/mass_arxiv_ingest.py",
+      "scripts/multi_api_ingest.py",
+      "scripts/maintenance/retry_ingest.py"
+    ],
+    "incremental": [
+      "scripts/ingest_incremental.py",
+      "docs/core/loop/incremental_learner.md",
+      "core/loop/incremental_learner.py"
+    ],
+    "inspect": [
+      "scripts/inspect_connections.py",
+      "scripts/debug/inspect_metadata.py"
+    ],
+    "connections": [
+      "scripts/inspect_connections.py",
+      "scripts/testing/view_connections.py"
+    ],
+    "mass": [
+      "scripts/mass_arxiv_ingest.py"
+    ],
+    "arxiv": [
+      "scripts/mass_arxiv_ingest.py"
+    ],
+    "api": [
+      "scripts/multi_api_ingest.py",
+      "core/agents/action/execution/api_executor.py"
+    ],
+    "multi": [
+      "scripts/multi_api_ingest.py"
+    ],
+    "runner": [
+      "scripts/system_runner_v2.py"
+    ],
+    "v2": [
+      "scripts/system_runner_v2.py",
+      "tests/test_v2_cycle.py",
+      "scripts/demos/collide_v2.py"
+    ],
+    "system": [
+      "scripts/system_runner_v2.py",
+      "tests/test_system_integration.py",
+      "scripts/demos/demo_full_system.py"
+    ],
+    "autonomy": [
+      "scripts/verify_autonomy.py",
+      "docs/concepts/active_autonomy.md"
+    ],
+    "verify": [
+      "scripts/verify_autonomy.py",
+      "scripts/debug/verify_learning_stack.py",
+      "scripts/debug/verify_nemesis.py",
+      "scripts/testing/verify_fineweb_model.py"
+    ],
+    "conftest": [
+      "tests/conftest.py"
+    ],
+    "tests": [
+      "tests/conftest.py",
+      "tests/test_action_agent_refactor.py",
+      "tests/test_active_inference_integration.py",
+      "tests/test_core.py",
+      "tests/test_executor_real.py",
+      "tests/test_mycelial.py",
+      "tests/test_storage.py",
+      "tests/test_symbol_grounding.py",
+      "tests/test_system_integration.py",
+      "tests/test_v2_cycle.py",
+      "tests/test_viz.py"
+    ],
+    "refactor": [
+      "tests/test_action_agent_refactor.py"
+    ],
+    "action": [
+      "tests/test_action_agent_refactor.py",
+      "docs/core/agents/action_agent.md",
+      "core/agents/action_agent.py",
+      "core/loop/action_selection.py",
+      "core/agents/action/agent.py",
+      "core/agents/action/evidence_registrar.py",
+      "core/agents/action/parameter_controller.py",
+      "core/agents/action/security_controller.py",
+      "core/agents/action/test_simulator.py",
+      "core/agents/action/types.py",
+      "core/agents/action/__init__.py",
+      "core/agents/action/execution/api_executor.py",
+      "core/agents/action/execution/data_executor.py",
+      "core/agents/action/execution/model_executor.py",
+      "core/agents/action/execution/simulation_executor.py",
+      "core/agents/action/execution/__init__.py"
+    ],
+    "inference": [
+      "tests/test_active_inference_integration.py",
+      "docs/core/learning/active_inference.md",
+      "core/learning/active_inference.py",
+      "core/loop/active_inference_adapter.py"
+    ],
+    "active": [
+      "tests/test_active_inference_integration.py",
+      "docs/concepts/active_autonomy.md",
+      "docs/core/learning/active_inference.md",
+      "core/learning/active_inference.py",
+      "core/loop/active_inference_adapter.py"
+    ],
+    "integration": [
+      "tests/test_active_inference_integration.py",
+      "tests/test_system_integration.py",
+      "scripts/debug/test_nemesis_integration.py",
+      "scripts/testing/integration_test.py",
+      "docs/core/learning/integration_layer.md",
+      "docs/core/loop/nemesis_integration.md",
+      "core/learning/integration_layer.py",
+      "core/loop/nemesis_integration.py"
+    ],
+    "real": [
+      "tests/test_executor_real.py",
+      "scripts/demos/run_real_loop.py",
+      "scripts/testing/test_field_real.py"
+    ],
+    "executor": [
+      "tests/test_executor_real.py",
+      "docs/core/loop/hypothesis_executor.md",
+      "core/loop/hypothesis_executor.py",
+      "core/agents/action/execution/api_executor.py",
+      "core/agents/action/execution/data_executor.py",
+      "core/agents/action/execution/model_executor.py",
+      "core/agents/action/execution/simulation_executor.py"
+    ],
+    "mycelial": [
+      "tests/test_mycelial.py",
+      "scripts/analysis/bootstrap_mycelial.py",
+      "scripts/analysis/test_mycelial_reasoning.py",
+      "scripts/analysis/visualize_mycelial.py",
+      "scripts/maintenance/check_mycelial_health.py",
+      "scripts/maintenance/prune_mycelial.py",
+      "scripts/training/train_mycelial.py",
+      "scripts/training/train_topology_mycelial.py",
+      "interface/pages/2_🍄_Mycelial_Brain.py",
+      "docs/core/reasoning/mycelial_reasoning.md",
+      "core/reasoning/mycelial_reasoning.py"
+    ],
+    "storage": [
+      "tests/test_storage.py",
+      "docs/core/memory/storage.md",
+      "core/memory/storage.py"
+    ],
+    "grounding": [
+      "tests/test_symbol_grounding.py",
+      "core/reasoning/symbol_grounding.py"
+    ],
+    "symbol": [
+      "tests/test_symbol_grounding.py",
+      "core/reasoning/symbol_grounding.py"
+    ],
+    "cycle": [
+      "tests/test_v2_cycle.py",
+      "docs/core/field/cycle_dynamics.md",
+      "core/field/cycle_dynamics.py"
+    ],
+    "viz": [
+      "tests/test_viz.py"
+    ],
+    "alexandria": [
+      "scripts/analysis/alexandria_topics.py",
+      "scripts/testing/validate_alexandria.py",
+      "docs/scripts/validate_alexandria.md"
+    ],
+    "topics": [
+      "scripts/analysis/alexandria_topics.py",
+      "scripts/analysis/geometric_topics.py",
+      "scripts/analysis/meta_learning_topics.py"
+    ],
+    "analysis": [
+      "scripts/analysis/alexandria_topics.py",
+      "scripts/analysis/analyze_code_semantics.py",
+      "scripts/analysis/analyze_db_stats.py",
+      "scripts/analysis/bootstrap_mycelial.py",
+      "scripts/analysis/check_truncation.py",
+      "scripts/analysis/check_vector_norms.py",
+      "scripts/analysis/cluster_labeler.py",
+      "scripts/analysis/domain_classifier.py",
+      "scripts/analysis/domain_classifier_fs.py",
+      "scripts/analysis/experiment_A_ablation.py",
+      "scripts/analysis/experiment_B_rescaling.py",
+      "scripts/analysis/experiment_CD_combined.py",
+      "scripts/analysis/geometric_topics.py",
+      "scripts/analysis/meta_learning_topics.py",
+      "scripts/analysis/probe_vqvae_advanced.py",
+      "scripts/analysis/probe_vqvae_deep.py",
+      "scripts/analysis/query_criticality.py",
+      "scripts/analysis/test_mycelial_reasoning.py",
+      "scripts/analysis/visualize_bridge.py",
+      "scripts/analysis/visualize_knowledge_graph.py",
+      "scripts/analysis/visualize_mycelial.py",
+      "scripts/analysis/visualize_structure.py"
+    ],
+    "semantics": [
+      "scripts/analysis/analyze_code_semantics.py"
+    ],
+    "analyze": [
+      "scripts/analysis/analyze_code_semantics.py",
+      "scripts/analysis/analyze_db_stats.py",
+      "scripts/debug/analyze_coverage.py",
+      "scripts/debug/analyze_training_metrics.py"
+    ],
+    "db": [
+      "scripts/analysis/analyze_db_stats.py",
+      "scripts/utilities/reset_db.py"
+    ],
+    "stats": [
+      "scripts/analysis/analyze_db_stats.py"
+    ],
+    "bootstrap": [
+      "scripts/analysis/bootstrap_mycelial.py"
+    ],
+    "truncation": [
+      "scripts/analysis/check_truncation.py"
+    ],
+    "vector": [
+      "scripts/analysis/check_vector_norms.py"
+    ],
+    "norms": [
+      "scripts/analysis/check_vector_norms.py"
+    ],
+    "labeler": [
+      "scripts/analysis/cluster_labeler.py"
+    ],
+    "cluster": [
+      "scripts/analysis/cluster_labeler.py"
+    ],
+    "classifier": [
+      "scripts/analysis/domain_classifier.py",
+      "scripts/analysis/domain_classifier_fs.py"
+    ],
+    "domain": [
+      "scripts/analysis/domain_classifier.py",
+      "scripts/analysis/domain_classifier_fs.py"
+    ],
+    "fs": [
+      "scripts/analysis/domain_classifier_fs.py"
+    ],
+    "ablation": [
+      "scripts/analysis/experiment_A_ablation.py"
+    ],
+    "experiment": [
+      "scripts/analysis/experiment_A_ablation.py",
+      "scripts/analysis/experiment_B_rescaling.py",
+      "scripts/analysis/experiment_CD_combined.py"
+    ],
+    "a": [
+      "scripts/analysis/experiment_A_ablation.py"
+    ],
+    "b": [
+      "scripts/analysis/experiment_B_rescaling.py"
+    ],
+    "rescaling": [
+      "scripts/analysis/experiment_B_rescaling.py"
+    ],
+    "cd": [
+      "scripts/analysis/experiment_CD_combined.py"
+    ],
+    "combined": [
+      "scripts/analysis/experiment_CD_combined.py"
+    ],
+    "geometric": [
+      "scripts/analysis/geometric_topics.py",
+      "docs/concepts/geometric_cognition.md"
+    ],
+    "learning": [
+      "scripts/analysis/meta_learning_topics.py",
+      "scripts/debug/verify_learning_stack.py",
+      "docs/core/learning/active_inference.md",
+      "docs/core/learning/free_energy.md",
+      "docs/core/learning/integration_layer.md",
+      "docs/core/learning/meta_hebbian.md",
+      "docs/core/learning/NEMESIS_MANUAL.md",
+      "docs/core/learning/predictive_coding.md",
+      "docs/core/learning/profiles.md",
+      "docs/core/learning/README.md",
+      "core/learning/active_inference.py",
+      "core/learning/free_energy.py",
+      "core/learning/integration_layer.py",
+      "core/learning/meta_hebbian.py",
+      "core/learning/predictive_coding.py",
+      "core/learning/profiles.py"
+    ],
+    "meta": [
+      "scripts/analysis/meta_learning_topics.py",
+      "docs/core/learning/meta_hebbian.md",
+      "core/learning/meta_hebbian.py"
+    ],
+    "vqvae": [
+      "scripts/analysis/probe_vqvae_advanced.py",
+      "scripts/analysis/probe_vqvae_deep.py",
+      "scripts/training/finetune_vqvae.py",
+      "scripts/training/train_nemesis_vqvae.py",
+      "scripts/training/train_vqvae.py",
+      "docs/core/reasoning/vqvae.md",
+      "core/reasoning/vqvae/layers.py",
+      "core/reasoning/vqvae/loss.py",
+      "core/reasoning/vqvae/model.py",
+      "core/reasoning/vqvae/model_wiki.py",
+      "core/reasoning/vqvae/__init__.py"
+    ],
+    "probe": [
+      "scripts/analysis/probe_vqvae_advanced.py",
+      "scripts/analysis/probe_vqvae_deep.py",
+      "scripts/debug/probe_reasoning.py"
+    ],
+    "advanced": [
+      "scripts/analysis/probe_vqvae_advanced.py"
+    ],
+    "deep": [
+      "scripts/analysis/probe_vqvae_deep.py"
+    ],
+    "criticality": [
+      "scripts/analysis/query_criticality.py"
+    ],
+    "query": [
+      "scripts/analysis/query_criticality.py"
+    ],
+    "reasoning": [
+      "scripts/analysis/test_mycelial_reasoning.py",
+      "scripts/debug/probe_reasoning.py",
+      "docs/core/reasoning/abduction_engine.md",
+      "docs/core/reasoning/causal_reasoning.md",
+      "docs/core/reasoning/mycelial_reasoning.md",
+      "docs/core/reasoning/neural_learner.md",
+      "docs/core/reasoning/vqvae.md",
+      "core/reasoning/abduction_engine.py",
+      "core/reasoning/causal_reasoning.py",
+      "core/reasoning/mycelial_reasoning.py",
+      "core/reasoning/neural_learner.py",
+      "core/reasoning/symbol_grounding.py",
+      "core/reasoning/__init__.py",
+      "core/reasoning/vqvae/layers.py",
+      "core/reasoning/vqvae/loss.py",
+      "core/reasoning/vqvae/model.py",
+      "core/reasoning/vqvae/model_wiki.py",
+      "core/reasoning/vqvae/__init__.py"
+    ],
+    "visualize": [
+      "scripts/analysis/visualize_bridge.py",
+      "scripts/analysis/visualize_knowledge_graph.py",
+      "scripts/analysis/visualize_mycelial.py",
+      "scripts/analysis/visualize_structure.py"
+    ],
+    "bridge": [
+      "scripts/analysis/visualize_bridge.py",
+      "scripts/testing/test_geodesic_bridge.py",
+      "docs/core/agents/bridge_agent.md",
+      "core/agents/bridge_agent.py"
+    ],
+    "graph": [
+      "scripts/analysis/visualize_knowledge_graph.py",
+      "scripts/utilities/build_causal_graph.py",
+      "interface/pages/3_🕸️_Knowledge_Graph.py"
+    ],
+    "knowledge": [
+      "scripts/analysis/visualize_knowledge_graph.py",
+      "scripts/maintenance/recover_knowledge.py",
+      "interface/pages/3_🕸️_Knowledge_Graph.py"
+    ],
+    "coverage": [
+      "scripts/debug/analyze_coverage.py"
+    ],
+    "training": [
+      "scripts/debug/analyze_training_metrics.py",
+      "scripts/training/finetune_vqvae.py",
+      "scripts/training/test_balanced_training.py",
+      "scripts/training/train_mycelial.py",
+      "scripts/training/train_nemesis_vqvae.py",
+      "scripts/training/train_topology_mycelial.py",
+      "scripts/training/train_vqvae.py"
+    ],
+    "columns": [
+      "scripts/debug/check_columns.py"
+    ],
+    "lancedb": [
+      "scripts/debug/check_lancedb.py",
+      "scripts/diagnostics/check_lancedb.py"
+    ],
+    "metadata": [
+      "scripts/debug/inspect_metadata.py"
+    ],
+    "nemesis": [
+      "scripts/debug/test_nemesis_integration.py",
+      "scripts/debug/verify_nemesis.py",
+      "scripts/training/train_nemesis_vqvae.py",
+      "docs/core/learning/NEMESIS_MANUAL.md",
+      "docs/core/loop/nemesis_integration.md",
+      "core/loop/nemesis_integration.py"
+    ],
+    "stack": [
+      "scripts/debug/verify_learning_stack.py"
+    ],
+    "collide": [
+      "scripts/demos/collide.py",
+      "scripts/demos/collide_v2.py"
+    ],
+    "demos": [
+      "scripts/demos/collide.py",
+      "scripts/demos/collide_v2.py",
+      "scripts/demos/demo_capabilities.py",
+      "scripts/demos/demo_full_system.py",
+      "scripts/demos/demo_self_feeding_loop.py",
+      "scripts/demos/run_real_loop.py"
+    ],
+    "capabilities": [
+      "scripts/demos/demo_capabilities.py"
+    ],
+    "demo": [
+      "scripts/demos/demo_capabilities.py",
+      "scripts/demos/demo_full_system.py",
+      "scripts/demos/demo_self_feeding_loop.py"
+    ],
+    "full": [
+      "scripts/demos/demo_full_system.py"
+    ],
+    "feeding": [
+      "scripts/demos/demo_self_feeding_loop.py",
+      "docs/core/loop/self_feeding_loop.md",
+      "core/loop/self_feeding_loop.py"
+    ],
+    "loop": [
+      "scripts/demos/demo_self_feeding_loop.py",
+      "scripts/demos/run_real_loop.py",
+      "docs/core/loop/feedback_collector.md",
+      "docs/core/loop/hypothesis_executor.md",
+      "docs/core/loop/incremental_learner.md",
+      "docs/core/loop/loop_metrics.md",
+      "docs/core/loop/nemesis_integration.md",
+      "docs/core/loop/README.md",
+      "docs/core/loop/self_feeding_loop.md",
+      "core/loop/action_selection.py",
+      "core/loop/active_inference_adapter.py",
+      "core/loop/feedback_collector.py",
+      "core/loop/hypothesis_executor.py",
+      "core/loop/incremental_learner.py",
+      "core/loop/loop_metrics.py",
+      "core/loop/nemesis_integration.py",
+      "core/loop/self_feeding_loop.py",
+      "core/loop/__init__.py"
+    ],
+    "self": [
+      "scripts/demos/demo_self_feeding_loop.py",
+      "docs/core/loop/self_feeding_loop.md",
+      "core/loop/self_feeding_loop.py"
+    ],
+    "diagnostics": [
+      "scripts/diagnostics/check_lancedb.py"
+    ],
+    "missing": [
+      "scripts/maintenance/check_missing_papers.py",
+      "scripts/maintenance/process_missing_papers.py"
+    ],
+    "maintenance": [
+      "scripts/maintenance/check_missing_papers.py",
+      "scripts/maintenance/check_mycelial_health.py",
+      "scripts/maintenance/process_missing_papers.py",
+      "scripts/maintenance/prune_mycelial.py",
+      "scripts/maintenance/recover_knowledge.py",
+      "scripts/maintenance/retry_ingest.py"
+    ],
+    "health": [
+      "scripts/maintenance/check_mycelial_health.py"
+    ],
+    "process": [
+      "scripts/maintenance/process_missing_papers.py"
+    ],
+    "prune": [
+      "scripts/maintenance/prune_mycelial.py"
+    ],
+    "recover": [
+      "scripts/maintenance/recover_knowledge.py"
+    ],
+    "retry": [
+      "scripts/maintenance/retry_ingest.py"
+    ],
+    "testing": [
+      "scripts/testing/integration_test.py",
+      "scripts/testing/stress_test.py",
+      "scripts/testing/test_field.py",
+      "scripts/testing/test_field_real.py",
+      "scripts/testing/test_field_simple.py",
+      "scripts/testing/test_geodesic_bridge.py",
+      "scripts/testing/test_model_loading.py",
+      "scripts/testing/test_predictive_coding.py",
+      "scripts/testing/validate_alexandria.py",
+      "scripts/testing/validate_concepts.py",
+      "scripts/testing/verify_fineweb_model.py",
+      "scripts/testing/view_connections.py"
+    ],
+    "stress": [
+      "scripts/testing/stress_test.py"
+    ],
+    "field": [
+      "scripts/testing/test_field.py",
+      "scripts/testing/test_field_real.py",
+      "scripts/testing/test_field_simple.py",
+      "docs/core/field/cycle_dynamics.md",
+      "docs/core/field/free_energy_field.md",
+      "docs/core/field/geodesic_flow.md",
+      "docs/core/field/manifold.md",
+      "docs/core/field/metric.md",
+      "docs/core/field/README.md",
+      "core/field/cycle_dynamics.py",
+      "core/field/free_energy_field.py",
+      "core/field/geodesic_flow.py",
+      "core/field/manifold.py",
+      "core/field/metric.py",
+      "core/field/pre_structural_field.py",
+      "core/field/__init__.py"
+    ],
+    "simple": [
+      "scripts/testing/test_field_simple.py"
+    ],
+    "geodesic": [
+      "scripts/testing/test_geodesic_bridge.py",
+      "docs/core/field/geodesic_flow.md",
+      "core/field/geodesic_flow.py"
+    ],
+    "model": [
+      "scripts/testing/test_model_loading.py",
+      "scripts/testing/verify_fineweb_model.py",
+      "core/reasoning/vqvae/model.py",
+      "core/reasoning/vqvae/model_wiki.py",
+      "core/agents/action/execution/model_executor.py"
+    ],
+    "loading": [
+      "scripts/testing/test_model_loading.py"
+    ],
+    "predictive": [
+      "scripts/testing/test_predictive_coding.py",
+      "docs/core/learning/predictive_coding.md",
+      "core/learning/predictive_coding.py"
+    ],
+    "coding": [
+      "scripts/testing/test_predictive_coding.py",
+      "docs/core/learning/predictive_coding.md",
+      "core/learning/predictive_coding.py"
+    ],
+    "validate": [
+      "scripts/testing/validate_alexandria.py",
+      "scripts/testing/validate_concepts.py",
+      "docs/scripts/validate_alexandria.md"
+    ],
+    "concepts": [
+      "scripts/testing/validate_concepts.py",
+      "docs/concepts/active_autonomy.md",
+      "docs/concepts/cognitive_resilience.md",
+      "docs/concepts/geometric_cognition.md"
+    ],
+    "fineweb": [
+      "scripts/testing/verify_fineweb_model.py"
+    ],
+    "view": [
+      "scripts/testing/view_connections.py"
+    ],
+    "finetune": [
+      "scripts/training/finetune_vqvae.py",
+      "scripts/utilities/finetune_llm.py"
+    ],
+    "balanced": [
+      "scripts/training/test_balanced_training.py"
+    ],
+    "train": [
+      "scripts/training/train_mycelial.py",
+      "scripts/training/train_nemesis_vqvae.py",
+      "scripts/training/train_topology_mycelial.py",
+      "scripts/training/train_vqvae.py"
+    ],
+    "topology": [
+      "scripts/training/train_topology_mycelial.py",
+      "docs/core/topology/topology_engine.md",
+      "core/topology/topology_engine.py",
+      "core/topology/__init__.py"
+    ],
+    "build": [
+      "scripts/utilities/build_causal_graph.py"
+    ],
+    "utilities": [
+      "scripts/utilities/build_causal_graph.py",
+      "scripts/utilities/convert_wiki_weights.py",
+      "scripts/utilities/count_papers.py",
+      "scripts/utilities/export_embeddings.py",
+      "scripts/utilities/extract_causal_relations.py",
+      "scripts/utilities/finetune_llm.py",
+      "scripts/utilities/init_brain.py",
+      "scripts/utilities/reset_db.py"
+    ],
+    "causal": [
+      "scripts/utilities/build_causal_graph.py",
+      "scripts/utilities/extract_causal_relations.py",
+      "docs/core/reasoning/causal_reasoning.md",
+      "core/reasoning/causal_reasoning.py"
+    ],
+    "weights": [
+      "scripts/utilities/convert_wiki_weights.py"
+    ],
+    "convert": [
+      "scripts/utilities/convert_wiki_weights.py"
+    ],
+    "wiki": [
+      "scripts/utilities/convert_wiki_weights.py",
+      "core/reasoning/vqvae/model_wiki.py"
+    ],
+    "count": [
+      "scripts/utilities/count_papers.py"
+    ],
+    "export": [
+      "scripts/utilities/export_embeddings.py"
+    ],
+    "embeddings": [
+      "scripts/utilities/export_embeddings.py"
+    ],
+    "relations": [
+      "scripts/utilities/extract_causal_relations.py"
+    ],
+    "extract": [
+      "scripts/utilities/extract_causal_relations.py"
+    ],
+    "llm": [
+      "scripts/utilities/finetune_llm.py",
+      "core/utils/local_llm.py"
+    ],
+    "brain": [
+      "scripts/utilities/init_brain.py",
+      "interface/pages/2_🍄_Mycelial_Brain.py"
+    ],
+    "reset": [
+      "scripts/utilities/reset_db.py"
+    ],
+    "components": [
+      "interface/components/sidebar.py",
+      "interface/components/__init__.py"
+    ],
+    "sidebar": [
+      "interface/components/sidebar.py"
+    ],
+    "dashboard": [
+      "interface/pages/1_🧠_Dashboard.py"
+    ],
+    "1": [
+      "interface/pages/1_🧠_Dashboard.py"
+    ],
+    "pages": [
+      "interface/pages/1_🧠_Dashboard.py",
+      "interface/pages/2_🍄_Mycelial_Brain.py",
+      "interface/pages/3_🕸️_Knowledge_Graph.py",
+      "interface/pages/4_🔮_Abduction.py",
+      "interface/pages/5_💥_Collider.py",
+      "interface/pages/__init__.py"
+    ],
+    "2": [
+      "interface/pages/2_🍄_Mycelial_Brain.py"
+    ],
+    "abduction": [
+      "interface/pages/4_🔮_Abduction.py",
+      "docs/core/reasoning/abduction_engine.md",
+      "core/reasoning/abduction_engine.py"
+    ],
+    "4": [
+      "interface/pages/4_🔮_Abduction.py"
+    ],
+    "5": [
+      "interface/pages/5_💥_Collider.py"
+    ],
+    "collider": [
+      "interface/pages/5_💥_Collider.py"
+    ],
+    "utils": [
+      "interface/utils/state_manager.py",
+      "interface/utils/__init__.py",
+      "docs/core/utils/README.md",
+      "core/utils/harvester.py",
+      "core/utils/local_llm.py",
+      "core/utils/logger.py"
+    ],
+    "state": [
+      "interface/utils/state_manager.py"
+    ],
+    "manager": [
+      "interface/utils/state_manager.py"
+    ],
+    "docs": [
+      "docs/concepts/active_autonomy.md",
+      "docs/concepts/cognitive_resilience.md",
+      "docs/concepts/geometric_cognition.md",
+      "docs/core/README.md",
+      "docs/scripts/validate_alexandria.md",
+      "docs/core/agents/action_agent.md",
+      "docs/core/agents/bridge_agent.md",
+      "docs/core/agents/critic_agent.md",
+      "docs/core/agents/neural_oracle.md",
+      "docs/core/field/cycle_dynamics.md",
+      "docs/core/field/free_energy_field.md",
+      "docs/core/field/geodesic_flow.md",
+      "docs/core/field/manifold.md",
+      "docs/core/field/metric.md",
+      "docs/core/field/README.md",
+      "docs/core/learning/active_inference.md",
+      "docs/core/learning/free_energy.md",
+      "docs/core/learning/integration_layer.md",
+      "docs/core/learning/meta_hebbian.md",
+      "docs/core/learning/NEMESIS_MANUAL.md",
+      "docs/core/learning/predictive_coding.md",
+      "docs/core/learning/profiles.md",
+      "docs/core/learning/README.md",
+      "docs/core/loop/feedback_collector.md",
+      "docs/core/loop/hypothesis_executor.md",
+      "docs/core/loop/incremental_learner.md",
+      "docs/core/loop/loop_metrics.md",
+      "docs/core/loop/nemesis_integration.md",
+      "docs/core/loop/README.md",
+      "docs/core/loop/self_feeding_loop.md",
+      "docs/core/memory/semantic_memory.md",
+      "docs/core/memory/storage.md",
+      "docs/core/memory/v11_vision_encoder.md",
+      "docs/core/reasoning/abduction_engine.md",
+      "docs/core/reasoning/causal_reasoning.md",
+      "docs/core/reasoning/mycelial_reasoning.md",
+      "docs/core/reasoning/neural_learner.md",
+      "docs/core/reasoning/vqvae.md",
+      "docs/core/topology/topology_engine.md",
+      "docs/core/utils/README.md"
+    ],
+    "resilience": [
+      "docs/concepts/cognitive_resilience.md"
+    ],
+    "cognitive": [
+      "docs/concepts/cognitive_resilience.md"
+    ],
+    "cognition": [
+      "docs/concepts/geometric_cognition.md"
+    ],
+    "agents": [
+      "docs/core/agents/action_agent.md",
+      "docs/core/agents/bridge_agent.md",
+      "docs/core/agents/critic_agent.md",
+      "docs/core/agents/neural_oracle.md",
+      "core/agents/action_agent.py",
+      "core/agents/bridge_agent.py",
+      "core/agents/critic_agent.py",
+      "core/agents/oracle.py",
+      "core/agents/action/agent.py",
+      "core/agents/action/evidence_registrar.py",
+      "core/agents/action/parameter_controller.py",
+      "core/agents/action/security_controller.py",
+      "core/agents/action/test_simulator.py",
+      "core/agents/action/types.py",
+      "core/agents/action/__init__.py",
+      "core/agents/action/execution/api_executor.py",
+      "core/agents/action/execution/data_executor.py",
+      "core/agents/action/execution/model_executor.py",
+      "core/agents/action/execution/simulation_executor.py",
+      "core/agents/action/execution/__init__.py"
+    ],
+    "critic": [
+      "docs/core/agents/critic_agent.md",
+      "core/agents/critic_agent.py"
+    ],
+    "oracle": [
+      "docs/core/agents/neural_oracle.md",
+      "core/agents/oracle.py"
+    ],
+    "neural": [
+      "docs/core/agents/neural_oracle.md",
+      "docs/core/reasoning/neural_learner.md",
+      "core/reasoning/neural_learner.py"
+    ],
+    "dynamics": [
+      "docs/core/field/cycle_dynamics.md",
+      "core/field/cycle_dynamics.py"
+    ],
+    "free": [
+      "docs/core/field/free_energy_field.md",
+      "docs/core/learning/free_energy.md",
+      "core/field/free_energy_field.py",
+      "core/learning/free_energy.py"
+    ],
+    "energy": [
+      "docs/core/field/free_energy_field.md",
+      "docs/core/learning/free_energy.md",
+      "core/field/free_energy_field.py",
+      "core/learning/free_energy.py"
+    ],
+    "flow": [
+      "docs/core/field/geodesic_flow.md",
+      "core/field/geodesic_flow.py"
+    ],
+    "manifold": [
+      "docs/core/field/manifold.md",
+      "core/field/manifold.py"
+    ],
+    "metric": [
+      "docs/core/field/metric.md",
+      "core/field/metric.py"
+    ],
+    "layer": [
+      "docs/core/learning/integration_layer.md",
+      "core/learning/integration_layer.py"
+    ],
+    "hebbian": [
+      "docs/core/learning/meta_hebbian.md",
+      "core/learning/meta_hebbian.py"
+    ],
+    "manual": [
+      "docs/core/learning/NEMESIS_MANUAL.md"
+    ],
+    "profiles": [
+      "docs/core/learning/profiles.md",
+      "core/learning/profiles.py"
+    ],
+    "feedback": [
+      "docs/core/loop/feedback_collector.md",
+      "core/loop/feedback_collector.py"
+    ],
+    "collector": [
+      "docs/core/loop/feedback_collector.md",
+      "core/loop/feedback_collector.py"
+    ],
+    "hypothesis": [
+      "docs/core/loop/hypothesis_executor.md",
+      "core/loop/hypothesis_executor.py"
+    ],
+    "learner": [
+      "docs/core/loop/incremental_learner.md",
+      "docs/core/reasoning/neural_learner.md",
+      "core/loop/incremental_learner.py",
+      "core/reasoning/neural_learner.py"
+    ],
+    "semantic": [
+      "docs/core/memory/semantic_memory.md",
+      "core/memory/semantic_memory.py"
+    ],
+    "memory": [
+      "docs/core/memory/semantic_memory.md",
+      "docs/core/memory/storage.md",
+      "docs/core/memory/v11_vision_encoder.md",
+      "core/memory/semantic_memory.py",
+      "core/memory/storage.py",
+      "core/memory/v11_vision_encoder.py"
+    ],
+    "v11": [
+      "docs/core/memory/v11_vision_encoder.md",
+      "core/memory/v11_vision_encoder.py"
+    ],
+    "vision": [
+      "docs/core/memory/v11_vision_encoder.md",
+      "core/memory/v11_vision_encoder.py"
+    ],
+    "encoder": [
+      "docs/core/memory/v11_vision_encoder.md",
+      "core/memory/v11_vision_encoder.py"
+    ],
+    "engine": [
+      "docs/core/reasoning/abduction_engine.md",
+      "docs/core/topology/topology_engine.md",
+      "core/reasoning/abduction_engine.py",
+      "core/topology/topology_engine.py"
+    ],
+    "structural": [
+      "core/field/pre_structural_field.py"
+    ],
+    "pre": [
+      "core/field/pre_structural_field.py"
+    ],
+    "selection": [
+      "core/loop/action_selection.py"
+    ],
+    "adapter": [
+      "core/loop/active_inference_adapter.py"
+    ],
+    "harvester": [
+      "core/utils/harvester.py"
+    ],
+    "local": [
+      "core/utils/local_llm.py"
+    ],
+    "logger": [
+      "core/utils/logger.py"
+    ],
+    "layers": [
+      "core/reasoning/vqvae/layers.py"
+    ],
+    "loss": [
+      "core/reasoning/vqvae/loss.py"
+    ],
+    "registrar": [
+      "core/agents/action/evidence_registrar.py"
+    ],
+    "evidence": [
+      "core/agents/action/evidence_registrar.py"
+    ],
+    "controller": [
+      "core/agents/action/parameter_controller.py",
+      "core/agents/action/security_controller.py"
+    ],
+    "parameter": [
+      "core/agents/action/parameter_controller.py"
+    ],
+    "security": [
+      "core/agents/action/security_controller.py"
+    ],
+    "simulator": [
+      "core/agents/action/test_simulator.py"
+    ],
+    "types": [
+      "core/agents/action/types.py"
+    ],
+    "execution": [
+      "core/agents/action/execution/api_executor.py",
+      "core/agents/action/execution/data_executor.py",
+      "core/agents/action/execution/model_executor.py",
+      "core/agents/action/execution/simulation_executor.py",
+      "core/agents/action/execution/__init__.py"
+    ],
+    "simulation": [
+      "core/agents/action/execution/simulation_executor.py"
+    ],
+    "feature": [
+      ".agent/workflows/criar-feature.md"
+    ],
+    "profundo": [
+      ".agent/workflows/debug-profundo.md"
+    ],
+    "projeto": [
+      ".agent/workflows/documentar-projeto.md"
+    ],
+    "onboarding": [
+      ".agent/workflows/onboarding.md"
+    ],
+    "to": [
+      ".agent/workflows/how-to-think.md"
+    ],
+    "how": [
+      ".agent/workflows/how-to-think.md"
+    ],
+    "think": [
+      ".agent/workflows/how-to-think.md"
+    ],
+    "mapear": [
+      ".agent/workflows/mapear-contexto.md"
+    ]
+  }
+}

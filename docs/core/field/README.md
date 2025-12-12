@@ -247,6 +247,14 @@ field.connect_variational_fe(vfe_module)
 
 ---
 
+### 7. DimensionalityReducer (`dim_reduction.py`)
+Componente para otimização de hardware (redução 384d -> 32d).
+- **Responsabilidade**: Projetar embeddings para espaço manifold de baixa dimensão
+- **Algoritmo**: PCA incremental ou Random Projection
+- **Motivação**: Cálculo geodésico eficiente em CPU
+
+---
+
 ## Dependências
 
 - numpy

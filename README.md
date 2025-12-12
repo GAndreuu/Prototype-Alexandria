@@ -81,21 +81,28 @@ O sistema possui workflows autônomos acessíveis via comandos:
 Alexandria/
 ├── core/                  # O Cérebro
 │   ├── field/             # → Cognição Geométrica (Riemmanian Manifold)
+│   ├── integrations/      # → [NEW] Integrações Unificadas (AlexandriaCore)
 │   ├── loop/              # → Autonomia (Self-Feeding Loop)
 │   ├── reasoning/         # → VQ-VAE e Mycelial Network
 │   ├── memory/            # → LanceDB e SemanticFileSystem
 │   └── agents/            # → Agentes especializados
 │
 ├── scripts/               # Ferramentas
-│   ├── mass_arxiv_ingest.py  # → Ingestão massiva de papers
-│   ├── system_runner_v2.py   # → Loop principal do sistema
-│   ├── maintenance/          # → Scripts de cura e limpeza
-│   ├── analysis/             # → Ferramentas de diagnóstico
-│   └── testing/              # → Scripts de validação
+│   ├── ingestion/           # → [NEW] Scripts de ingestão
+│   ├── system_runner_v2.py  # → Loop principal do sistema
+│   ├── maintenance/         # → Scripts de cura e limpeza
+│   ├── analysis/            # → Ferramentas de diagnóstico
+│   └── testing/             # → Scripts de validação
+│
+├── tests/                 # [REORGANIZED] Testes Automatizados
+│   └── test_*.py            # → 19 arquivos de teste
+│
+├── interface/             # [NEW] UI Streamlit
+│   └── app.py               # → Control Deck
 │
 ├── docs/                  # Conhecimento
-│   ├── concepts/          # → Teoria profunda (Novos!)
-│   ├── architecture/      # → Diagramas técnicos
+│   ├── concepts/          # → Teoria profunda
+│   ├── core/              # → Manuais técnicos (~40 arquivos)
 │   └── reports/           # → Relatórios gerados pelo agente
 │
 └── .agent/                # Protocolos
@@ -118,7 +125,7 @@ pip install -r requirements.txt
 ### 2. Ingestão de Dados (Alimentar o Cérebro)
 ```bash
 # Baixa e processa papers do ArXiv sobre AI/ML
-python scripts/mass_arxiv_ingest.py --max-papers 100
+python scripts/ingestion/mass_arxiv_ingest.py --max-papers 100
 ```
 
 ### 3. Iniciar o Sistema (Acordar a Mente)
@@ -130,7 +137,7 @@ python scripts/system_runner_v2.py
 ### 4. Verificar Autonomia (Smoke Test)
 ```bash
 # Roda um ciclo completo "Day in the Life" com Symbol Grounding
-python scripts/verify_autonomy.py --topic "autonomy demo"
+python scripts/testing/verify_autonomy.py --topic "autonomy demo"
 ```
 
 ### 4. Modo Manutenção (Opcional)

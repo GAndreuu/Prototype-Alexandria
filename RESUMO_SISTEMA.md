@@ -42,6 +42,14 @@
 ### 📄 `action_agent.md`
 **Resumo**: O "braço" do sistema. Executa ações (`ActionType`) como: Ajuste de parämetros, Rodar simulações, Chamadas de API. Possui um `SecurityController` (rate limit) e `ParameterController` (segurança de estado).
 
+### 3. Otimização de Hardware (i9 + RX 580)
+- **Manifold**: 32 dimensões (reduzido de 384 via PCA) para cálculo geodésico em CPU.
+- **LLM**: Desativado localmente para economia de recursos.
+- **Geodesic Flow**: Otimizado para execução em CPU com projeção dimensional.
+
+### 4. Interface
+- **Streamlit**: Dashboard interativo para visualização de estados.
+
 ### 📄 `bridge_agent.md`
 **Resumo**: O agente metacognitivo. Identifica `KnowledgeGap` (o que não sei) e cria `BridgeRequest` (planos de pesquisa) para preenchê-los. Avalia se novos dados realmente conectam conceitos isolados.
 
@@ -159,6 +167,31 @@
 - **Harvester**: Scraper de Arxiv.
 - **LocalLLM**: TinyLlama-1.1B para inferência rápida na CPU.
 - **Logger**: Loguru estruturado.
+
+---
+
+## 🔌 SEÇÃO: INTEGRATIONS (`core/integrations/`) - [NEW]
+
+### 📄 `alexandria_unified.md`
+**Resumo**: `AlexandriaCore` - Fachada unificada. Um único ponto de entrada para executar ciclos cognitivos completos (Perceive→Reason→Act→Learn). Coordena Geodesic, Nemesis, Abduction, Agents e Loop.
+
+### 📄 `geodesic_bridge_integration.md`
+**Resumo**: Integra o motor de fluxo geodésico ao manifold curvo. Permite computar caminhos semânticos (geodésicas) entre conceitos respeitando a curvatura do espaço.
+
+### 📄 `nemesis_bridge_integration.md`
+**Resumo**: Conecta Active Inference ao manifold. O EFE (Expected Free Energy) agora é calculado via distância geodésica, tornando o agente ciente da topologia.
+
+### 📄 `learning_field_integration.md`
+**Resumo**: Unifica PC, AI e Meta-Hebbian com o campo. Erros de predição são geodésicos, planejamento usa EFE curvo, learning rates dependem da curvatura local.
+
+### 📄 `abduction_compositional_integration.md`
+**Resumo**: Representa gaps como descontinuidades geométricas e hipóteses como caminhos geodésicos que fecham esses gaps.
+
+### 📄 `agents_compositional_integration.md`
+**Resumo**: Enriquece todos os agentes (Action, Bridge, Critic, Oracle) com consciência geométrica.
+
+### 📄 `loop_compositional_integration.md`
+**Resumo**: Fecha o ciclo autônomo. Feedback agora deforma o manifold, tornando caminhos de sucesso mais fáceis de percorrer.
 
 ---
 

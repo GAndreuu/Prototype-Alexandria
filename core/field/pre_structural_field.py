@@ -21,6 +21,7 @@ from .metric import RiemannianMetric, MetricConfig
 from .free_energy_field import FreeEnergyField, FieldConfig, FieldState
 from .geodesic_flow import GeodesicFlow, GeodesicConfig
 from .cycle_dynamics import CycleDynamics, CycleConfig, CycleState
+from .dim_reduction import DimensionalityReducer
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +30,8 @@ logger = logging.getLogger(__name__)
 class PreStructuralConfig:
     """Configuração unificada do Campo Pré-Estrutural."""
     # Manifold
-    base_dim: int = 384
+    base_dim: int = 32  # OTIMIZADO: 32d (geo) vs 384d (semantic)
+    input_dim: int = 384
     max_expansion: int = 64
     
     # Metric
@@ -60,6 +62,8 @@ class PreStructuralField:
         field.connect_vqvae(vqvae_model)
         field.connect_mycelial(mycelial_reasoning)
         
+
+        
         # Trigger um conceito
         state = field.trigger(embedding)
         
@@ -76,10 +80,17 @@ class PreStructuralField:
         # Inicializa componentes
         self._init_components()
         
+        # Redutor de dimensionalidade (384d -> 32d)
+        self.reducer = DimensionalityReducer(
+            input_dim=getattr(self.config, 'input_dim', 384),
+            target_dim=self.config.base_dim
+        )
+        
         # Conexões externas (opcionais)
         self.vqvae = None
         self.mycelial = None
         self.variational_fe = None
+        self.vqvae_bridge = None  # Bridge VQ-VAE <-> Manifold
         
         # Histórico
         self.trigger_count = 0
@@ -133,20 +144,33 @@ class PreStructuralField:
     
     def connect_vqvae(self, vqvae_model):
         """
-        Conecta com modelo VQ-VAE.
+        Conecta com modelo VQ-VAE via Bridge.
         
         Args:
             vqvae_model: Instância de MonolithV13 ou MonolithWiki
         """
-        self.vqvae = vqvae_model
-        
-        # Extrai codebook como anchor points
-        if hasattr(vqvae_model, 'get_codebook'):
-            codebook = vqvae_model.get_codebook()
-            self.manifold.set_anchor_points(codebook)
-            logger.info(f"VQ-VAE conectado: codebook shape {codebook.shape}")
-        else:
-            logger.warning("VQ-VAE não tem get_codebook(), anchor points não setados")
+        try:
+            from .vqvae_manifold_bridge import create_integrated_field, patch_dynamic_manifold
+            
+            # Cria e conecta bridge
+            self.vqvae_bridge = create_integrated_field(vqvae_model)
+            self.vqvae = vqvae_model
+            
+            # Aplica patch no manifold existente
+            patch_dynamic_manifold(self.manifold, self.vqvae_bridge)
+            
+            logger.info("VQ-VAE conectado via VQVAEManifoldBridge (Gap S_lambda -> S_iota fechado)")
+            
+        except ImportError:
+            logger.error("VQVAEManifoldBridge não encontrado. Usando conexão legada.")
+            self.vqvae = vqvae_model
+            # Fallback legado
+            if hasattr(vqvae_model, 'get_codebook'):
+                codebook = vqvae_model.get_codebook()
+                self.manifold.set_anchor_points(codebook)
+        except Exception as e:
+            logger.error(f"Erro ao conectar VQ-VAE via Bridge: {e}")
+            self.vqvae = vqvae_model
     
     def connect_mycelial(self, mycelial_reasoning):
         """
@@ -193,6 +217,13 @@ class PreStructuralField:
         Returns:
             FieldState com campos computados
         """
+        # Redução dimensional (384 -> 32)
+        # O manifold agora vive em 32d para que geodésicas sejam rápidas
+        if embedding.shape[-1] == 384 and self.config.base_dim == 32:
+            embedding_reduced = self.reducer.transform(embedding)
+        else:
+            embedding_reduced = embedding
+
         # Se temos VQ-VAE e não temos codes, codifica
         if codes is None and self.vqvae is not None:
             try:
@@ -207,8 +238,8 @@ class PreStructuralField:
                 logger.warning(f"VQ-VAE encode falhou: {e}")
                 codes = None
         
-        # Embed na variedade
-        point = self.manifold.embed(embedding, codes)
+        # Embed na variedade usando versão reduzida
+        point = self.manifold.embed(embedding_reduced, codes)
         
         # Gera ID
         point_id = f"trigger_{self.trigger_count}"

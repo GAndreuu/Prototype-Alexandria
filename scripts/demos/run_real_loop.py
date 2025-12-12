@@ -51,6 +51,7 @@ class AbductionWrapper:
         self.abduction_engine = abduction_engine
         self.semantic_memory = semantic_memory
         self.nemesis = nemesis  # Integração Nemesis (opcional)
+        self.last_gaps = []  # Armazena gaps para compatibilidade com SelfFeedingLoop
         self.exploration_queries = [
             "neural network compression",
             "predictive coding brain",
@@ -66,6 +67,8 @@ class AbductionWrapper:
     
     def detect_knowledge_gaps(self):
         """Detecta gaps ou gera exploratórios"""
+        result = []
+        
         # Tentar abduction real primeiro
         if self.abduction_engine:
             try:
@@ -75,15 +78,17 @@ class AbductionWrapper:
                     # Usar índice rotativo para explorar diferentes gaps
                     idx = self.current_query_idx % len(gaps)
                     self.current_query_idx += 1
-                    return [self._gap_to_dict(gaps[idx])]
+                    result = [self._gap_to_dict(gaps[idx])]
+                    self.last_gaps = result
+                    return result
             except Exception as e:
                 logger.warning(f"Abduction falhou: {e}")
         
         # Fallback: criar gap exploratório
-        query = self.exploration_queries[self.current_query_idx]
+        query = self.exploration_queries[self.current_query_idx % len(self.exploration_queries)]
         self.current_query_idx = (self.current_query_idx + 1) % len(self.exploration_queries)
         
-        return [{
+        result = [{
             "gap_id": f"explore_{self.current_query_idx}",
             "gap_type": "exploration",
             "description": f"Explorar: {query}",
@@ -91,9 +96,14 @@ class AbductionWrapper:
             "affected_clusters": [query.split()[0]],
             "priority_score": 0.5
         }]
+        self.last_gaps = result
+        return result
     
-    def generate_hypotheses(self, gaps):
+    def generate_hypotheses(self, gaps=None, max_hypotheses=5):
         """Wrapper com lógica inline para garantir execução"""
+        # Se gaps não passado, usar os últimos detectados
+        if gaps is None:
+            gaps = self.last_gaps
         try:
             # CORREÇÃO DE TIPO: Se gaps for dict, normalizar para lista
             if isinstance(gaps, dict):

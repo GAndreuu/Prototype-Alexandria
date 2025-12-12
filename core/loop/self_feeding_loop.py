@@ -297,16 +297,22 @@ class SelfFeedingLoop:
             hypothesis_objs = self.abduction_engine.generate_hypotheses(max_hypotheses=min(len(gaps), 10))
             
             # Convert Hypothesis objects to dicts for executor
+            # Handle both dict and Hypothesis objects (for compatibility with wrappers)
             hypotheses = []
             for h in hypothesis_objs:
-                hypotheses.append({
-                    "id": h.id,
-                    "hypothesis_text": h.hypothesis_text,
-                    "source_cluster": h.source_cluster,
-                    "target_cluster": h.target_cluster,
-                    "confidence_score": h.confidence_score,
-                    "test_requirements": h.test_requirements
-                })
+                if isinstance(h, dict):
+                    # Already a dict (from wrapper)
+                    hypotheses.append(h)
+                else:
+                    # Hypothesis object - convert to dict
+                    hypotheses.append({
+                        "id": h.id,
+                        "hypothesis_text": h.hypothesis_text,
+                        "source_cluster": h.source_cluster,
+                        "target_cluster": h.target_cluster,
+                        "confidence_score": h.confidence_score,
+                        "test_requirements": h.test_requirements
+                    })
             return hypotheses
         except Exception as e:
             logger.error(f"Erro ao gerar hipóteses: {e}")

@@ -50,6 +50,9 @@ docs/core/
 ├── topology/         → Motor de embeddings
 │   └── topology_engine.md
 │
+├── integrations/     → [NOVO] Integrações Unificadas
+│   └── alexandria_unified.md
+│
 └── utils/            → Utilitários
     └── README.md
 ```
@@ -172,15 +175,15 @@ graph TB
 |-----------|---------|--------------|-----------|
 | Agents | 4 | 4 | ✅ 100% |
 | Field | 6 | 6 | ✅ 100% |
+| Integrations | 8 | 1 | ⚠️ 12.5% |
 | Learning | 7 | 7 | ✅ 100% |
 | Loop | 6 | 6 | ✅ 100% |
 | Memory | 3 | 3 | ✅ 100% |
 | Reasoning | 5 | 5 | ✅ 100% |
 | Topology | 1 | 1 | ✅ 100% |
 | Utils | 3 | 3 | ✅ 100% |
-| **Total** | **35** | **35** | **✅ 100%** |
+| **Total** | **43** | **36** | **~84%** |
 
 ---
 
-**Última atualização**: 2025-12-08
-
+**Última atualização**: 2025-12-11

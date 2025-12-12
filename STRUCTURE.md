@@ -12,12 +12,22 @@ Alexandria/
 ├── 📂 core/                      # O NÚCLEO COGNITIVO
 │   ├── agents/                   # [Alpha] Sistema de Agentes
 │   │   ├── action/              # Agentes de Ação (V2)
+│   │   ├── bridge_agent.py      # Bridge Metacognitivo
 │   │   └── critic_agent.py      # Crítico de Hipóteses
 │   │
 │   ├── field/                    # [Beta] Cognição Geométrica
 │   │   ├── manifold.py          # Espaço vetorial dinâmico
 │   │   ├── metric.py            # Métrica Riemanniana
 │   │   └── pre_structural_field.py # Wrapper principal
+│   │
+│   ├── integrations/             # [NEW] Integrações Unificadas
+│   │   ├── alexandria_unified.py # Master Integration (AlexandriaCore)
+│   │   ├── geodesic_bridge_integration.py
+│   │   ├── nemesis_bridge_integration.py
+│   │   ├── learning_field_integration.py
+│   │   ├── abduction_compositional_integration.py
+│   │   ├── agents_compositional_integration.py
+│   │   └── loop_compositional_integration.py
 │   │
 │   ├── learning/                 # [Prod] Nemesis Core
 │   │   ├── active_inference.py  # Agentes FEP
@@ -35,7 +45,7 @@ Alexandria/
 │   │
 │   ├── reasoning/                # [Prod] Motores de Raciocínio
 │   │   ├── mycelial_reasoning.py # Rede Hebbiana
-│   │   ├── symbol_grounding.py   # [NEW] Text -> Node Grounding
+│   │   ├── symbol_grounding.py   # Text -> Node Grounding
 │   │   └── vqvae/               # Compressão Neural (Monolith)
 │   │
 │   ├── topology/                 # [Prod] Gestão de Espaço
@@ -44,41 +54,45 @@ Alexandria/
 │   └── utils/                    # Utilitários Compartilhados
 │
 ├── 📂 scripts/                   # FERRAMENTAS & OPERAÇÃO
-│   ├── mass_arxiv_ingest.py      # → Ingestão de Papers (Principal)
 │   ├── system_runner_v2.py       # → Executor do Sistema (Principal)
+│   ├── entrypoint.sh            # → Docker entrypoint
+│   ├── ingestion/               # [NEW] Ingestão de Dados
+│   │   ├── ingest_incremental.py
+│   │   ├── mass_arxiv_ingest.py
+│   │   └── multi_api_ingest.py
 │   ├── maintenance/              # → Saúde e Limpeza
-│   │   ├── check_mycelial_health.py
-│   │   └── prune_mycelial.py
-│   ├── analysis/                 # → Ciência de Dados
-│   │   ├── alexandria_topics.py
-│   │   └── geometric_topics.py
-│   └── testing/                  # → Validação
-│       └── validate_alexandria.py
+│   ├── analysis/                 # → Ciência de Dados (~25 scripts)
+│   ├── testing/                  # → Validação e Stress Tests
+│   ├── debug/                   # → Diagnóstico (~11 scripts)
+│   ├── demos/                   # → Demonstrações
+│   ├── training/                # → Treino de Modelos
+│   ├── utilities/               # → Helpers
+│   ├── benchmarks/              # → Performance
+│   ├── calibration/             # → Calibração
+│   └── diagnostics/             # → Diagnósticos Profundos
+│
+├── 📂 tests/                     # [REORGANIZED] TESTES AUTOMATIZADOS
+│   ├── conftest.py              # Fixtures pytest
+│   ├── test_*.py                # 19 arquivos de teste
+│   └── data/                    # Dados de teste
+│
+├── 📂 interface/                 # [NEW] UI STREAMLIT
+│   ├── app.py                   # Entrada principal
+│   └── pages/                   # Páginas multipage
 │
 ├── 📂 docs/                      # BASE DE CONHECIMENTO
 │   ├── concepts/                 # [High Value] Teoria Profunda
-│   │   ├── active_autonomy.md
-│   │   ├── geometric_cognition.md
-│   │   └── cognitive_resilience.md
-│   ├── core/                     # Manuais Técnicos
+│   ├── core/                     # Manuais Técnicos (~40 arquivos)
+│   │   ├── integrations/        # [NEW] Docs de Integração
+│   │   └── ...
 │   └── reports/                  # Relatórios Gerados
 │
 ├── 📂 .agent/                    # PROTOCOLO OPERACIONAL
 │   └── workflows/                # /slash-commands
-│       ├── onboarding.md        # /onboarding (Total Recall)
-│       ├── criar-feature.md     # /criar-feature
-│       ├── documentar-projeto.md # /documentar-projeto
-│       ├── review-completo.md   # /review-completo
-│       └── debug-profundo.md    # /debug-profundo
 │
 ├── 📂 .prompts/                  # INSTRUÇÕES DE LLM
-│   ├── analisar_estrutura.md    # Prompt de Análise + Reality Check
-│   └── ...
 │
-├── 📂 modulo_operacional/        # CONCEITOS & DESIGN
-│   └── Cosmic Garden...md       # Inspiração para arquitetura de agentes
-│
-└── � data/                      # PERSISTÊNCIA DE ESTADO
+└── 📂 data/                      # PERSISTÊNCIA DE ESTADO
     ├── library/                 # PDFs crus
     ├── lancedb_store/           # Vetores (Memória Episódica)
     ├── mycelial_state.npz       # Grafo (Raciocínio Persistente)
