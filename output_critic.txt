@@ -1,0 +1,153 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.14, pytest-9.0.2, pluggy-1.6.0 -- /home/G/Área de trabalho/Alexandria/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/G/Área de trabalho/Alexandria
+plugins: anyio-3.7.1
+collecting ... collected 6 items
+
+tests/unit/core/agents/test_critic_agent.py::test_initialization PASSED  [ 16%]
+tests/unit/core/agents/test_critic_agent.py::test_assess_hypothesis_with_api_mock FAILED [ 33%]
+tests/unit/core/agents/test_critic_agent.py::test_assess_hypothesis_fallback FAILED [ 50%]
+tests/unit/core/agents/test_critic_agent.py::test_system_feedback FAILED [ 66%]
+tests/unit/core/agents/test_critic_agent.py::test_system_feedback_async FAILED [ 83%]
+tests/unit/core/agents/test_critic_agent.py::test_export_report PASSED   [100%]
+
+=================================== FAILURES ===================================
+_____________________ test_assess_hypothesis_with_api_mock _____________________
+async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+---------------------------- Captured stderr setup -----------------------------
+INFO:core.agents.critic_agent:🔑 Gemini API Key inicializada: ✅ Configurada
+INFO:core.agents.critic_agent:🔑 Primeiros caracteres da chave: FIRS...
+INFO:core.agents.critic_agent:V10 - Agente Crítico Sênior inicializado
+------------------------------ Captured log setup ------------------------------
+INFO     core.agents.critic_agent:critic_agent.py:104 🔑 Gemini API Key inicializada: ✅ Configurada
+INFO     core.agents.critic_agent:critic_agent.py:106 🔑 Primeiros caracteres da chave: FIRS...
+INFO     core.agents.critic_agent:critic_agent.py:126 V10 - Agente Crítico Sênior inicializado
+_______________________ test_assess_hypothesis_fallback ________________________
+async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+---------------------------- Captured stderr setup -----------------------------
+INFO:core.agents.critic_agent:🔑 Gemini API Key inicializada: ✅ Configurada
+INFO:core.agents.critic_agent:🔑 Primeiros caracteres da chave: FIRS...
+INFO:core.agents.critic_agent:V10 - Agente Crítico Sênior inicializado
+------------------------------ Captured log setup ------------------------------
+INFO     core.agents.critic_agent:critic_agent.py:104 🔑 Gemini API Key inicializada: ✅ Configurada
+INFO     core.agents.critic_agent:critic_agent.py:106 🔑 Primeiros caracteres da chave: FIRS...
+INFO     core.agents.critic_agent:critic_agent.py:126 V10 - Agente Crítico Sênior inicializado
+_____________________________ test_system_feedback _____________________________
+
+critic_agent = <core.agents.critic_agent.CriticAgent object at 0x7ffa0135ced0>
+
+    def test_system_feedback(critic_agent):
+        """Test feedback generation"""
+        # Manually add history
+        assessment = CriticalAssessment(
+            hypothesis_id="h1", truth_score=0.9, truth_category=TruthScore.FACTUAL,
+            risk_level=RiskLevel.BAIXO, confidence_intervals={}, evidence_quality=0.8,
+            contradiction_strength=0.0, reasoning_coherence=0.9, supporting_facts=[],
+            contradicting_facts=[], gaps_in_evidence=[], recommendation="aprovar",
+            suggested_adjustments=[], assessed_at=datetime.now()
+        )
+        critic_agent._update_assessment_history(assessment)
+        critic_agent._update_system_metrics(assessment)
+    
+>       feedback = pytest.mark.asyncio(critic_agent.get_system_feedback)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/unit/core/agents/test_critic_agent.py:85: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+venv/lib64/python3.11/site-packages/_pytest/mark/structures.py:401: in __call__
+    store_mark(unwrapped_func, self.mark, stacklevel=3)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+obj = <bound method CriticAgent.get_system_feedback of <core.agents.critic_agent.CriticAgent object at 0x7ffa0135ced0>>
+mark = Mark(name='asyncio', args=(), kwargs={})
+
+    def store_mark(obj, mark: Mark, *, stacklevel: int = 2) -> None:
+        """Store a Mark on an object.
+    
+        This is used to implement the Mark declarations/decorators correctly.
+        """
+        assert isinstance(mark, Mark), mark
+    
+        from ..fixtures import getfixturemarker
+    
+        if getfixturemarker(obj) is not None:
+            warnings.warn(MARKED_FIXTURE, stacklevel=stacklevel)
+    
+        # Always reassign name to avoid updating pytestmark in a reference that
+        # was only borrowed.
+>       obj.pytestmark = [*get_unpacked_marks(obj, consider_mro=False), mark]
+        ^^^^^^^^^^^^^^
+E       AttributeError: 'method' object has no attribute 'pytestmark'
+
+venv/lib64/python3.11/site-packages/_pytest/mark/structures.py:470: AttributeError
+---------------------------- Captured stderr setup -----------------------------
+INFO:core.agents.critic_agent:🔑 Gemini API Key inicializada: ✅ Configurada
+INFO:core.agents.critic_agent:🔑 Primeiros caracteres da chave: FIRS...
+INFO:core.agents.critic_agent:V10 - Agente Crítico Sênior inicializado
+------------------------------ Captured log setup ------------------------------
+INFO     core.agents.critic_agent:critic_agent.py:104 🔑 Gemini API Key inicializada: ✅ Configurada
+INFO     core.agents.critic_agent:critic_agent.py:106 🔑 Primeiros caracteres da chave: FIRS...
+INFO     core.agents.critic_agent:critic_agent.py:126 V10 - Agente Crítico Sênior inicializado
+__________________________ test_system_feedback_async __________________________
+async def functions are not natively supported.
+You need to install a suitable plugin for your async framework, for example:
+  - anyio
+  - pytest-asyncio
+  - pytest-tornasync
+  - pytest-trio
+  - pytest-twisted
+---------------------------- Captured stderr setup -----------------------------
+INFO:core.agents.critic_agent:🔑 Gemini API Key inicializada: ✅ Configurada
+INFO:core.agents.critic_agent:🔑 Primeiros caracteres da chave: FIRS...
+INFO:core.agents.critic_agent:V10 - Agente Crítico Sênior inicializado
+------------------------------ Captured log setup ------------------------------
+INFO     core.agents.critic_agent:critic_agent.py:104 🔑 Gemini API Key inicializada: ✅ Configurada
+INFO     core.agents.critic_agent:critic_agent.py:106 🔑 Primeiros caracteres da chave: FIRS...
+INFO     core.agents.critic_agent:critic_agent.py:126 V10 - Agente Crítico Sênior inicializado
+=============================== warnings summary ===============================
+venv/lib64/python3.11/site-packages/pydantic/_internal/_fields.py:149
+  /home/G/Área de trabalho/Alexandria/venv/lib64/python3.11/site-packages/pydantic/_internal/_fields.py:149: UserWarning: Field "model_name" has conflict with protected namespace "model_".
+  
+  You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+    warnings.warn(
+
+core/reasoning/abduction_engine.py:21
+  /home/G/Área de trabalho/Alexandria/core/reasoning/abduction_engine.py:21: DeprecationWarning: Importing from 'core.agents.action_agent' is deprecated. Use 'core.agents.action' instead. The entire module has been refactored into a modular structure.
+    from core.agents.action_agent import ActionAgent, ActionType
+
+tests/unit/core/agents/test_critic_agent.py:17
+  /home/G/Área de trabalho/Alexandria/tests/unit/core/agents/test_critic_agent.py:17: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/unit/core/agents/test_critic_agent.py:53
+  /home/G/Área de trabalho/Alexandria/tests/unit/core/agents/test_critic_agent.py:53: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/unit/core/agents/test_critic_agent.py:91
+  /home/G/Área de trabalho/Alexandria/tests/unit/core/agents/test_critic_agent.py:91: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests/unit/core/agents/test_critic_agent.py::test_system_feedback
+  /home/G/Área de trabalho/Alexandria/tests/unit/core/agents/test_critic_agent.py:85: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    feedback = pytest.mark.asyncio(critic_agent.get_system_feedback)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/unit/core/agents/test_critic_agent.py::test_assess_hypothesis_with_api_mock
+FAILED tests/unit/core/agents/test_critic_agent.py::test_assess_hypothesis_fallback
+FAILED tests/unit/core/agents/test_critic_agent.py::test_system_feedback - At...
+FAILED tests/unit/core/agents/test_critic_agent.py::test_system_feedback_async
+=================== 4 failed, 2 passed, 6 warnings in 0.11s ====================

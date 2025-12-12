@@ -103,7 +103,7 @@ def infer_domain_from_tags(tags: List[str]) -> str:
     # TODO: ligar com ontologias reais do Alexandria
     if any("causal" in t for t in tags):
         return "causal_inference"
-    if any("reinforcement" in t for t in tags):
+    if any("reinforcement" in t or "rl" in t for t in tags):
         return "reinforcement_learning"
     if any("bayesian" in t for t in tags):
         return "bayesian_inference"

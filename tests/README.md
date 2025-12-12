@@ -1,51 +1,47 @@
-# 🧪 Tests Directory
+# 🧪 Alexandria QA 2.0
 
-**Purpose**: Automated test suite for Alexandria.
+**Architecture**: Tiered testing strategy for reliability and speed.
 
 ## Structure
+
 ```
 tests/
-├── conftest.py              # Pytest fixtures
-├── data/                    # Test data files
-├── test_action_agent_refactor.py
-├── test_active_inference_integration.py
-├── test_core.py
-├── test_executor_real.py
-├── test_field.py            # [NEW]
-├── test_field_real.py       # [NEW]
-├── test_field_reduction.py  # [NEW]
-├── test_field_simple.py     # [NEW]
-├── test_geodesic_bridge.py  # [NEW]
-├── test_model_loading.py    # [NEW]
-├── test_mycelial.py
-├── test_mycelial_reasoning.py # [NEW]
-├── test_predictive_coding.py  # [NEW]
-├── test_storage.py
-├── test_symbol_grounding.py
-├── test_system_integration.py
-├── test_v2_cycle.py
-└── test_viz.py
+├── unit/                    # 🚀 Fast, Mocked (No DB/LLM)
+│   ├── core/agents/
+│   ├── core/field/
+│   └── ...
+│
+├── integration/             # 🐢 Slower, Real I/O (LanceDB, etc)
+│   ├── core/memory/
+│   ├── core/loop/
+│   └── workflows/
+│
+├── functional/              # 🧪 Real Data / Scenarios
+│   ├── test_manifold_runner.py
+│   └── test_mycelial_runner.py
+│
+└── conftest.py              # Global fixtures & Mocks
 ```
 
 ## Running Tests
+
+### 1. Unit Tests (Fast)
 ```bash
-# All tests
-python -m pytest tests/ -v
-
-# Specific test file
-python -m pytest tests/test_mycelial.py -v
-
-# With coverage
-python -m pytest tests/ --cov=core --cov-report=html
+./venv/bin/python -m pytest tests/unit
 ```
 
-## Test Categories
-| Pattern | Description |
-|---------|-------------|
-| `test_*_integration.py` | Integration tests |
-| `test_field*.py` | Field/manifold tests |
-| `test_*_real.py` | Tests with real data |
+### 2. Integration Tests (Slower)
+```bash
+./venv/bin/python -m pytest tests/integration
+```
 
----
+### 3. Full Suite (Sequential Runner)
+```bash
+./venv/bin/python scripts/testing/sequential_runner.py
+```
+This script runs unit, integration, and functional tests, logging results to `docs/reports/test_logs/`.
 
-**Last Updated**: 2025-12-11
+## Guidelines
+- **Unit**: Mock EVERYTHING external (DB, API). Use `conftest.py` fixtures.
+- **Integration**: Use real DB (temp dir) and real components.
+- **Functional**: End-to-end flows with real data.

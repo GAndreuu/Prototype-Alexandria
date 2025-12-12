@@ -224,7 +224,7 @@ class CriticAgent:
                     score = 0.5  # Fallback para score neutro
                 
                 return {
-                    "score": score,
+                    "truth_score": score,
                     "reasoning": text_response,
                     "raw_response": data
                 }
@@ -456,7 +456,12 @@ class CriticAgent:
         }
         
         # Determinar recomendação
-        recommendation = gemini_response.get("recommendation", "revisar")
+        recommendation = gemini_response.get("recommendation")
+        if not recommendation:
+             # Fallback: derive from score
+             if truth_score >= 0.8: recommendation = "aprovar"
+             elif truth_score >= 0.6: recommendation = "aprovar com cautela"
+             else: recommendation = "revisar"
         
         # Gerar ajustes sugeridos
         suggested_adjustments = self._generate_adjustment_suggestions(
