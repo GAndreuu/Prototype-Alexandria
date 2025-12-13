@@ -1,71 +1,159 @@
-# 🔗 Symbol Grounding
+# 🔗 SymbolGrounder
 
-**Module**: `core/reasoning/symbol_grounding.py`
-**Lines of Code**: ~117
+**Module**: `core/reasoning/symbol_grounding.py`  
+**Lines**: 117  
 **Purpose**: Bridge between symbolic (text) and subsymbolic (neural/graph) representations.
 
 ---
 
-## 🎯 Overview
+## Overview
 
-The **SymbolGrounder** class converts free-form text into discrete **Mycelial Graph nodes**. This is the critical interface between:
-- Human-readable concepts → (e.g., "machine learning")
-- Neural representations → 384D embedding
-- Discrete graph nodes → `[(head_0, code_0), (head_1, code_1), ...]`
+The **SymbolGrounder** converts free-form text into discrete Mycelial Graph nodes through a pipeline:
+
+```
+Text → TopologyEngine → 384D Embedding → VQ-VAE → 4 (head, code) Nodes
+```
 
 ### Pipeline
-```
-Text → TopologyEngine (embed) → 384D Vector → VQ-VAE (quantize) → (head, code) Nodes
-```
+
+| Stage | Component | Output |
+|-------|-----------|--------|
+| 1. Embed | TopologyEngine | 384D vector |
+| 2. Quantize | MycelialVQVAE | [4] indices |
+| 3. Format | — | List[(head, code)] |
 
 ---
 
-## 📊 Core Class
+## Dependencies
 
-### `SymbolGrounder`
+| Import | Purpose |
+|--------|---------|
+| `torch` | Tensor conversion |
+| `numpy` | Array operations |
+| `core.topology.topology_engine` | TopologyEngine for embedding |
+| `core.reasoning.mycelial_reasoning` | MycelialVQVAE for quantization |
+
+---
+
+## Class: SymbolGrounder
+
 ```python
-class SymbolGrounder:
-    def __init__(
-        self,
-        topology_engine: Optional[TopologyEngine] = None,
-        vqvae_wrapper: Optional[MycelialVQVAE] = None
-    )
+SymbolGrounder(
+    topology_engine: Optional[TopologyEngine] = None,
+    vqvae_wrapper: Optional[MycelialVQVAE] = None
+)
+```
+
+### Lazy Initialization
+
+If components not provided, attempts to create them automatically.
+
+### Attributes
+
+| Attribute | Type | Description |
+|-----------|------|-------------|
+| `topology` | `TopologyEngine` | Text → embedding |
+| `vqvae` | `MycelialVQVAE` | Embedding → codes |
+
+### Methods
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `ground` | `(text: str) → List[(int, int)]` | Text → Mycelial nodes |
+| `ground_gap` | `(gap_description: str) → List[Node]` | Wrapper for knowledge gaps |
+
+---
+
+## Communication
+
+```mermaid
+graph LR
+    SG[SymbolGrounder] --> TE[TopologyEngine]
+    SG --> VQVAE[MycelialVQVAE]
     
-    def ground(self, text: str) -> List[Tuple[int, int]]:
-        """Converts text to list of (head, code) tuples."""
-        
-    def ground_gap(self, gap_description: str) -> List[Tuple[int, int]]:
-        """Wrapper for grounding knowledge gap descriptions."""
+    subgraph Consumers
+        Abduction[AbductionEngine] --> SG
+        Bridge[BridgeAgent] --> SG
+        Action[ActionAgent] --> SG
+        PSF[PreStructuralField] --> SG
+    end
 ```
 
 ---
 
-## 🎯 Use Cases
+## Usage Examples
 
 ### Basic Grounding
+
 ```python
 from core.reasoning.symbol_grounding import SymbolGrounder
 
 grounder = SymbolGrounder()
+
+# Ground a concept
 nodes = grounder.ground("machine learning")
 # nodes = [(0, 12), (1, 55), (2, 128), (3, 9)]
+
+for head, code in nodes:
+    print(f"Head {head}: Code {code}")
 ```
 
-### Grounding a Knowledge Gap
+### Grounding Knowledge Gaps
+
 ```python
-gap_desc = "missing connection between causal inference and reinforcement learning"
-nodes = grounder.ground_gap(gap_desc)
+# For AbductionEngine usage
+gap_nodes = grounder.ground_gap("connection between neural networks and biology")
+```
+
+### With Custom Components
+
+```python
+from core.topology.topology_engine import TopologyEngine
+from core.reasoning.mycelial_reasoning import MycelialVQVAE
+
+topology = TopologyEngine()
+vqvae = MycelialVQVAE.load_default()
+
+grounder = SymbolGrounder(
+    topology_engine=topology,
+    vqvae_wrapper=vqvae
+)
 ```
 
 ---
 
-## 🔗 Dependencies
-- **TopologyEngine**: Provides text → embedding conversion.
-- **MycelialVQVAE**: Provides embedding → discrete codes conversion.
+## Internal Details
 
-**Used By**: `AbductionEngine`, `BridgeAgent`, `ActionAgent`.
+### Grounding Flow
+
+```python
+# 1. Embed text
+embeddings = self.topology.encode([text])
+vector = embeddings[0]  # 384D
+
+# 2. Convert to tensor
+t_vector = torch.tensor(vector, dtype=torch.float32)
+
+# 3. Quantize
+indices = self.vqvae.encode(t_vector)  # [4]
+
+# 4. Format as nodes
+nodes = [(h, int(code)) for h, code in enumerate(indices)]
+```
 
 ---
 
-**Last Updated**: 2025-12-11
-**Status**: Production
+## Error Handling
+
+Returns empty list `[]` if:
+- Text is empty
+- TopologyEngine not available
+- VQ-VAE not available
+- Embedding or quantization fails
+
+All errors are logged with appropriate warning/error level.
+
+---
+
+**Last Updated**: 2025-12-13  
+**Version**: 1.0

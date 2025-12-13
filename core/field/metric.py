@@ -20,8 +20,8 @@ de distância geodésica, mesmo que a distância Euclidiana não mude.
 import numpy as np
 from typing import Dict, List, Optional, Tuple, Callable
 from dataclasses import dataclass
-from scipy.sparse import csr_matrix, lil_matrix
-from scipy.ndimage import gaussian_filter
+# from scipy.sparse import csr_matrix, lil_matrix
+# from scipy.ndimage import gaussian_filter
 from concurrent.futures import ThreadPoolExecutor
 import os
 
@@ -31,12 +31,20 @@ from .manifold import DynamicManifold, ManifoldPoint
 @dataclass
 class MetricConfig:
     """Configuração da métrica."""
-    deformation_radius: float = 0.3    # Raio de influência da deformação
-    deformation_strength: float = 0.5  # Força máxima da deformação
-    decay_rate: float = 0.05           # Taxa de relaxamento da métrica
-    min_curvature: float = 0.0         # Curvatura mínima (plano)
-    max_curvature: float = 10.0        # Curvatura máxima
-    grid_resolution: int = 32          # Resolução do grid para campo
+    deformation_radius: float = 0.8         # Raio de influência (aumentado de 0.3)
+    deformation_strength: float = 1.0       # Força máxima da deformação (aumentado)
+    decay_rate: float = 0.05                # Taxa de relaxamento da métrica
+    min_curvature: float = 0.0              # Curvatura mínima (plano)
+    max_curvature: float = 10.0             # Curvatura máxima
+    grid_resolution: int = 32               # Resolução do grid para campo
+    
+    # Novos parâmetros para comportamento melhorado
+    kernel_type: str = "cauchy"             # "gaussian" | "cauchy" (cauchy decai mais lento)
+    mode: str = "attractor"                 # "attractor" | "obstacle"
+                                            # attractor: g = I + w*(I - n⊗n) → favorece caminhos pelo centro
+                                            # obstacle: g = I + w*(n⊗n) → repele caminhos
+    cutoff_multiplier: float = 6.0          # Cutoff = radius * multiplier (aumentado de 3)
+    radius_scale_with_dim: bool = True      # Escala raio com sqrt(dim/10)
 
 
 @dataclass
@@ -83,41 +91,84 @@ class RiemannianMetric:
         """
         Computa tensor métrico g_ij em um ponto específico.
         
+        Fórmula:
+        - mode="attractor": g = I + Σ w_k * (I - n_k⊗n_k)  → favorece caminhos pelo centro
+        - mode="obstacle":  g = I + Σ w_k * (n_k⊗n_k)     → repele caminhos
+        
+        Kernel:
+        - "gaussian": w = intensity * exp(-0.5 * (dist/radius)²)
+        - "cauchy":   w = intensity / (1 + (dist/radius)²)
+        
         Args:
             point: Coordenadas [dim]
             
         Returns:
             Tensor métrico [dim, dim] (simétrico, positivo-definido)
-            
-        Nota: Para alta dimensão, isso é caro. Usar com parcimônia.
-        
-        TODO:
-            - Aproximação esparsa para alta dimensão
-            - Cache para pontos frequentemente acessados
         """
         dim = len(point)
-        
-        # Começa com métrica Euclidiana (identidade)
         g = np.eye(dim)
         
-        # Adiciona deformações
-        for deform in self.deformations:
-            # Distância ao centro da deformação
-            dist = np.linalg.norm(point - deform.center)
+        if not self.deformations:
+            return g
             
-            if dist < deform.radius * 3:  # Corte para eficiência
-                # Deformação Gaussiana
-                weight = deform.intensity * np.exp(-0.5 * (dist / deform.radius) ** 2)
-                
-                # Deforma a métrica na direção do centro
-                # Isso "encurta" distâncias na direção da deformação
-                direction = (deform.center - point)
-                if np.linalg.norm(direction) > 1e-8:
-                    direction = direction / np.linalg.norm(direction)
-                    # Tensor de deformação: aumenta "peso" na direção do centro
-                    D = weight * np.outer(direction, direction)
-                    g = g + D
-                    
+        # Preparar arrays das deformações
+        centers = np.array([d.center for d in self.deformations]) # [N, dim]
+        intensities = np.array([d.intensity for d in self.deformations]) # [N]
+        radii = np.array([d.radius for d in self.deformations]) # [N]
+        
+        # Scaling radius logic
+        if self.config.radius_scale_with_dim:
+             radii = radii * np.sqrt(dim / 10.0)
+             
+        # Cutoff logic
+        base_radius = self.config.deformation_radius
+        if self.config.radius_scale_with_dim:
+            effective_radius = base_radius * np.sqrt(dim / 10.0)
+        else:
+            effective_radius = base_radius
+            
+        cutoff = effective_radius * self.config.cutoff_multiplier
+        
+        # Distances
+        diffs = centers - point[None, :] # [N, dim]
+        dist_sq = np.sum(diffs**2, axis=1) # [N]
+        
+        # Mask
+        mask = (dist_sq > 1e-12) & (dist_sq < cutoff**2)
+        
+        if not np.any(mask):
+            return g
+            
+        # Filter active
+        diffs = diffs[mask]
+        dist_sq = dist_sq[mask]
+        intensities = intensities[mask]
+        radii = radii[mask]
+        
+        # Weights
+        r_sq = radii**2 + 1e-12
+        if self.config.kernel_type == "cauchy":
+            weights = intensities / (1.0 + dist_sq / r_sq)
+        else:
+            weights = intensities * np.exp(-0.5 * dist_sq / r_sq)
+            
+        # Directions n
+        inv_dist = 1.0 / np.sqrt(dist_sq + 1e-12)
+        n = diffs * inv_dist[:, None] # [K, dim]
+        
+        # Accumulate tensors
+        if self.config.mode == "attractor":
+            # g = (1 + sum(w))I - sum(w * n nT)
+            total_weight = np.sum(weights)
+            g *= (1.0 + total_weight)
+            
+            wn = n * weights[:, None]
+            g -= n.T @ wn
+        else:
+            # g = I + sum(w * n nT)
+            wn = n * weights[:, None]
+            g += n.T @ wn
+            
         return g
     
     def metric_tensor_inverse(self, point: np.ndarray) -> np.ndarray:
@@ -250,12 +301,12 @@ class RiemannianMetric:
         
         dim = len(point)
         
-        # Determinante da métrica no ponto
+        # Determinante da métrica no ponto (usando log-det para estabilidade)
         g_center = self.metric_at(point)
-        det_center = np.linalg.det(g_center)
+        sign_center, logdet_center = np.linalg.slogdet(g_center)
         
-        # Laplaciano via diferenças finitas
-        laplacian = 0.0
+        # Laplaciano do log-det via diferenças finitas
+        laplacian_log = 0.0
         for i in range(min(dim, 10)):  # Limita para eficiência
             # Derivada segunda na direção i
             point_plus = point.copy()
@@ -263,14 +314,16 @@ class RiemannianMetric:
             point_minus = point.copy()
             point_minus[i] -= epsilon
             
-            det_plus = np.linalg.det(self.metric_at(point_plus))
-            det_minus = np.linalg.det(self.metric_at(point_minus))
+            sign_plus, logdet_plus = np.linalg.slogdet(self.metric_at(point_plus))
+            sign_minus, logdet_minus = np.linalg.slogdet(self.metric_at(point_minus))
             
-            d2_det = (det_plus - 2*det_center + det_minus) / (epsilon**2)
-            laplacian += d2_det
+            # d²(log det g) / dx²
+            d2_log = (logdet_plus - 2*logdet_center + logdet_minus) / (epsilon**2)
+            laplacian_log += d2_log
             
-        # Curvatura proporcional ao Laplaciano (com sinal)
-        curvature = -laplacian / (det_center + 1e-8)
+        # Curvatura aproximada como negativo do Laplaciano do log-volume
+        # R ~ -Δ(log √|g|) = -0.5 * Δ(log |g|)
+        curvature = -0.5 * laplacian_log
         
         # Clipa para range razoável
         return np.clip(curvature, -self.config.max_curvature, self.config.max_curvature)
@@ -373,6 +426,105 @@ class RiemannianMetric:
                         sum_term += g_inv[k, l] * (dg_i + dg_j - dg_l)
                     gamma[k, i, j] = 0.5 * sum_term
                     
+        return gamma
+
+    def christoffel_at_active(self, x: np.ndarray, active_dims: int, eps: float = 1e-4) -> np.ndarray:
+        """
+        Calcula símbolos de Christoffel apenas para as primeiras `active_dims`.
+        Otimizado com broadcasting e einsum.
+        """
+        dim = len(x)
+        ad = min(active_dims, dim)
+        
+        g = self.metric_at(x)
+        
+        try:
+            # Precisamos do inverso. Se a métrica for muito estável/diagonal, 
+            # g_inv[0:ad, 0:ad] seria o inverso de g[0:ad, 0:ad], mas aqui usamos aproximação.
+            g_inv = np.linalg.inv(g)
+        except np.linalg.LinAlgError:
+            return np.zeros((ad, ad, ad))
+            
+        g_inv_sub = g_inv[:ad, :ad] # [k, l]
+        
+        # Derivadas parciais d g_... / d x_p
+        # p corre 0..ad
+        # matriz g completa é [dim, dim], mas truncamos para [ad, ad] para o cálculo
+        
+        # Vamos calcular dg para todos os p de uma vez?
+        # metric_at é vetorizada sobre Deformations, mas não sobre pontos x múltiplos de forma trivial sem mudar a assinatura.
+        # Loop sobre p (dimensões ativas) é aceitável (ad ~ 20-30), o custo maior era o loop interno i,j,l.
+        
+        dg_tensor = np.zeros((ad, ad, ad)) # [p, i, j] -> d g_ij / d x_p
+        
+        for p in range(ad):
+            x_plus = x.copy(); x_plus[p] += eps
+            x_minus = x.copy(); x_minus[p] -= eps
+            gp = self.metric_at(x_plus)
+            gm = self.metric_at(x_minus)
+            
+            # Truncamos gp e gm para [ad, ad]
+            diff = (gp[:ad, :ad] - gm[:ad, :ad]) / (2 * eps)
+            dg_tensor[p] = diff
+            
+        # Agora temos dg[p, i, j] = ∂_p g_ij
+        # Formula: Γ^k_ij = 0.5 * g^kl * (∂_i g_jl + ∂_j g_il - ∂_l g_ij)
+        # 
+        # Indices:
+        # k -> output 0
+        # i -> output 1
+        # j -> output 2
+        # l -> summation
+        
+        # Term 1: ∂_i g_jl -> dg[i, j, l]
+        # Term 2: ∂_j g_il -> dg[j, i, l] = dg[j, l, i] (simetria de g_il) -> mas no tensor dg é p, row, col.
+        #                  -> dg tensor é [p, row, col]. 
+        #                  -> ∂_j g_il é derivada em j da entrada il. -> dg[j, i, l]
+        # Term 3: ∂_l g_ij -> dg[l, i, j]
+        
+        # Vamos construir o tensor "S" (soma dos termos parentesis)
+        # S[i, j, l] = dg[i, j, l] + dg[j, i, l] - dg[l, i, j]
+        
+        # dg_tensor é [p, r, c].
+        # Term1: i é index p, j é r, l é c -> dg_tensor
+        # Term2: p=j, r=i, c=l -> transpose(0, 1) do dg_tensor?
+        #        dg[j, i, l]. dg_tensor[j, i, l]. 
+        #        Precisamos alinhar eixos.
+        #        dg_tensor[a, b, c] -> derivada em a de g_bc.
+        #        Queremos tensor [i, j, l].
+        #        T1: dg[i, j, l] -> dg_tensor[i, j, l] (Elementwise)
+        #        T2: dg[j, i, l] -> dg_tensor[j, i, l] (Permute 0,1 dos indices i,j)
+        #        T3: dg[l, i, j] -> dg_tensor[l, i, j] (Permute 0,2 dos indices i,l ?)
+        
+        T1 = dg_tensor # [i, j, l]
+        T2 = np.transpose(dg_tensor, (1, 0, 2)) # [j, i, l] -> swap p and r. p=j, r=i, c=l. Correct.
+        T3 = np.transpose(dg_tensor, (2, 1, 0)) # [l, r, p] -> wait.
+             # dg[l, i, j]. p=l, r=i, c=j.
+             # dg_tensor original: [p, r, c].
+             # Queremos mapear [i, j, l] para [p, r, c] onde p=l, r=i, c=j.
+             # Entao a permutaçao de (0,1,2) [p,r,c] que leva a (l, i, j) ?
+             # Não.
+             # T3[i, j, l] deve vir de dg_tensor[l, i, j].
+             # dg_tensor[l, i, j] tem índices (l, i, j).
+             # Se eu quero um array T3 onde T3[i, j, l] == dg_tensor[l, i, j],
+             # T3 é transposta de dg_tensor?
+             # dg_tensor[A, B, C]. T3[B, C, A] = dg_tensor[A, B, C]. 
+             # Sim, T3[i, j, l] com i=B, j=C, l=A.
+             # Então transpose (1, 2, 0).
+             
+        T3 = np.transpose(dg_tensor, (1, 2, 0)) # [r, c, p] -> [i, j, l].
+             # Check: T3[i, j, l] (indices 0,1,2 na nova matriz)
+             # map to old: 0->1(r=i), 1->2(c=j), 2->0(p=l).
+             # dg_tensor[l, i, j]. Correct.
+             
+        S = T1 + T2 - T3 # [i, j, l]
+        
+        # Agora contrair com g_inv[k, l]
+        # Gamma[k, i, j] = 0.5 * sum_l (g_inv[k, l] * S[i, j, l])
+        # Einsum: kl, ijl -> kij
+        
+        gamma = 0.5 * np.einsum('kl,ijl->kij', g_inv_sub, S)
+        
         return gamma
     
     def _christoffel_sparse(self, point: np.ndarray, epsilon: float) -> np.ndarray:

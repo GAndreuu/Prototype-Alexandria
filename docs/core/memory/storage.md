@@ -1,50 +1,85 @@
-# 💾 LanceDB Storage
+# 💾 LanceDBStorage
 
 **Module**: `core/memory/storage.py`  
-**Lines of Code**: 160  
-**Purpose**: Armazenamento vetorial persistente de alta performance
+**Lines**: 160  
+**Purpose**: High-performance vector storage on disk using LanceDB.
 
 ---
 
-## 🎯 Overview
+## Overview
 
-O LanceDB Storage substitui armazenamento JSON por um **banco vetorial columnar** que permite busca eficiente em milhões de vetores com baixo uso de RAM. Utiliza LanceDB internamente.
+The **LanceDBStorage** replaces JSON file storage with LanceDB (columnar format), enabling efficient search on millions of vectors with low RAM usage.
+
+### Benefits
+
+| Feature | Description |
+|---------|-------------|
+| **Columnar** | Efficient disk-based storage |
+| **ANN** | Approximate nearest neighbor search |
+| **Filtering** | SQL-like WHERE clauses |
+| **Persistent** | Auto-save to disk |
 
 ---
 
-## 🏗️ Architecture
+## Dependencies
 
-```mermaid
-graph LR
-    Input[Embeddings 384D] --> LDB[LanceDB]
-    LDB --> Disk[(Disco)]
-    Query[Query Vector] --> LDB
-    LDB --> Results[Top-K Results]
-    
-    style LDB fill:#4CAF50,color:#fff
+| Import | Purpose |
+|--------|---------|
+| `lancedb` | Vector database |
+| `pyarrow` | Schema definition |
+| `numpy` | Vector operations |
+| `config.settings` | DATA_DIR path |
+
+---
+
+## Class: LanceDBStorage
+
+```python
+LanceDBStorage(db_path: str = None)
+# Default: data/lancedb_store
 ```
 
----
-
-## 📊 Schema
+### Schema
 
 ```python
 schema = pa.schema([
-    pa.field("vector", pa.list_(pa.float32(), 384)),  # Embedding
-    pa.field("id", pa.string()),                       # ID único
-    pa.field("content", pa.string()),                  # Conteúdo textual
-    pa.field("source", pa.string()),                   # Origem
-    pa.field("modality", pa.string()),                 # TEXT/VISUAL
-    pa.field("timestamp", pa.string()),                # ISO datetime
-    pa.field("metadata", pa.string())                  # JSON extra
+    pa.field("vector", pa.list_(pa.float32(), 384)),
+    pa.field("id", pa.string()),
+    pa.field("content", pa.string()),
+    pa.field("source", pa.string()),
+    pa.field("modality", pa.string()),
+    pa.field("timestamp", pa.string()),
+    pa.field("metadata", pa.string())  # JSON string
 ])
+```
+
+### Methods
+
+| Method | Signature | Description |
+|--------|-----------|-------------|
+| `add` | `(ids, vectors, contents, sources, modalities, extra_metadata)` | Add items to database |
+| `search` | `(query_vector, limit, filter_sql) → List[Dict]` | ANN vector search |
+| `count` | `() → int` | Number of rows |
+| `_init_table` | `()` | Create or load table |
+
+---
+
+## Communication
+
+```mermaid
+graph LR
+    LDB[LanceDBStorage] --> Lance[lancedb]
+    
+    subgraph Consumers
+        SFS[SemanticFileSystem] --> LDB
+    end
 ```
 
 ---
 
-## 🎯 Use Cases
+## Usage Examples
 
-### 1. Adicionar Memórias
+### Add Items
 
 ```python
 from core.memory.storage import LanceDBStorage
@@ -52,39 +87,50 @@ from core.memory.storage import LanceDBStorage
 storage = LanceDBStorage()
 
 storage.add(
-    ids=["mem_001", "mem_002"],
-    vectors=[embedding1, embedding2],
-    contents=["texto 1", "texto 2"],
-    sources=["doc.pdf", "doc.pdf"],
-    modalities=["TEXT", "TEXT"]
+    ids=["doc_1", "doc_2"],
+    vectors=[[0.1, 0.2, ...], [0.3, 0.4, ...]],  # 384D
+    contents=["Text 1", "Text 2"],
+    sources=["/path/doc1.txt", "/path/doc2.txt"],
+    modalities=["TEXTUAL", "TEXTUAL"],
+    extra_metadata=[{"type": "GEN"}, {"type": "SCI"}]
 )
 ```
 
-### 2. Busca Vetorial
+### Search
 
 ```python
 results = storage.search(
-    query_vector=query_embedding,
-    limit=10,
-    filter_sql="modality = 'TEXT'"
+    query_vector=[0.1, 0.2, ...],  # 384D
+    limit=5,
+    filter_sql="modality = 'TEXTUAL'"
 )
 
 for r in results:
-    print(f"{r['content'][:50]}... (relevance: {r['relevance']:.2f})")
+    print(f"{r['id']}: {r['content'][:50]}...")
+    print(f"  Relevance: {r['relevance']:.3f}")
+```
+
+### Count
+
+```python
+total = storage.count()
+print(f"Total items: {total}")
 ```
 
 ---
 
-## 📈 Performance
+## Internal Details
 
-| Operation | Time | Notes |
-|-----------|------|-------|
-| **add()** | ~5ms/item | Batch supported |
-| **search()** | ~10ms | Top-10 in 1M vectors |
-| **count()** | ~1ms | Metadata only |
+### Relevance Calculation
+
+```python
+# LanceDB returns L2 distance (lower is better)
+# Convert to relevance (0 to 1)
+dist = r.get('_distance', 1.0)
+relevance = max(0, 1 - (dist / 2))
+```
 
 ---
 
-**Last Updated**: 2025-12-07  
-**Version**: 1.0  
-**Status**: Production
+**Last Updated**: 2025-12-13  
+**Version**: 1.0

@@ -1,8 +1,19 @@
-# 🔮 Abduction Engine
+# 🔮 AbductionEngine
 
 **Module**: `core/reasoning/abduction_engine.py`  
-**Lines of Code**: 999  
-**Purpose**: Automatic hypothesis generation for knowledge expansion
+**Lines**: 999  
+**Purpose**: Automatic hypothesis generation for knowledge expansion.
+
+---
+
+## Dependencies
+
+| Import | Purpose |
+|--------|---------|
+| `core.reasoning.causal_reasoning` | CausalEngine |
+| `core.memory.semantic_memory` | SemanticFileSystem |
+| `core.agents.action_agent` | ActionAgent |
+| `core.reasoning.neural_learner` | V2Learner |
 
 ---
 

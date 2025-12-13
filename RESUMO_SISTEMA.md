@@ -1,217 +1,145 @@
-# 📚 ALEXANDRIA: SYSTEM CONTEXT ANTHOLOGY (V2 - COMPREHENSIVE)
+# 📚 ALEXANDRIA: RESUMO DO SISTEMA
 
-> **META-INSTRUÇÃO PARA AGENTES IA**: Este documento é uma fusão completa de TODA a documentação do sistema Alexandria. Ele substitui a necessidade de acessar a pasta `docs/`. Cada seção abaixo corresponde a um arquivo de documentação real.
+> **Versão**: 2.0 | **Última Atualização**: 2025-12-13
 
----
+## 🎯 Visão Geral
 
-# 🏛️ CAPÍTULO 1: VISÃO & ESTRUTURA (ROOT)
+Alexandria é um **Sistema de Conhecimento Auto-Evolutivo** que combina:
+- **Compressão Neural** (VQ-VAE: 384D → 4 bytes)
+- **Geometria Riemanniana** (manifold dinâmico com geodésicas)
+- **Active Inference** (exploração autônoma baseada em Free Energy)
+- **Rede Hebbiana** (600k+ conexões persistentes)
 
-## 📄 `README.md` (A Visão)
-**Resumo**: Alexandria é uma **Arquitetura Cognitiva Sinergética** e **Biocameral**. Ela separa memória bruta (LanceDB) de raciocínio (Mycelial Network). Seus 3 pilares são:
-1.  **Raciocínio Micelial**: Aprendizado Hebbiano (persistência de conexões).
-2.  **Cognição Geométrica**: Pensamento como deformação de espaço (Riemannian Manifold).
-3.  **Autonomia Ativa**: Self-Feeding Loop (sonho e auto-correção).
-**Status**: Operacional.
-
-## 📄 `STRUCTURE.md` (O Território)
-**Resumo**: Mapeamento da árvore de diretórios.
-- `core/`: O código fonte principal (Agents, Field, Learning, Loop, Memory, Reasoning).
-- `scripts/`: Ferramentas de operação (Ingestão, Runner, Manutenção).
-- `.agent/`: Protocolos operacionais e workflows.
-- `docs/`: A base de conhecimento original.
-
----
-
-# 💡 CAPÍTULO 2: CONCEITOS TEÓRICOS (`docs/concepts/`)
-
-## 📄 `geometric_cognition.md`
-**Resumo**: Define o "Campo Pré-Estrutural". O sistema não usa apenas vetores estáticos, mas um **Dynamic Manifold** que se expande e contrai. O pensamento é a navegação por **geodésicas** (menor resistência) neste espaço curvo, onde tópicos densos têm "gravidade" alta.
-
-## 📄 `active_autonomy.md`
-**Resumo**: Define o "Self-Feeding Loop". O sistema transforma o ciclo passivo (Input→Output) em ativo (Input→Sonho→Ação). Usa agentes (Scout, Weaver, Critic) para detectar gaps de conhecimento e gerar hipóteses automaticamente.
-
-## 📄 `cognitive_resilience.md`
-**Resumo**: Explica a persistência da "Mente" mesmo após "Lobotomia" (Memory Wipe). Devido à quantização determinística (VQ-VAE), a rede micelial retém as conexões entre conceitos mesmo se os textos originais forem deletados. "Esquece onde leu, lembra o que aprendeu".
-
----
-
-# 🧠 CAPÍTULO 3: CORE DOCUMENTATION (`docs/core/`)
-
-## 🤖 SEÇÃO: AGENTS (`core/agents/`)
-
-### 📄 `action_agent.md`
-**Resumo**: O "braço" do sistema. Executa ações (`ActionType`) como: Ajuste de parämetros, Rodar simulações, Chamadas de API. Possui um `SecurityController` (rate limit) e `ParameterController` (segurança de estado).
-
-### 3. Otimização de Hardware (i9 + RX 580)
-- **Manifold**: 32 dimensões (reduzido de 384 via PCA) para cálculo geodésico em CPU.
-- **LLM**: Desativado localmente para economia de recursos.
-- **Geodesic Flow**: Otimizado para execução em CPU com projeção dimensional.
-
-### 4. Interface
-- **Streamlit**: Dashboard interativo para visualização de estados.
-
-### 📄 `bridge_agent.md`
-**Resumo**: O agente metacognitivo. Identifica `KnowledgeGap` (o que não sei) e cria `BridgeRequest` (planos de pesquisa) para preenchê-los. Avalia se novos dados realmente conectam conceitos isolados.
-
-### 📄 `critic_agent.md`
-**Resumo**: A "consciência". Usa Gemini para avaliar hipóteses. Gera `TruthScore` (veracidade) e `RiskLevel` (segurança). Implementa auto-regulação: se aprovar demais, diminui a temperatura do sistema.
-
-### 📄 `neural_oracle.md`
-**Resumo**: O sintetizador híbrido. Usa "Cortex of Experts": Tático (TinyLlama local, rápido/privado) e Estratégico (Gemini cloud, complexo). Realiza "Semantic Collision" (fusão de ideias).
+```mermaid
+graph TB
+    subgraph Entrada["📥 Entrada"]
+        Docs[Documentos]
+        Queries[Queries]
+    end
+    
+    subgraph Core["🧠 Core (69 módulos)"]
+        direction LR
+        Field["Field<br>Geometria"]
+        Learning["Learning<br>Active Inference"]
+        Reasoning["Reasoning<br>VQ-VAE + Mycelial"]
+        Loop["Loop<br>Autonomia"]
+    end
+    
+    subgraph Saida["📤 Saída"]
+        Results[Resultados]
+        Hypo[Hipóteses]
+    end
+    
+    Entrada --> Core --> Saida
+    Field <--> Learning
+    Learning <--> Reasoning
+    Reasoning <--> Loop
+```
 
 ---
 
-## 🌌 SEÇÃO: FIELD (`core/field/`)
+## 🏗️ Arquitetura em Camadas
 
-### 📄 `README.md` (Field Overview)
-**Resumo**: Wrapper que unifica geometria diferencial e VQ-VAE. Metáfora: "Gravidade Cognitiva". Componentes: Manifold, Métrica, Energia Livre.
+### 1. 🌌 Field Layer (Cognição Geométrica)
+| Módulo | Linhas | Função |
+|--------|-------:|--------|
+| `manifold.py` | 402 | Espaço vetorial dinâmico com expansão/contração |
+| `metric.py` | 612 | Métrica Riemanniana com deformação local |
+| `geodesic_flow.py` | 265 | Integração de geodésicas (shooting method) |
+| `free_energy_field.py` | 500 | Campo F(x) = E(x) - T·S(x) |
 
-### 📄 `manifold.md`
-**Resumo**: `DynamicManifold`. Um espaço vetorial que pode adicionar/remover dimensões dinamicamente. Mantém pontos âncora (códigos VQ-VAE) para estruturar o espaço.
+### 2. 🎓 Learning Layer (Inferência Ativa)
+| Módulo | Linhas | Função |
+|--------|-------:|--------|
+| `active_inference.py` | 1,486 | Agente EFE com 8 tipos de ação |
+| `free_energy.py` | 1,257 | Variational + Expected Free Energy |
+| `predictive_coding.py` | 981 | Hierarquia preditiva com precisão |
+| `meta_hebbian.py` | 784 | Plasticidade ABCD evolutiva |
 
-### 📄 `metric.md`
-**Resumo**: `RiemannianMetric`. Calcula distâncias não-euclideanas. Implementa deformação local: $g_{ij}(x) = \delta_{ij} + \sum w \cdot \exp(-r^2)$.
+### 3. 🔬 Reasoning Layer (VQ-VAE + Mycelial)
+| Módulo | Linhas | Função |
+|--------|-------:|--------|
+| `vqvae/layers.py` | 170 | Product Quantizer (4 heads × 256 codes) |
+| `vqvae/model.py` | 96 | MonolithV13 encoder/decoder |
+| `mycelial_reasoning.py` | 568 | Grafo Hebbiano esparso |
+| `abduction_engine.py` | ~300 | Detecção de gaps e geração de hipóteses |
 
-### 📄 `free_energy_field.md`
-**Resumo**: `FreeEnergyField`. Calcula $F(x) = E(x) - TS(x)$. Encontra atratores (mínimos locais) que representam conceitos estáveis.
+### 4. 🔄 Loop Layer (Autonomia)
+| Módulo | Linhas | Função |
+|--------|-------:|--------|
+| `self_feeding_loop.py` | 502 | Orquestrador do ciclo autônomo |
+| `hypothesis_executor.py` | ~250 | Execução de ações |
+| `feedback_collector.py` | ~200 | Coleta de feedback |
+| `action_selection.py` | ~300 | Seleção via softmax sobre -EFE |
 
-### 📄 `geodesic_flow.md`
-**Resumo**: `GeodesicFlow`. Resolve a equação geodésica $\ddot{x} + \Gamma \dot{x}\dot{x} = 0$. Simula o fluxo de pensamento seguindo a curvatura do campo.
+### 5. 💾 Memory Layer (Persistência)
+| Módulo | Linhas | Função |
+|--------|-------:|--------|
+| `storage.py` | 160 | LanceDB wrapper (20k+ vetores) |
+| `semantic_memory.py` | ~400 | Sistema de indexação multimodal |
 
-### 📄 `cycle_dynamics.md`
-**Resumo**: `CycleDynamics`. O ciclo cardíaco do campo: Expansão (novas dims) → Configuração (annealing) → Compressão (cristalização em grafo).
-
----
-
-## 🎓 SEÇÃO: LEARNING (`core/learning/`)
-
-### 📄 `active_inference.md`
-**Resumo**: Agente baseado em Friston. Minimiza `Expected Free Energy` ($G = Risk + Ambiguity$). Escolhe ações epistêmicas (explorar) para reduzir incerteza e pragmáticas (explotar) para atingir objetivos.
-
-### 📄 `predictive_coding.md`
-**Resumo**: Rede hierárquica (Input → L1 → L2 → Code). Propaga **Erro** para cima e **Predição** para baixo. Aprendizado ocorre minimizando o erro de predição localmente.
-
-### 📄 `meta_hebbian.md`
-**Resumo**: Plasticidade evolutiva. Não aprende apenas pesos, mas a **regra de atualização** ($\Delta w = \eta(A \cdot pre \cdot post + ...)$). Usa estratégias evolutivas para otimizar a regra ABCD.
-
-### 📄 `free_energy.md`
-**Resumo**: Métrica unificadora. `VariationalFreeEnergy` para percepção ($F = Complexity - Accuracy$) e `ExpectedFreeEnergy` para ação.
-
-### 📄 `integration_layer.md`
-**Resumo**: Glue code. Resolve conflitos entre módulos (ex: adapta matrizes densas do Meta-Hebbian para grafos esparsos do Mycelial). Gerencia Resource Profiles (LITE, BALANCED, PERFORMANCE).
-
-### 📄 `NEMESIS_MANUAL.md`
-**Resumo**: Manual do subsistema "Cognitive Nemesis". Define 3 personas: Scout (Explorador), Judge (Crítico), Weaver (Conector). Otimizado para hardware de consumo (Lite Mode).
-
----
-
-## 🔄 SEÇÃO: LOOP (`core/loop/`)
-
-### 📄 `self_feeding_loop.md`
-**Resumo**: Orquestrador principal. Loop contínuo: Detectar Gaps → Gerar Hipóteses → Executar Ações → Coletar Feedback → Atualizar Modelos.
-
-### 📄 `nemesis_integration.md`
-**Resumo**: Cérebro executivo do loop. Seleciona a melhor ação baseada em EFE. Fecha o ciclo de feedback atualizando o modelo generativo com recompensas.
-
-### 📄 `active_inference_adapter.md`
-**Resumo**: Adaptador que conecta a teoria da Active Inference (FEP) com o loop pragmático. Implementa o protocolo `ActionSelectionAdapter` para permitir que o sistema alterne entre heurísticas e inferência profunda.
-
-### 📄 `action_selection.md`
-**Resumo**: Protocolo unificado de tipos de ação (`QUERY_SEARCH`, `BRIDGE_CONCEPTS`, etc.). Define o contrato para qualquer agente que queira controlar o corpo do Alexandria.
+### 6. 🔗 Integration Layer (Unificação)
+| Módulo | Linhas | Função |
+|--------|-------:|--------|
+| `alexandria_unified.py` | 718 | AlexandriaCore - fachada unificada |
+| `geodesic_bridge_integration.py` | ~300 | Integração geodésica-manifold |
+| `learning_field_integration.py` | ~350 | Unificação PC + AI + campo |
 
 ---
 
-## 💾 SEÇÃO: MEMORY (`core/memory/`)
+## 📊 Estatísticas
 
-### 📄 `semantic_memory.md`
-**Resumo**: `SemanticFileSystem`. Gerencia indexação multimodal. Pipeline: PDF/Imagem → Router → Chunking Inteligente → Embedding 384D → LanceDB.
-
-### 📄 `storage.md`
-**Resumo**: Wrapper do LanceDB. Garante persistência eficiente, busca vetorial e armazenamento de metadados.
-
-### 📄 `v11_vision_encoder.md`
-**Resumo**: Encoder visual hierárquico. Transforma imagens em vetores 384D compatíveis com o espaço semântico de texto.
-
----
-
-## 🔬 SEÇÃO: REASONING (`core/reasoning/`)
-
-### 📄 `vqvae.md`
-**Resumo**: "O Codec do Cérebro". Comprime vetores 384D em 4 códigos discretos (4 bytes). Permite que o sistema manipule conceitos abstratos simbolicamente. Modelo atual: MonolithWiki (96% compressão).
-
-### 📄 `mycelial_reasoning.md`
-**Resumo**: "A Rede Neural". Grafo esparso onde nós são pares (Head, Code). Aprendizado Hebbiano ("Fire together, wire together"). Raciocínio é a propagação de ativação neste grafo.
-
-### 📄 `abduction_engine.md`
-**Resumo**: Motor de hipóteses. Detecta 3 tipos de gaps: Cluster Órfão, Conexão Ausente, Corrente Quebrada. Gera hipóteses usando templates e valida via coerência semântica.
-
-### 📄 `causal_reasoning.md`
-**Resumo**: Grafo Causal. Tenta inferir direção (A causa B) usando padrões temporais em textos e verbos causais. Detecta variáveis latentes (causas ocultas de correlação).
-
-### 📄 `symbol_grounding.md`
-**Resumo**: O elo perdido entre texto e grafo. Converte strings arbitrárias ("autonomy") em códigos VQ-VAE concretos ((Head, Code)). Permite que o executor realize ações precisas no grafo baseadas em comandos abstratos.
+| Métrica | Valor |
+|---------|------:|
+| **Módulos Python** | 69 |
+| **Documentação** | 60+ arquivos |
+| **Testes Unitários** | 293 (100% passing) |
+| **Conexões Mycelial** | 600k+ |
+| **Vetores LanceDB** | 20k+ |
 
 ---
 
-## 🗺️ SEÇÃO: TOPOLOGY (`core/topology/`)
+## ⚡ Ciclo Cognitivo
 
-### 📄 `topology_engine.md`
-**Resumo**: Gerenciador do espaço 384D. Wrapper do `sentence-transformers`. Realiza Clustering (K-Means) e Redução de Dimensionalidade (UMAP/PCA).
+```mermaid
+graph LR
+    subgraph Ciclo["🔄 Ciclo Self-Feeding"]
+        A[1. Detectar Gaps] --> B[2. Gerar Hipóteses]
+        B --> C[3. Executar Ações]
+        C --> D[4. Coletar Feedback]
+        D --> E[5. Atualizar Modelo]
+        E --> A
+    end
+```
 
----
-
-## 🛠️ SEÇÃO: UTILS (`core/utils/`)
-
-### 📄 `README.md` (Utils)
-**Resumo**:
-- **Harvester**: Scraper de Arxiv.
-- **LocalLLM**: TinyLlama-1.1B para inferência rápida na CPU.
-- **Logger**: Loguru estruturado.
-
----
-
-## 🔌 SEÇÃO: INTEGRATIONS (`core/integrations/`) - [NEW]
-
-### 📄 `alexandria_unified.md`
-**Resumo**: `AlexandriaCore` - Fachada unificada. Um único ponto de entrada para executar ciclos cognitivos completos (Perceive→Reason→Act→Learn). Coordena Geodesic, Nemesis, Abduction, Agents e Loop.
-
-### 📄 `geodesic_bridge_integration.md`
-**Resumo**: Integra o motor de fluxo geodésico ao manifold curvo. Permite computar caminhos semânticos (geodésicas) entre conceitos respeitando a curvatura do espaço.
-
-### 📄 `nemesis_bridge_integration.md`
-**Resumo**: Conecta Active Inference ao manifold. O EFE (Expected Free Energy) agora é calculado via distância geodésica, tornando o agente ciente da topologia.
-
-### 📄 `learning_field_integration.md`
-**Resumo**: Unifica PC, AI e Meta-Hebbian com o campo. Erros de predição são geodésicos, planejamento usa EFE curvo, learning rates dependem da curvatura local.
-
-### 📄 `abduction_compositional_integration.md`
-**Resumo**: Representa gaps como descontinuidades geométricas e hipóteses como caminhos geodésicos que fecham esses gaps.
-
-### 📄 `agents_compositional_integration.md`
-**Resumo**: Enriquece todos os agentes (Action, Bridge, Critic, Oracle) com consciência geométrica.
-
-### 📄 `loop_compositional_integration.md`
-**Resumo**: Fecha o ciclo autônomo. Feedback agora deforma o manifold, tornando caminhos de sucesso mais fáceis de percorrer.
+**Fórmula Central (Expected Free Energy):**
+```
+G(π) = Risk + Ambiguity
+     = D_KL[Q(o|π) || P(o)] + E[H(o|s,π)]
+```
 
 ---
 
-# ⚙️ CAPÍTULO 4: PROTOCOLOS (.agent/workflows/)
+## 🚀 Quick Reference
 
-## 📄 `onboarding.md`
-**Resumo**: Workflow de "Total Recall". O agente lê todos os arquivos `.md` do projeto para carregar contexto total antes de começar a trabalhar.
-
-## 📄 `criar-feature.md`
-**Resumo**: Workflow de Scaffold. Cria automaticamente a estrutura de arquivos (`core/`, `tests/`, `docs/`) para uma nova feature, garantindo padronização.
-
-## 📄 `documentar-projeto.md`
-**Resumo**: Workflow de documentação. Analisa código não documentado e gera arquivos `.md` correspondentes.
-
-## 📄 `review-completo.md`
-**Resumo**: Workflow de CI/CD manual. Roda testes, linter, verifica segurança e gera relatório antes de merges.
+| Tarefa | Comando |
+|--------|---------|
+| Instalar | `pip install -r requirements.txt` |
+| Ingerir | `python scripts/ingestion/mass_arxiv_ingest.py` |
+| Executar | `python scripts/system_runner_v2.py` |
+| Testar | `python -m pytest tests/unit/core/ -v` |
+| Interface | `streamlit run interface/app.py` |
 
 ---
 
-# 🧪 CAPÍTULO 5: VALIDAÇÃO
+## 📁 Estrutura Principal
 
-## 📄 `scripts/validate_alexandria.md`
-**Resumo**: Documentação do script de prova de conceito. Compara o algoritmo Alexandria (Field+Mycelial) contra um Baseline (K-Means). Métricas: Pureza de Cluster, Recuperação de Conexões, Desvio Geodésico.
+```
+Alexandria/
+├── core/           # 69 módulos (field, learning, reasoning, loop, memory, agents, integrations)
+├── tests/          # 293 testes unitários
+├── docs/           # 60+ arquivos de documentação
+├── scripts/        # Ferramentas operacionais
+├── interface/      # UI Streamlit
+└── data/           # Persistência (LanceDB, mycelial_state, modelos)
+```

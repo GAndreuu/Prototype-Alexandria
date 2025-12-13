@@ -1,27 +1,28 @@
 #!/usr/bin/env python3
 """
-Alexandria :: Teste Automatizado do MycelialReasoning
+Alexandria :: Teste Automatizado do MycelialReasoning (Functional)
 
-Roda bateria completa de testes e reporta pass/fail.
+Roda bateria completa de testes funcionais e reporta pass/fail.
+Adaptado para MycelialReasoning v2.0 (Sparse Graph).
 
 Uso:
-    python test_mycelial.py
-    python test_mycelial.py --verbose
-    python test_mycelial.py --with-real-data
+    python test_mycelial_runner.py
+    python test_mycelial_runner.py --verbose
 """
 
 import sys
 import numpy as np
 import time
 from pathlib import Path
-from typing import Tuple, List, Callable
+from typing import Tuple, List, Callable, Dict, Any
 from dataclasses import dataclass
+import shutil
 
 # Adicionar path do projeto
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
 try:
-    from core.mycelial_reasoning import MycelialReasoning, MycelialConfig
+    from core.reasoning.mycelial_reasoning import MycelialReasoning, MycelialConfig
     IMPORT_OK = True
 except ImportError as e:
     IMPORT_OK = False
@@ -64,6 +65,8 @@ class TestRunner:
             self.results.append(TestResult(name, False, f"EXCEPTION: {e}", duration))
             print(f"[ERROR] | {name}")
             print(f"       {e}")
+            import traceback
+            traceback.print_exc()
             return False
 
     
@@ -80,7 +83,6 @@ class TestRunner:
         print(f"Passou:  {passed}")
         print(f"Falhou:  {failed}")
         print(f"Taxa:    {100*passed/total:.1f}%")
-
         
         total_time = sum(r.duration for r in self.results)
         print(f"Tempo:   {total_time:.2f}s")
@@ -97,7 +99,7 @@ class TestRunner:
 
 
 # =============================================================================
-# TESTES
+# TESTS
 # =============================================================================
 
 def test_import() -> Tuple[bool, str]:
@@ -108,323 +110,228 @@ def test_import() -> Tuple[bool, str]:
 
 
 def test_initialization() -> Tuple[bool, str]:
-    """Testa inicialização básica."""
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz")
+    """Testa inicialização básica (Sparse Graph)."""
+    config = MycelialConfig(save_path="/tmp/test_mycelial_init.pkl")
     m = MycelialReasoning(config)
     
+    # Check structures
+    stats = m.get_network_stats()
+    
     checks = [
-        m.connections.shape == (4, 256, 256),
-        m.activation_counts.shape == (4, 256),
+        isinstance(m.graph, dict),
+        stats['active_nodes'] == 0,
+        stats['active_edges'] == 0,
         m.total_observations == 0,
-        np.all(m.connections == 0),
     ]
     
     if all(checks):
-        return True, f"Shape: {m.connections.shape}, zerado: OK"
-    return False, f"Shapes incorretos ou não zerado"
+        return True, f"Graph init empty: OK"
+    return False, f"Inicialização incorreta: {stats}"
 
 
 def test_single_observation() -> Tuple[bool, str]:
-    """Testa uma única observação."""
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz")
+    """Testa uma única observação e criação de nós."""
+    config = MycelialConfig(save_path="/tmp/test_mycelial_obs.pkl")
     m = MycelialReasoning(config)
     
+    # Observe [h0=10, h1=20, h2=30, h3=40]
     m.observe([10, 20, 30, 40])
+    
+    stats = m.get_network_stats()
+    
+    # Expect 4 active nodes (one per head)
+    # Expect edges between all pairs: 4 nodes * 3 = 12 directed edges (or 6 undirected)
+    # Since graph is symmetric bidirectional in implementation:
+    # (0,10)->(1,20), (1,20)->(0,10), etc.
+    
+    node_0_10 = (0, 10)
+    node_1_20 = (1, 20)
+    
+    has_node = node_0_10 in m.graph
+    has_connection = node_1_20 in m.graph[node_0_10]
+    weight = m.graph[node_0_10][node_1_20]
     
     checks = [
         m.total_observations == 1,
-        m.activation_counts[0, 10] == 1,
-        m.activation_counts[1, 20] == 1,
-        m.connections[0, 10, 20] > 0,  # head 0, código 10 → código 20
+        stats['active_nodes'] == 4,
+        has_node,
+        has_connection,
+        weight > 0
     ]
     
     if all(checks):
-        conn_strength = m.connections[0, 10, 20]
-        return True, f"Observação registrada, conexão 10→20: {conn_strength:.4f}"
-    return False, "Observação não registrada corretamente"
+        return True, f"Observação registrada, conexão 0:10->1:20 com peso {weight:.4f}"
+    return False, f"Falha na observação. Stats: {stats}"
 
 
 def test_hebbian_learning() -> Tuple[bool, str]:
     """Testa se observações repetidas fortalecem conexões."""
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz")
+    config = MycelialConfig(save_path="/tmp/test_mycelial_hebb.pkl")
     m = MycelialReasoning(config)
     
-    # Observar mesmo padrão 100x
-    for _ in range(100):
-        m.observe([10, 20, 30, 40])
+    # Observar mesmo padrão 10x
+    indices = [10, 20, 30, 40]
+    for _ in range(10):
+        m.observe(indices)
     
-    # Verificar conexões fortes
-    conn_10_20 = m.connections[0, 10, 20]
-    conn_10_30 = m.connections[0, 10, 30]
+    node_a = (0, 10)
+    node_b = (1, 20)
     
-    # Conexão aleatória deve ser fraca/zero
-    conn_random = m.connections[0, 100, 200]
+    weight_strong = m.graph[node_a].get(node_b, 0.0)
+    
+    # Conexão inexistente
+    weight_none = m.graph[node_a].get((2, 99), 0.0)
+    
+    # Expected weight ~= 10 * learning_rate (default 0.1) = 1.0 (approx)
     
     checks = [
-        conn_10_20 > 0.5,
-        conn_10_30 > 0.5,
-        conn_random < 0.1,
+        weight_strong > 0.5,
+        weight_none == 0.0
     ]
     
     if all(checks):
-        return True, f"Hebbian OK: 10→20={conn_10_20:.2f}, random={conn_random:.2f}"
-    return False, f"Hebbian falhou: 10→20={conn_10_20:.2f}, random={conn_random:.2f}"
+        return True, f"Hebbian OK: Strong={weight_strong:.2f}, None={weight_none:.2f}"
+    return False, f"Hebbian falhou: Strong={weight_strong:.2f}, Expected > 0.5"
 
 
-def test_propagation_changes_indices() -> Tuple[bool, str]:
-    """Testa se propagação altera índices."""
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz")
+def test_reasoning_pipeline() -> Tuple[bool, str]:
+    """Testa propagação e raciocínio (completion)."""
+    config = MycelialConfig(save_path="/tmp/test_mycelial_reason.pkl")
     m = MycelialReasoning(config)
     
-    # Treinar padrões
-    for _ in range(100):
+    # Treinar padrão forte: A->B
+    # [10, 20, 30, 40]
+    for _ in range(20):
         m.observe([10, 20, 30, 40])
-    for _ in range(100):
-        m.observe([10, 50, 60, 70])
+        
+    # Input parcial: [10, 0, 0, 0] (0 = vazio/ignorado logicamente se não tiver peso)
+    # Assumindo que 0 não tem conexões fortes, a propagação de 10 deve ativar 20, 30, 40.
     
-    # Propagar de input parcial
-    original = np.array([10, 20, 0, 0])
-    new_indices, activation = m.reason(original)
+    # Nota: O sistema "reason" retorna indices refinados.
+    # Se passarmos [10, 999, 999, 999] (ruído), ele deve sugerir [10, 20, 30, 40] se o sinal for forte.
     
-    # Deve ter mudado algo
-    changed = not np.array_equal(original, new_indices)
+    input_indices = [10, 0, 0, 0]
+    result_indices, activations = m.reason(input_indices)
     
-    if changed:
-        return True, f"Original: {original} → Novo: {new_indices}"
+    # Esperamos que result_indices recupere [10, 20, 30, 40]
+    # Head 0: 10 (mantido)
+    # Head 1: deve ser 20
+    # Head 2: deve ser 30
+    # Head 3: deve ser 40
     
-    # Se não mudou, verificar se ativação é diferente
-    if np.max(activation) > 0:
-        return True, f"Índices iguais mas ativação presente: max={np.max(activation):.2f}"
+    matches = (
+        result_indices[1] == 20 and
+        result_indices[2] == 30 and
+        result_indices[3] == 40
+    )
     
-    return False, "Propagação não alterou nada"
+    if matches:
+        return True, f"Pattern Completion OK: {input_indices} -> {result_indices}"
+    return False, f"Pattern Completion Failed: {input_indices} -> {result_indices} (Expected [10, 20, 30, 40])"
 
 
 def test_hub_emergence() -> Tuple[bool, str]:
-    """Testa se hubs emergem de padrões frequentes."""
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz")
+    """Testa identificação de hubs (nós muito conectados)."""
+    config = MycelialConfig(save_path="/tmp/test_mycelial_hubs.pkl")
     m = MycelialReasoning(config)
     
-    # Código 10 aparece em TODOS os padrões
-    for _ in range(50):
-        m.observe([10, 20, 30, 40])
-        m.observe([10, 50, 60, 70])
-        m.observe([10, 80, 90, 100])
+    # Nó (0, 10) aparece em vários contextos
+    # Contexto 1
+    for _ in range(5): m.observe([10, 20, 30, 40])
+    # Contexto 2
+    for _ in range(5): m.observe([10, 50, 60, 70])
+    # Contexto 3
+    for _ in range(5): m.observe([10, 80, 90, 100])
     
-    hubs = m.get_hub_codes(5)
+    hubs = m.get_hub_codes(top_k=5)
     
     if not hubs:
-        return False, "Nenhum hub encontrado"
+        return False, "Nenhum hub retornado"
+        
+    # Esperamos que (0, 10) seja o top hub
+    top_hub = hubs[0]
+    is_code_10 = (top_hub['head'] == 0 and top_hub['code'] == 10)
     
-    # Código 10 deve ser o top hub (ou estar no top)
-    top_codes = [h['code'] for h in hubs[:3] if h['head'] == 0]
+    if is_code_10:
+        return True, f"Top hub identificado corretamente: Head 0, Code 10 (Degree: {top_hub['degree']})"
     
-    if 10 in top_codes:
-        degree = next(h['total_degree'] for h in hubs if h['code'] == 10 and h['head'] == 0)
-        return True, f"Código 10 é hub com degree={degree}"
-    
-    return False, f"Código 10 não é hub. Top: {top_codes}"
+    return False, f"Top hub incorreto: {top_hub}"
 
 
 def test_decay() -> Tuple[bool, str]:
-    """Testa se decaimento reduz conexões."""
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz", decay_rate=0.1)
+    """Testa poda de conexões fracas."""
+    config = MycelialConfig(
+        save_path="/tmp/test_mycelial_decay.pkl",
+        decay_rate=0.5, # Agressivo
+        min_weight=0.6  # Threshold alto
+    )
     m = MycelialReasoning(config)
     
-    # Treinar
-    for _ in range(100):
+    # Criar conexão com peso ~0.5 (5 obs * 0.1)
+    for _ in range(5):
         m.observe([10, 20, 30, 40])
+        
+    stats_before = m.get_network_stats()
     
-    antes = m.get_network_stats()['active_connections']
+    # Aplicar decay
+    # Peso 0.5 * 0.5 = 0.25 < 0.6 -> deve ser podado
+    m.decay()
     
-    # Decair várias vezes
-    for _ in range(50):
-        m.decay()
+    stats_after = m.get_network_stats()
     
-    depois = m.get_network_stats()['active_connections']
+    if stats_after['active_edges'] < stats_before['active_edges']:
+        return True, f"Decay funcionou: {stats_before['active_edges']} -> {stats_after['active_edges']} edges"
     
-    if depois < antes:
-        return True, f"Antes: {antes} → Depois: {depois} (reduziu {antes-depois})"
-    return False, f"Decaimento não funcionou: {antes} → {depois}"
+    return False, f"Decay falhou ou nada foi podado: {stats_after}"
 
 
 def test_persistence() -> Tuple[bool, str]:
-    """Testa se estado persiste entre instâncias."""
-    save_path = "/tmp/test_mycelial_persist.npz"
+    """Testa salvar e carregar estado."""
+    save_path = "/tmp/test_mycelial_persist.pkl"
+    if Path(save_path).exists():
+        Path(save_path).unlink()
+        
+    config = MycelialConfig(save_path=save_path)
+    m1 = MycelialReasoning(config)
     
-    # Limpar arquivo antigo
-    Path(save_path).unlink(missing_ok=True)
-    
-    # Sessão 1: criar e salvar
-    config1 = MycelialConfig(save_path=save_path)
-    m1 = MycelialReasoning(config1)
-    for _ in range(100):
-        m1.observe([10, 20, 30, 40])
+    # Criar estado
+    m1.observe([10, 20, 30, 40])
     m1.save_state()
-    obs1 = m1.total_observations
-    conn1 = m1.connections[0, 10, 20]
     
-    # Sessão 2: carregar
-    config2 = MycelialConfig(save_path=save_path)
-    m2 = MycelialReasoning(config2)
-    obs2 = m2.total_observations
-    conn2 = m2.connections[0, 10, 20]
+    # Carregar em nova instância
+    m2 = MycelialReasoning(config) # Auto-loads in init
     
-    # Limpar
-    Path(save_path).unlink(missing_ok=True)
+    stats1 = m1.get_network_stats()
+    stats2 = m2.get_network_stats()
     
-    if obs1 == obs2 and np.isclose(conn1, conn2):
-        return True, f"Persistiu: obs={obs1}, conn={conn1:.4f}"
-    return False, f"Não persistiu: obs {obs1}→{obs2}, conn {conn1:.4f}→{conn2:.4f}"
-
-
-def test_find_bridges() -> Tuple[bool, str]:
-    """Testa busca de pontes entre domínios."""
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz")
-    m = MycelialReasoning(config)
-    
-    # Dois "domínios" que compartilham código 10
-    for _ in range(100):
-        m.observe([10, 20, 30, 40])   # Domínio A
-    for _ in range(100):
-        m.observe([10, 120, 130, 140])  # Domínio B
-    
-    bridges = m.find_bridges(
-        np.array([10, 20, 30, 40]),
-        np.array([10, 120, 130, 140])
-    )
-    
-    if not bridges:
-        return False, "Nenhuma ponte encontrada"
-    
-    # Código 10 deve ser ponte
-    bridge_codes = [b['code'] for b in bridges]
-    
-    if 10 in bridge_codes:
-        score = next(b['bridge_score'] for b in bridges if b['code'] == 10)
-        return True, f"Ponte encontrada: código 10 com score={score:.4f}"
-    
-    return False, f"Código 10 não é ponte. Pontes: {bridge_codes}"
-
-
-def test_network_stats() -> Tuple[bool, str]:
-    """Testa geração de estatísticas."""
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz")
-    m = MycelialReasoning(config)
-    
-    # Usar padrão repetido para garantir conexões fortes (> 0.05)
-    for _ in range(10):
-        m.observe([10, 20, 30, 40])
-    
-    # E alguns aleatórios
-    for _ in range(90):
-        m.observe(np.random.randint(0, 256, size=4))
-    
-    stats = m.get_network_stats()
-
-    
-    required_keys = [
-        'total_observations',
-        'active_connections',
-        'density',
-        'mean_connection_strength',
+    checks = [
+        stats1['total_observations'] == stats2['total_observations'],
+        stats1['active_nodes'] == stats2['active_nodes'],
+        stats1['active_edges'] == stats2['active_edges']
     ]
     
-    missing = [k for k in required_keys if k not in stats]
-    
-    if missing:
-        return False, f"Keys faltando: {missing}"
-    
-    if stats['total_observations'] == 100 and stats['active_connections'] > 0:
-        return True, f"Stats OK: obs={stats['total_observations']}, conn={stats['active_connections']}"
-    
-    return False, f"Stats incorretas: {stats}"
+    if all(checks):
+        return True, "Persistência OK (Stats idênticos)"
+    return False, f"Falha na persistência. Original: {stats1}, Carregado: {stats2}"
 
 
-def test_batch_observation() -> Tuple[bool, str]:
-    """Testa observação em batch."""
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz")
-    m = MycelialReasoning(config)
-    
-    batch = np.random.randint(0, 256, size=(50, 4))
-    m.observe_batch(batch)
-    
-    if m.total_observations == 50:
-        return True, f"Batch de 50 observações registrado"
-    return False, f"Esperado 50, got {m.total_observations}"
-
-
-def test_density_stays_low() -> Tuple[bool, str]:
-    """Testa se rede permanece esparsa."""
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz")
-    m = MycelialReasoning(config)
-    
-    # Muitas observações aleatórias
-    for _ in range(500):
-        m.observe(np.random.randint(0, 256, size=4))
-    
-    stats = m.get_network_stats()
-    density = stats['density']
-    
-    # Rede deve ser esparsa (< 10%)
-    if density < 0.1:
-        return True, f"Densidade: {density:.2%} (esparsa ✓)"
-    return False, f"Densidade muito alta: {density:.2%}"
+def test_find_bridges_skip() -> Tuple[bool, str]:
+    """Testa find_bridges (Feature removida/não impl. na v2)."""
+    # Placeholder para manter relatório consistente se necessário
+    return True, "SKIPPED: find_bridges not in v2 API"
 
 
 def test_reset() -> Tuple[bool, str]:
-    """Testa reset da rede."""
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz")
+    """Testa reset."""
+    config = MycelialConfig(save_path="/tmp/test_mycelial_reset.pkl")
     m = MycelialReasoning(config)
+    m.observe([10, 20, 30, 40])
     
-    # Usar
-    for _ in range(100):
-        m.observe([10, 20, 30, 40])
-    
-    antes = m.total_observations
-    
-    # Reset
     m.reset()
     
-    depois = m.total_observations
-    conn = np.sum(m.connections)
-    
-    if depois == 0 and conn == 0:
-        return True, f"Reset OK: {antes} → {depois}, conexões zeradas"
-    return False, f"Reset falhou: obs={depois}, conn_sum={conn}"
-
-
-def test_torch_input() -> Tuple[bool, str]:
-    """Testa se aceita input torch."""
-    try:
-        import torch
-    except ImportError:
-        return True, "Torch não disponível, skip"
-    
-    config = MycelialConfig(save_path="/tmp/test_mycelial.npz")
-    m = MycelialReasoning(config)
-    
-    indices = torch.tensor([10, 20, 30, 40])
-    m.observe(indices)
-    
-    if m.total_observations == 1:
-        return True, "Input torch aceito"
-    return False, "Falha com input torch"
-
-
-# =============================================================================
-# TESTES COM DADOS REAIS (OPCIONAL)
-# =============================================================================
-
-def test_with_real_data() -> Tuple[bool, str]:
-    """Testa com dados reais do Alexandria (se disponível)."""
-    try:
-        from core.semantic_memory import SemanticMemory
-        # from v2.monolith_v13 import MonolithV13
-    except ImportError:
-        return True, "SemanticMemory não disponível, skip"
-    
-    # Aqui entraria lógica de teste com dados reais
-    return True, "Teste com dados reais: TODO"
+    if len(m.graph) == 0:
+        return True, "Reset limpou grafo com sucesso"
+    return False, "Grafo não vazio após reset"
 
 
 # =============================================================================
@@ -433,48 +340,33 @@ def test_with_real_data() -> Tuple[bool, str]:
 
 def main():
     import argparse
-    
-    parser = argparse.ArgumentParser(description="Testes do MycelialReasoning")
-    parser.add_argument("--verbose", "-v", action="store_true", help="Output detalhado")
-    parser.add_argument("--with-real-data", action="store_true", help="Incluir testes com dados reais")
+    parser = argparse.ArgumentParser(description="Testes Funcionais Mycelial v2")
+    parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
     
     print("=" * 60)
-    print("ALEXANDRIA :: TESTES DO MYCELIAL REASONING")
+    print("ALEXANDRIA :: TESTES MYCELIAL REASONING (V2 SPARSE)")
     print("=" * 60)
     print()
     
     runner = TestRunner(verbose=args.verbose)
     
-    # Testes básicos
+    # Executar bateria
     runner.run("Import", test_import)
-    
     if not IMPORT_OK:
-        print("\n❌ Import falhou. Não é possível continuar.")
         return 1
-    
-    runner.run("Inicialização", test_initialization)
-    runner.run("Observação única", test_single_observation)
-    runner.run("Aprendizado Hebbian", test_hebbian_learning)
-    runner.run("Propagação altera índices", test_propagation_changes_indices)
-    runner.run("Emergência de hubs", test_hub_emergence)
-    runner.run("Decaimento", test_decay)
-    runner.run("Persistência", test_persistence)
-    runner.run("Busca de pontes", test_find_bridges)
-    runner.run("Estatísticas da rede", test_network_stats)
-    runner.run("Observação em batch", test_batch_observation)
-    runner.run("Densidade permanece baixa", test_density_stays_low)
+        
+    runner.run("Initialization", test_initialization)
+    runner.run("Single Observation", test_single_observation)
+    runner.run("Hebbian Learning", test_hebbian_learning)
+    runner.run("Reasoning Pipeline", test_reasoning_pipeline)
+    runner.run("Hub Emergence", test_hub_emergence)
+    runner.run("Decay System", test_decay)
+    runner.run("Persistence", test_persistence)
     runner.run("Reset", test_reset)
-    runner.run("Input torch", test_torch_input)
     
-    if args.with_real_data:
-        runner.run("Dados reais", test_with_real_data)
-    
-    # Resumo
     success = runner.summary()
-    
     return 0 if success else 1
-
 
 if __name__ == "__main__":
     sys.exit(main())

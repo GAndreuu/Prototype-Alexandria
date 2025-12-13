@@ -237,7 +237,7 @@ class VectorQuantizerWithStats(nn.Module):
             # Update weights
             dw = torch.matmul(encodings.t(), flat_input)
             self._ema_weight = self._ema_weight * self._decay + (1 - self._decay) * dw
-            self._embedding.weight = self._ema_weight / self._ema_cluster_size.unsqueeze(1)
+            self._embedding.weight.data.copy_(self._ema_weight / self._ema_cluster_size.unsqueeze(1))
             
             # Track usage
             self.usage_count += encoding_sum

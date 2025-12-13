@@ -1,551 +1,264 @@
 """
-GeodesicFlow: Propagação por Caminhos Geodésicos
-================================================
+Geodesic Flow
+=============
 
-Geodésicas são os "caminhos mais curtos" em espaço curvo.
-Quando a métrica é deformada, os caminhos retos Euclidianos
-deixam de ser os mais curtos - a geodésica "curva" ao redor
-das deformações.
+Motor de integração de geodésicas (caminhos de menor energia) em variedades Riemannianas.
+Implementa métodos robustos para resolver o Boundary Value Problem (BVP) entre dois pontos.
 
-Isso implementa como ativação se propaga: não em linha reta,
-mas seguindo a geometria do espaço de conhecimento.
+Algoritmos:
+- Integração Semi-Implícita (Euler Symplectic-ish)
+- Shooting Method com Line Search
+- Renormalização de Energia (vT g v)
 
-A equação geodésica é:
-    d²x^k/dt² + Γ^k_ij (dx^i/dt)(dx^j/dt) = 0
-    
-Onde Γ são os símbolos de Christoffel derivados da métrica.
+Autor: Alexandria System
+Versão: 2.0 (Ported from Demo)
 """
 
+from __future__ import annotations
+
 import numpy as np
-from typing import Dict, List, Optional, Tuple, Generator
 from dataclasses import dataclass
-from scipy.integrate import solve_ivp
-
-from .manifold import DynamicManifold, ManifoldPoint
-from .metric import RiemannianMetric
-
+from typing import Optional, List, Tuple
+from core.field.metric import RiemannianMetric
 
 @dataclass
 class GeodesicConfig:
     """Configuração do fluxo geodésico."""
-    max_steps: int = 100               # Máximo de passos por geodésica
-    step_size: float = 0.01            # Tamanho do passo de integração
-    tolerance: float = 1e-6            # Tolerância para convergência
-    min_velocity: float = 0.001        # Velocidade mínima (para de propagar)
-    damping: float = 0.01              # Amortecimento da velocidade
-    use_scipy_integrator: bool = False # Usar integrador scipy (mais preciso, mais lento)
-    n_workers: int = 1                 # Workers para paralelizar Christoffel
+    dt: float = 0.02
+    max_steps: int = 200
+    active_dims: int = 24       # Dimensões ativas para cálculo de curvatura
+    energy_renorm: bool = True  # Mantém vT g v constante (conservação de energia)
+    vel_damping: float = 0.0    # Amortecimento (para relaxamento)
+    speed_floor: float = 1e-6
+    use_scipy_integrator: bool = False  # Usar scipy.integrate.solve_ivp ao invés de Euler
+
+    # Parâmetros do Shooting Method (BVP)
+    shooting_iters: int = 35
+    lr: float = 0.35            # Taxa de aprendizado inicial para correção de velocidade
+    tol: float = 1e-2           # Tolerância de convergência (distância final)
+    patience: int = 35          # Passos sem melhora antes de abortar integração
 
 
 @dataclass
 class GeodesicPath:
-    """Um caminho geodésico."""
-    points: np.ndarray           # [n_steps, dim] - pontos ao longo do caminho
-    velocities: np.ndarray       # [n_steps, dim] - velocidades em cada ponto
-    parameter: np.ndarray        # [n_steps] - parâmetro t ao longo do caminho
-    length: float                # Comprimento total do caminho
-    converged: bool             # Se atingiu destino/estabilizou
-    
-    @property
-    def start(self) -> np.ndarray:
-        return self.points[0]
-    
-    @property
-    def end(self) -> np.ndarray:
-        return self.points[-1]
-    
+    """Representa um caminho geodésico calculado."""
+    points: np.ndarray          # [n_steps, dim]
+    length: float               # Comprimento métrico acumulado
+    converged: bool             # Se atingiu o alvo dentro da tolerância
+    end_error: float            # Distância final ao alvo
+    best_step: int              # Passo onde a distância foi mínima (para cortes)
+
     @property
     def n_steps(self) -> int:
-        return len(self.points)
+        return int(self.points.shape[0])
 
 
 class GeodesicFlow:
     """
-    Motor de propagação geodésica.
-    
-    Este componente é responsável por propagar ativação no espaço
-    seguindo a geometria natural (geodésicas) em vez de caminhos
-    Euclidianos.
-    
-    Attributes:
-        manifold: Variedade base
-        metric: Métrica Riemanniana
-        config: Configuração
+    Gerencia o cálculo de geodésicas na variedade.
     """
-    
-    def __init__(self, 
-                 manifold: DynamicManifold, 
-                 metric: RiemannianMetric,
-                 config: Optional[GeodesicConfig] = None):
+
+    def __init__(self, manifold: 'DynamicManifold', metric: RiemannianMetric, config: Optional[GeodesicConfig] = None):
         self.manifold = manifold
         self.metric = metric
         self.config = config or GeodesicConfig()
-        
-    # =========================================================================
-    # GEODÉSICA ÚNICA
-    # =========================================================================
-    
-    def compute_geodesic(self, 
-                         start: np.ndarray, 
-                         initial_velocity: np.ndarray,
-                         max_steps: Optional[int] = None) -> GeodesicPath:
+        self.dim = getattr(manifold, 'base_dim', 64) # Fallback se não definido
+
+    def _speed2(self, x: np.ndarray, v: np.ndarray) -> float:
+        """Calcula energia cinética vT g(x) v."""
+        g = self.metric.metric_at(x)
+        return float(v @ (g @ v))
+
+    def _integrate_ivp(
+        self,
+        start: np.ndarray,
+        v0: np.ndarray,
+        end: Optional[np.ndarray] = None,
+        steps: Optional[int] = None,
+    ) -> GeodesicPath:
         """
-        Computa uma geodésica a partir de ponto inicial com velocidade dada.
+        Integra equação geodésica como Problema de Valor Inicial (IVP).
         
-        A geodésica é a curva que satisfaz:
-            d²x/dt² = -Γ^k_ij v^i v^j
-            
         Args:
-            start: Ponto inicial [dim]
-            initial_velocity: Velocidade inicial [dim]
-            max_steps: Máximo de passos (override config)
+            start: Ponto inicial
+            v0: Velocidade inicial
+            end: Alvo opcional (para early stopping e métricas)
+            steps: Override de max_steps
             
         Returns:
-            GeodesicPath com a trajetória
+            GeodesicPath integrado
         """
-        max_steps = max_steps or self.config.max_steps
-        
-        if self.config.use_scipy_integrator:
-            return self._geodesic_scipy(start, initial_velocity, max_steps)
-        else:
-            return self._geodesic_euler(start, initial_velocity, max_steps)
-    
-    def _geodesic_euler(self, 
-                        start: np.ndarray, 
-                        initial_velocity: np.ndarray,
-                        max_steps: int) -> GeodesicPath:
-        """
-        Integração por Euler modificado (mais rápido, menos preciso).
-        """
-        dim = len(start)
-        dt = self.config.step_size
-        
-        # Arrays para armazenar caminho
-        points = [start.copy()]
-        velocities = [initial_velocity.copy()]
-        parameters = [0.0]
-        
-        x = start.copy()
-        v = initial_velocity.copy()
-        t = 0.0
-        total_length = 0.0
-        converged = False
-        
+        dt = self.config.dt
+        max_steps = int(steps if steps is not None else self.config.max_steps)
+        ad = int(min(self.config.active_dims, self.dim))
+
+        x = np.array(start, dtype=np.float64, copy=True)
+        v = np.array(v0, dtype=np.float64, copy=True)
+
+        points = [x.copy()]
+        total_len = 0.0
+
+        # Alvo de energia para renormalização
+        s2_target = self._speed2(x, v) if self.config.energy_renorm else None
+
+        best_step = 0
+        best_err = float("inf")
+        worse_count = 0
+
         for step in range(max_steps):
-            # Símbolos de Christoffel no ponto atual
-            gamma = self.metric.christoffel_at(x, n_workers=self.config.n_workers)
+            # Calcula Christoffel symbols apenas nas dimensões ativas
+            gamma = self.metric.christoffel_at_active(x, ad)  # [ad, ad, ad]
+
+            # Aceleração geodésica: a^k = - Γ^k_ij v^i v^j
+            v_ad = v[:ad]
+            a_ad = -np.einsum("kij,i,j->k", gamma, v_ad, v_ad)
             
-            # Aceleração geodésica: a^k = -Γ^k_ij v^i v^j
-            acceleration = np.zeros(dim)
-            for k in range(dim):
-                for i in range(dim):
-                    for j in range(dim):
-                        acceleration[k] -= gamma[k, i, j] * v[i] * v[j]
-            
-            # Atualiza velocidade (com damping opcional)
-            v = v + acceleration * dt
-            v = v * (1 - self.config.damping)
-            
-            # Atualiza posição
+            a = np.zeros_like(v)
+            a[:ad] = a_ad
+
+            # Semi-implicit Euler
+            v = v + a * dt
+
+            if self.config.vel_damping > 0.0:
+                v *= (1.0 - self.config.vel_damping)
+
+            # Renormalização de energia
+            if self.config.energy_renorm and s2_target is not None:
+                s2 = self._speed2(x, v)
+                if s2 > self.config.speed_floor:
+                    # Scaling factor: sqrt(target / current)
+                    v *= np.sqrt(max(s2_target, 1e-12) / (s2 + 1e-12))
+
             x = x + v * dt
-            
-            # Comprimento do passo (usando métrica)
-            g = self.metric.metric_at(x)
-            ds = np.sqrt(np.abs(np.dot(v * dt, np.dot(g, v * dt))))
-            total_length += ds
-            
-            # Armazena
-            t += dt
             points.append(x.copy())
-            velocities.append(v.copy())
-            parameters.append(t)
-            
-            # Verifica convergência
-            speed = np.linalg.norm(v)
-            if speed < self.config.min_velocity:
-                converged = True
-                break
+
+            # Comprimento incremental (Riemanniano)
+            g_here = self.metric.metric_at(x)
+            ds = np.sqrt(max(float(v @ (g_here @ v)), 0.0)) * dt
+            total_len += ds
+
+            # Verificação de alvo (Critérios de parada)
+            if end is not None:
+                err = float(np.linalg.norm(x - end))
                 
-        return GeodesicPath(
-            points=np.array(points),
-            velocities=np.array(velocities),
-            parameter=np.array(parameters),
-            length=total_length,
-            converged=converged
-        )
-    
-    def _geodesic_scipy(self, 
-                        start: np.ndarray, 
-                        initial_velocity: np.ndarray,
-                        max_steps: int) -> GeodesicPath:
-        """
-        Integração via scipy.integrate (mais preciso, mais lento).
-        """
-        dim = len(start)
-        
-        def geodesic_ode(t, state):
-            """
-            ODE para geodésica.
-            State = [x, v] (posição e velocidade concatenados)
-            """
-            x = state[:dim]
-            v = state[dim:]
+                # Rastreamento do melhor ponto
+                if err < best_err:
+                    best_err = err
+                    best_step = step + 1
+                    worse_count = 0
+                else:
+                    worse_count += 1
+
+                # Convergência
+                if err < self.config.tol:
+                    return GeodesicPath(
+                        points=np.array(points, dtype=np.float64),
+                        length=total_len,
+                        converged=True,
+                        end_error=err,
+                        best_step=best_step,
+                    )
+
+                # Early stopping por não-melhora (overshoot ou preso)
+                if worse_count >= self.config.patience:
+                    break
+
+        # Se saiu do loop sem convergir:
+        # Corta o caminho no ponto de maior proximidade (Best Cut)
+        pts = np.array(points, dtype=np.float64)
+        if end is not None and best_step > 0 and best_step < len(pts):
+            pts = pts[: best_step + 1]
             
-            # Christoffel
-            gamma = self.metric.christoffel_at(x, n_workers=self.config.n_workers)
-            
-            # dx/dt = v
-            dx_dt = v
-            
-            # dv/dt = -Γ^k_ij v^i v^j
-            dv_dt = np.zeros(dim)
-            for k in range(dim):
-                for i in range(dim):
-                    for j in range(dim):
-                        dv_dt[k] -= gamma[k, i, j] * v[i] * v[j]
-                        
-            return np.concatenate([dx_dt, dv_dt])
-        
-        # Condição inicial
-        y0 = np.concatenate([start, initial_velocity])
-        
-        # Integra
-        t_span = (0, max_steps * self.config.step_size)
-        t_eval = np.linspace(*t_span, max_steps)
-        
-        try:
-            sol = solve_ivp(
-                geodesic_ode, 
-                t_span, 
-                y0, 
-                t_eval=t_eval,
-                method='RK45',
-                rtol=self.config.tolerance
-            )
-            
-            points = sol.y[:dim].T
-            velocities = sol.y[dim:].T
-            parameters = sol.t
-            
-            # Calcula comprimento
-            total_length = 0.0
-            for i in range(1, len(points)):
-                dx = points[i] - points[i-1]
-                g = self.metric.metric_at(points[i])
-                ds = np.sqrt(np.abs(np.dot(dx, np.dot(g, dx))))
-                total_length += ds
-                
-            converged = np.linalg.norm(velocities[-1]) < self.config.min_velocity
-            
-        except Exception as e:
-            # Fallback para Euler se scipy falhar
-            return self._geodesic_euler(start, initial_velocity, max_steps)
-            
-        return GeodesicPath(
-            points=points,
-            velocities=velocities,
-            parameter=parameters,
-            length=total_length,
-            converged=converged
-        )
-    
-    # =========================================================================
-    # GEODÉSICA ENTRE DOIS PONTOS
-    # =========================================================================
-    
-    def shortest_path(self, 
-                      start: np.ndarray, 
-                      end: np.ndarray,
-                      max_iterations: int = 10) -> GeodesicPath:
-        """
-        Encontra geodésica conectando dois pontos.
-        
-        Isso é um problema de valor de contorno, mais difícil que
-        o problema de valor inicial acima.
-        
-        Usa shooting method: ajusta velocidade inicial até acertar destino.
-        
-        Args:
-            start: Ponto inicial [dim]
-            end: Ponto final [dim]
-            max_iterations: Iterações do shooting method
-            
-        Returns:
-            GeodesicPath aproximada conectando os pontos
-            
-        TODO:
-            - Implementar shooting method real
-            - Ou usar relaxation method
-        """
-        # Por agora, aproximação simples: 
-        # velocidade inicial na direção do destino
-        direction = end - start
-        distance = np.linalg.norm(direction)
-        
-        if distance < 1e-8:
-            # Pontos coincidentes
-            return GeodesicPath(
-                points=np.array([start]),
-                velocities=np.array([np.zeros_like(start)]),
-                parameter=np.array([0.0]),
-                length=0.0,
-                converged=True
-            )
-            
-        # Velocidade inicial: direção normalizada
-        initial_velocity = direction / distance
-        
-        # Escala velocidade para chegar aproximadamente no destino
-        # Isso é aproximado - geodésica real pode ter comprimento diferente
-        estimated_time = distance / np.linalg.norm(initial_velocity)
-        
-        # Propaga
-        path = self.compute_geodesic(
-            start, 
-            initial_velocity, 
-            max_steps=int(estimated_time / self.config.step_size) + 10
-        )
-        
-        return path
-    
-    # =========================================================================
-    # PROPAGAÇÃO DE ATIVAÇÃO
-    # =========================================================================
-    
-    def propagate_activation(self, 
-                             source_point: ManifoldPoint,
-                             steps: int = 3,
-                             decay: float = 0.5) -> List[Tuple[str, float]]:
-        """
-        Propaga ativação de um ponto para vizinhos via geodésicas.
-        
-        Esta é a versão geodésica da propagação Hebbiana do mycelial.
-        Em vez de seguir conexões do grafo, segue a geometria do espaço.
-        
-        Args:
-            source_point: Ponto fonte da ativação
-            steps: Número de passos de propagação
-            decay: Fator de decaimento por passo
-            
-        Returns:
-            Lista de (point_id, activation) para pontos atingidos
-        """
-        activations = {}
-        
-        # Encontra vizinhos do ponto fonte
-        neighbors = self.manifold.get_neighbors(source_point)
-        
-        current_activation = source_point.activation
-        frontier = [(source_point, current_activation)]
-        visited = set()
-        
-        for step in range(steps):
-            next_frontier = []
-            
-            for point, activation in frontier:
-                if id(point) in visited:
-                    continue
-                visited.add(id(point))
-                
-                # Para cada vizinho, computa geodésica
-                for neighbor_id, euclidean_dist in self.manifold.get_neighbors(point):
-                    neighbor = self.manifold.get_point(neighbor_id)
-                    if neighbor is None:
-                        continue
-                        
-                    # Geodésica para o vizinho
-                    path = self.shortest_path(point.coordinates, neighbor.coordinates)
-                    
-                    # Ativação decai com comprimento geodésico
-                    geodesic_dist = path.length
-                    propagated_activation = activation * np.exp(-geodesic_dist) * decay
-                    
-                    if propagated_activation > 0.01:  # Threshold
-                        # Acumula ativação
-                        if neighbor_id in activations:
-                            activations[neighbor_id] = max(activations[neighbor_id], 
-                                                          propagated_activation)
-                        else:
-                            activations[neighbor_id] = propagated_activation
-                            
-                        next_frontier.append((neighbor, propagated_activation))
-                        
-            frontier = next_frontier
-            current_activation *= decay
-            
-        return list(activations.items())
-    
-    def flow_from_point(self, 
-                        start: np.ndarray, 
-                        n_directions: int = 8) -> List[GeodesicPath]:
-        """
-        Dispara geodésicas em múltiplas direções a partir de um ponto.
-        
-        Útil para visualizar como o espaço "se abre" a partir de um ponto.
-        
-        Args:
-            start: Ponto inicial [dim]
-            n_directions: Número de direções a explorar
-            
-        Returns:
-            Lista de GeodesicPaths em diferentes direções
-        """
-        paths = []
-        dim = len(start)
-        
-        # Gera direções (uniformes em esfera)
-        # Para alta dimensão, amostra aleatória
-        if dim > 10:
-            directions = np.random.randn(n_directions, dim)
+            # Recalcula comprimento do caminho cortado
+            # (Poderia ter acumulado até best_step, mas recalcular é mais seguro aqui)
+            length_cut = 0.0
+            # Aproximação rápida linear para comprimento cortado se necessário,
+            # ou usar o acumulado proporcional. Aqui, apenas usamos total_len se full,
+            # ou recalculamos. Recalcular métrica é caro.
+            # Vamos estimar proporcionalmente para evitar custo extra:
+            length_cut = total_len * (best_step / len(points)) 
         else:
-            # Para baixa dimensão, pode ser mais sistemático
-            directions = np.random.randn(n_directions, dim)
-            
-        # Normaliza
-        directions = directions / np.linalg.norm(directions, axis=1, keepdims=True)
-        
-        for direction in directions:
-            path = self.compute_geodesic(start, direction)
-            paths.append(path)
-            
-        return paths
-    
-    # =========================================================================
-    # CAMPO DE FLUXO
-    # =========================================================================
-    
-    def flow_field(self, 
-                   grid_points: np.ndarray,
-                   direction_field: np.ndarray) -> List[GeodesicPath]:
+            length_cut = total_len
+
+        end_err = float(np.linalg.norm(pts[-1] - end)) if end is not None else float("nan")
+
+        return GeodesicPath(
+            points=pts,
+            length=length_cut,
+            converged=False,
+            end_error=end_err,
+            best_step=best_step,
+        )
+
+    def shortest_path(self, start: np.ndarray, end: np.ndarray, max_iterations: int = 35) -> GeodesicPath:
         """
-        Computa geodésicas partindo de múltiplos pontos.
-        
-        Args:
-            grid_points: [n_points, dim] pontos iniciais
-            direction_field: [n_points, dim] direções iniciais
-            
-        Returns:
-            Lista de GeodesicPaths
+        Calcula o caminho mais curto (geodésica) entre start e end (BVP).
+        Usa Shooting Method com ajuste iterativo velocidade inicial.
         """
-        paths = []
+        start = np.asarray(start, dtype=np.float64)
+        end = np.asarray(end, dtype=np.float64)
+
+        delta = end - start
+        dist = float(np.linalg.norm(delta))
+        if dist < 1e-12:
+            return GeodesicPath(np.array([start]), 0.0, True, 0.0, 0)
+
+        # Heurística para tempo de integração
+        dt = self.config.dt
+        T = max(1.0, dist * 3.0) 
+        steps = int(min(max(T / dt, 30), self.config.max_steps))
+
+        # Chute inicial (velocidade Euclidiana)
+        v0 = delta / max(T, 1e-12)
+
+        best_path = None
+        best_err = float("inf")
         
-        for point, direction in zip(grid_points, direction_field):
-            # Normaliza direção
-            norm = np.linalg.norm(direction)
-            if norm > 1e-8:
-                direction = direction / norm
-                path = self.compute_geodesic(point, direction)
-                paths.append(path)
-                
-        return paths
-    
-    def streamlines(self, 
-                    start_points: np.ndarray,
-                    vector_field: callable,
-                    max_length: float = 10.0) -> List[GeodesicPath]:
-        """
-        Computa streamlines seguindo um campo vetorial.
-        
-        Diferente de geodésicas puras, streamlines seguem
-        um campo vetorial dado (ex: -∇F do FreeEnergyField).
-        
-        Args:
-            start_points: [n_points, dim] pontos iniciais
-            vector_field: função point -> velocity
-            max_length: comprimento máximo de cada streamline
-            
-        Returns:
-            Lista de paths (não são geodésicas, mas streamlines)
-        """
-        paths = []
-        
-        for start in start_points:
-            points = [start.copy()]
-            velocities = []
-            length = 0.0
-            
-            current = start.copy()
-            
-            for _ in range(self.config.max_steps):
-                # Velocidade do campo
-                v = vector_field(current)
-                velocities.append(v.copy())
-                
-                norm_v = np.linalg.norm(v)
-                if norm_v < self.config.min_velocity:
+        # Override config iterations se fornecido
+        iterations = max_iterations or self.config.shooting_iters
+
+        for it in range(iterations):
+            path = self._integrate_ivp(start, v0, end=end, steps=steps)
+
+            if path.end_error < best_err:
+                best_err = path.end_error
+                best_path = path
+
+            if path.converged:
+                return path
+
+            # Correção de velocidade (Shooting Update)
+            err_vec = path.points[-1] - end
+            base_err = path.end_error
+
+            # Line Search para garantir melhora
+            lr = self.config.lr
+            accepted = False
+            for _ in range(6):
+                # Gradiente descendente aproximado: v_new = v_old - lr * erro
+                v_try = v0 - (lr / max(T, 1e-12)) * err_vec
+                path_try = self._integrate_ivp(start, v_try, end=end, steps=steps)
+
+                if path_try.end_error < base_err:
+                    v0 = v_try
+                    accepted = True
+                    if path_try.converged: 
+                        return path_try
                     break
                     
-                # Passo
-                dt = self.config.step_size
-                current = current + v * dt
-                
-                # Comprimento
-                g = self.metric.metric_at(current)
-                ds = np.sqrt(np.abs(np.dot(v * dt, np.dot(g, v * dt))))
-                length += ds
-                
-                points.append(current.copy())
-                
-                if length > max_length:
-                    break
-                    
-            velocities.append(np.zeros_like(start))  # Final
-            
-            path = GeodesicPath(
-                points=np.array(points),
-                velocities=np.array(velocities),
-                parameter=np.linspace(0, length, len(points)),
-                length=length,
-                converged=(length < max_length)
-            )
-            paths.append(path)
-            
-        return paths
-    
-    # =========================================================================
-    # UTILIDADES
-    # =========================================================================
-    
-    def geodesic_distance(self, p1: np.ndarray, p2: np.ndarray) -> float:
+                lr *= 0.5 # Reduz passo se piorou
+
+            # Se line search falhou em achar melhora, tenta perturbação menor ou continua
+            if not accepted:
+                 v0 = v0 - (0.1 * self.config.lr / max(T, 1e-12)) * err_vec
+
+        # Retorna o melhor encontrado
+        return best_path if best_path is not None else self._integrate_ivp(start, v0, end=end, steps=steps)
+
+    def propagate_activation(self, start_point: 'ManifoldPoint', steps: int = 3, decay: float = 0.5) -> List['ManifoldPoint']:
         """
-        Computa distância geodésica entre dois pontos.
-        
-        Esta é a "distância real" no espaço curvo.
+        Simula propagação de ativação (como uma 'onda') usando geodésicas radiais.
+        (Ainda placeholder/básico, ideal seria wave-equation solver)
         """
-        path = self.shortest_path(p1, p2)
-        return path.length
-    
-    def geodesic_midpoint(self, p1: np.ndarray, p2: np.ndarray) -> np.ndarray:
-        """
-        Encontra ponto médio geodésico entre dois pontos.
-        
-        O ponto médio Euclidiano não é necessariamente o meio
-        da geodésica em espaço curvo.
-        """
-        path = self.shortest_path(p1, p2)
-        
-        # Encontra ponto no meio do caminho (por comprimento)
-        mid_idx = len(path.points) // 2
-        return path.points[mid_idx]
-    
-    def parallel_transport(self, 
-                          vector: np.ndarray, 
-                          along_path: GeodesicPath) -> np.ndarray:
-        """
-        Transporta paralelamente um vetor ao longo de uma geodésica.
-        
-        Isso preserva o "ângulo" do vetor relativo à geodésica
-        enquanto move pelo espaço curvo.
-        
-        TODO: Implementar via equação de transporte paralelo
-        """
-        # Por agora, retorna o vetor original (aproximação plana)
-        return vector.copy()
-    
-    def stats(self) -> Dict:
-        """Estatísticas do motor geodésico."""
-        return {
-            'config': self.config.__dict__,
-            'manifold_dim': self.manifold.current_dim,
-            'num_points': len(self.manifold.points)
-        }
+        # TODO: Implementar propagação real baseada em frentes de onda
+        return [start_point]

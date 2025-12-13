@@ -174,20 +174,27 @@ class GeodesicBridgeIntegration:
         """Inicializa GeodesicFlow a partir do bridge."""
         try:
             from core.field.geodesic_flow import GeodesicFlow, GeodesicConfig
-            from core.field.manifold import DynamicManifold
+            from core.field.manifold import DynamicManifold, ManifoldConfig
             from core.field.metric import RiemannianMetric
             
             # Criar manifold e métrica a partir do bridge
             dim = self.bridge.latent_dim if hasattr(self.bridge, 'latent_dim') else 128
             
-            manifold = DynamicManifold(dim=dim)
-            metric = RiemannianMetric(dim=dim)
+            # Use ManifoldConfig with base_dim parameter
+            manifold_config = ManifoldConfig(base_dim=dim)
+            manifold = DynamicManifold(config=manifold_config)
+            metric = RiemannianMetric(manifold)
             
             # Configurar geodésicas
+            # Mapeando campos do GeodesicBridgeConfig para GeodesicConfig (novo)
             geo_config = GeodesicConfig(
                 max_steps=self.config.max_geodesic_steps,
-                step_size=self.config.geodesic_step_size,
-                tolerance=self.config.geodesic_tolerance
+                dt=self.config.geodesic_step_size,
+                tol=self.config.geodesic_tolerance,
+                # Defaults robustos para shooting method
+                shooting_iters=self.config.path_search_iterations, 
+                active_dims=32, # Razoável para produção
+                energy_renorm=True
             )
             
             self.geodesic = GeodesicFlow(manifold, metric, geo_config)

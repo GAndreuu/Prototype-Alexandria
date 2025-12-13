@@ -1,7 +1,17 @@
 # 🗺️ Alexandria - Estrutura do Projeto
 
-**Visão Topográfica Atualizada**
-> Este documento mapeia a anatomia completa do sistema Alexandria.
+> **Versão**: 2.0 | **Atualizado**: 2025-12-13
+
+---
+
+## 📊 Estatísticas
+
+| Métrica | Valor |
+|---------|------:|
+| Módulos Python | 69 |
+| Testes Unitários | 293 |
+| Documentação | 60+ |
+| Linhas de Código | ~15k |
 
 ---
 
@@ -9,19 +19,68 @@
 
 ```
 Alexandria/
-├── 📂 core/                      # O NÚCLEO COGNITIVO
-│   ├── agents/                   # [Alpha] Sistema de Agentes
-│   │   ├── action/              # Agentes de Ação (V2)
-│   │   ├── bridge_agent.py      # Bridge Metacognitivo
-│   │   └── critic_agent.py      # Crítico de Hipóteses
+│
+├── 📂 core/                          # 🧠 NÚCLEO (69 módulos)
 │   │
-│   ├── field/                    # [Beta] Cognição Geométrica
-│   │   ├── manifold.py          # Espaço vetorial dinâmico
-│   │   ├── metric.py            # Métrica Riemanniana
-│   │   └── pre_structural_field.py # Wrapper principal
+│   ├── field/                        # Cognição Geométrica
+│   │   ├── manifold.py              # Espaço vetorial dinâmico (402 linhas)
+│   │   ├── metric.py                # Métrica Riemanniana (612 linhas)
+│   │   ├── geodesic_flow.py         # Fluxo geodésico (265 linhas)
+│   │   ├── free_energy_field.py     # Campo F(x) = E - TS (500 linhas)
+│   │   ├── cycle_dynamics.py        # Ciclo expansão/compressão
+│   │   ├── dim_reduction.py         # Redução dimensional
+│   │   ├── compositional_reasoning.py
+│   │   ├── pre_structural_field.py  # Wrapper principal
+│   │   └── vqvae_manifold_bridge.py # Ponte VQ-VAE ↔ Manifold
 │   │
-│   ├── integrations/             # [NEW] Integrações Unificadas
-│   │   ├── alexandria_unified.py # Master Integration (AlexandriaCore)
+│   ├── learning/                     # Active Inference
+│   │   ├── active_inference.py      # Agente EFE (1,486 linhas)
+│   │   ├── free_energy.py           # VFE + EFE (1,257 linhas)
+│   │   ├── predictive_coding.py     # Hierarquia preditiva (981 linhas)
+│   │   ├── meta_hebbian.py          # Plasticidade ABCD (784 linhas)
+│   │   ├── integration_layer.py     # Glue code
+│   │   └── profiles.py              # Resource profiles
+│   │
+│   ├── reasoning/                    # VQ-VAE + Mycelial
+│   │   ├── vqvae/                   # Compressão Neural
+│   │   │   ├── layers.py            # Product Quantizer (170 linhas)
+│   │   │   ├── model.py             # MonolithV13 (96 linhas)
+│   │   │   ├── model_wiki.py        # MonolithWiki
+│   │   │   └── loss.py              # VQ-VAE losses
+│   │   ├── mycelial_reasoning.py    # Rede Hebbiana (568 linhas)
+│   │   ├── abduction_engine.py      # Detecção de gaps
+│   │   ├── causal_reasoning.py      # Inferência causal
+│   │   ├── symbol_grounding.py      # Text → Códigos VQ-VAE
+│   │   └── neural_learner.py        # Aprendizado neural
+│   │
+│   ├── loop/                         # Autonomia
+│   │   ├── self_feeding_loop.py     # Orquestrador (502 linhas)
+│   │   ├── hypothesis_executor.py   # Execução de ações
+│   │   ├── feedback_collector.py    # Coleta de feedback
+│   │   ├── action_selection.py      # Seleção via EFE
+│   │   ├── active_inference_adapter.py
+│   │   ├── incremental_learner.py
+│   │   ├── loop_metrics.py
+│   │   └── nemesis_integration.py
+│   │
+│   ├── memory/                       # Persistência
+│   │   ├── storage.py               # LanceDB wrapper (160 linhas)
+│   │   ├── semantic_memory.py       # Indexação multimodal
+│   │   └── v11_vision_encoder.py    # Encoder visual hierárquico
+│   │
+│   ├── agents/                       # Agentes
+│   │   ├── action/                  # Agentes de ação (10 arquivos)
+│   │   │   ├── agent.py
+│   │   │   ├── types.py
+│   │   │   ├── execution/           # Executores especializados
+│   │   │   └── ...
+│   │   ├── action_agent.py
+│   │   ├── bridge_agent.py          # Agente metacognitivo
+│   │   ├── critic_agent.py          # Avaliador de hipóteses
+│   │   └── oracle.py                # Sintetizador híbrido
+│   │
+│   ├── integrations/                 # Integrações Unificadas
+│   │   ├── alexandria_unified.py    # AlexandriaCore (718 linhas)
 │   │   ├── geodesic_bridge_integration.py
 │   │   ├── nemesis_bridge_integration.py
 │   │   ├── learning_field_integration.py
@@ -29,113 +88,94 @@ Alexandria/
 │   │   ├── agents_compositional_integration.py
 │   │   └── loop_compositional_integration.py
 │   │
-│   ├── learning/                 # [Prod] Nemesis Core
-│   │   ├── active_inference.py  # Agentes FEP
-│   │   └── predictive_coding.py # Hierarquia Preditiva
+│   ├── topology/                     # Gestão de Espaço
+│   │   └── topology_engine.py       # Clustering + UMAP
 │   │
-│   ├── loop/                     # [Prod] Autonomia
-│   │   ├── self_feeding_loop.py # Orquestrador
-│   │   ├── action_selection.py  # Protocolo de Ação
-│   │   ├── active_inference_adapter.py # Adaptador AI
-│   │   └── hypothesis_executor.py # Executor Grounded
-│   │
-│   ├── memory/                   # [Prod] Memória Semântica
-│   │   ├── storage.py           # LanceDB Wrapper
-│   │   └── semantic_memory.py   # Sistema de Indexação
-│   │
-│   ├── reasoning/                # [Prod] Motores de Raciocínio
-│   │   ├── mycelial_reasoning.py # Rede Hebbiana
-│   │   ├── symbol_grounding.py   # Text -> Node Grounding
-│   │   └── vqvae/               # Compressão Neural (Monolith)
-│   │
-│   ├── topology/                 # [Prod] Gestão de Espaço
-│   │   └── topology_engine.py   # Clustering e Mapeamento
-│   │
-│   └── utils/                    # Utilitários Compartilhados
+│   └── utils/                        # Utilitários
+│       ├── harvester.py             # Scraper ArXiv
+│       ├── local_llm.py             # TinyLlama local
+│       └── logger.py                # Loguru estruturado
 │
-├── 📂 scripts/                   # FERRAMENTAS & OPERAÇÃO
-│   ├── system_runner_v2.py       # → Executor do Sistema (Principal)
-│   ├── entrypoint.sh            # → Docker entrypoint
-│   ├── ingestion/               # [NEW] Ingestão de Dados
-│   │   ├── ingest_incremental.py
+├── 📂 tests/                         # 🧪 TESTES (293 passando)
+│   ├── unit/
+│   │   └── core/                    # Testes por módulo
+│   │       ├── field/
+│   │       ├── learning/
+│   │       ├── reasoning/
+│   │       ├── loop/
+│   │       ├── memory/
+│   │       └── ...
+│   └── conftest.py                  # Fixtures pytest
+│
+├── 📂 scripts/                       # 🛠️ FERRAMENTAS
+│   ├── system_runner_v2.py          # Executor principal
+│   ├── ingestion/                   # Ingestão de dados
 │   │   ├── mass_arxiv_ingest.py
-│   │   └── multi_api_ingest.py
-│   ├── maintenance/              # → Saúde e Limpeza
-│   ├── analysis/                 # → Ciência de Dados (~25 scripts)
-│   ├── testing/                  # → Validação e Stress Tests
-│   ├── debug/                   # → Diagnóstico (~11 scripts)
-│   ├── demos/                   # → Demonstrações
-│   ├── training/                # → Treino de Modelos
-│   ├── utilities/               # → Helpers
-│   ├── benchmarks/              # → Performance
-│   ├── calibration/             # → Calibração
-│   └── diagnostics/             # → Diagnósticos Profundos
+│   │   └── ingest_incremental.py
+│   ├── analysis/                    # Diagnósticos (~25 scripts)
+│   ├── maintenance/                 # Saúde e limpeza
+│   └── testing/                     # Validação
 │
-├── 📂 tests/                     # [REORGANIZED] TESTES AUTOMATIZADOS
-│   ├── conftest.py              # Fixtures pytest
-│   ├── test_*.py                # 19 arquivos de teste
-│   └── data/                    # Dados de teste
+├── 📂 interface/                     # 🖥️ UI STREAMLIT
+│   ├── app.py                       # Entrada principal
+│   └── pages/                       # Páginas multipage
 │
-├── 📂 interface/                 # [NEW] UI STREAMLIT
-│   ├── app.py                   # Entrada principal
-│   └── pages/                   # Páginas multipage
+├── 📂 docs/                          # 📚 DOCUMENTAÇÃO (60+ arquivos)
 │
-├── 📂 docs/                      # BASE DE CONHECIMENTO
-│   ├── concepts/                 # [High Value] Teoria Profunda
-│   ├── core/                     # Manuais Técnicos (~40 arquivos)
-│   │   ├── integrations/        # [NEW] Docs de Integração
-│   │   └── ...
-│   └── reports/                  # Relatórios Gerados
+├── 📂 .agent/                        # 🤖 WORKFLOWS
+│   └── workflows/                   # /slash-commands
 │
-├── 📂 .agent/                    # PROTOCOLO OPERACIONAL
-│   └── workflows/                # /slash-commands
+├── 📂 data/                          # 💾 PERSISTÊNCIA
+│   ├── lancedb_store/               # Vetores (20k+)
+│   ├── mycelial_state.pkl           # Grafo (600k+ conexões)
+│   └── monolith_*.pth               # Modelos treinados
 │
-├── 📂 .prompts/                  # INSTRUÇÕES DE LLM
-│
-└── 📂 data/                      # PERSISTÊNCIA DE ESTADO
-    ├── library/                 # PDFs crus
-    ├── lancedb_store/           # Vetores (Memória Episódica)
-    ├── mycelial_state.npz       # Grafo (Raciocínio Persistente)
-    └── monolith_v13_trained.pth # Modelo VQ-VAE
+├── config/                           # Configurações
+├── requirements.txt                  # Dependências
+├── README.md                         # Documentação principal
+├── RESUMO_SISTEMA.md                 # Resumo técnico
+└── STRUCTURE.md                      # Este arquivo
 ```
 
 ---
 
-## 🔍 Detalhes dos Módulos Principais
-
-### 1. `core/field` (Cognição Geométrica)
-Implementa a ideia de que pensar é deformar o espaço.
-- **Status**: Beta
-- **Arquivos Chave**: `metric.py` (calcula distâncias curvas), `geodesic_flow.py` (encontra conexões não-lineares).
-
-### 2. `core/loop` (Autonomia)
-O mecanismo que permite ao sistema operar sem usuário.
-- **Status**: Beta
-- **Fluxo**: Observar Grafo → Detectar Gaps → Gerar Hipótese → Validar → Consolidar.
-
-### 3. `core/reasoning/vqvae` (Compressão Neural)
-O coração da eficiência do Alexandria.
-- **Status**: Produção
-- **Specs**: Reduz vetores 384D para apenas 4 bytes com perda mínima. Permite rodar grafos gigantes em hardware modesto.
-
----
-
-## � Estatísticas de Código (Estimada)
-
-- **Python**: ~20k linhas
-- **Módulos Core**: 8
-- **Scripts Utilitários**: 15+
-- **Documentação**: ~30 arquivos Markdown
-
----
-
-## 🛠️ Onde encontrar o que você precisa?
+## 🔍 Referência Rápida
 
 | Eu quero... | Vá para... |
 |-------------|------------|
-| Iniciar o sistema | `scripts/system_runner_v2.py` |
-| Ingerir dados | `scripts/mass_arxiv_ingest.py` |
-| Entender a teoria | `docs/concepts/` |
-| Criar nova feature | `.agent/workflows/criar-feature.md` |
-| Checar saúde | `scripts/maintenance/` |
-| Debugar | `.agent/workflows/debug-profundo.md` |
+| Iniciar o sistema | `python scripts/system_runner_v2.py` |
+| Ingerir dados | `python scripts/ingestion/mass_arxiv_ingest.py` |
+| Rodar testes | `python -m pytest tests/unit/core/ -v` |
+| Interface gráfica | `streamlit run interface/app.py` |
+| Criar feature | `/criar-feature` |
+| Debug profundo | `/debug-profundo` |
+
+---
+
+## 🏛️ Camadas do Core
+
+```mermaid
+graph TB
+    subgraph Core["core/"]
+        F[field/] --> L[learning/]
+        L --> R[reasoning/]
+        R --> LP[loop/]
+        LP --> M[memory/]
+        I[integrations/] --> F
+        I --> L
+        I --> R
+        I --> LP
+    end
+```
+
+| Camada | Módulos | Responsabilidade |
+|--------|--------:|------------------|
+| `field/` | 9 | Geometria Riemanniana, geodésicas |
+| `learning/` | 6 | Active Inference, Free Energy |
+| `reasoning/` | 11 | VQ-VAE, Mycelial, Abduction |
+| `loop/` | 9 | Autonomia, self-feeding |
+| `memory/` | 3 | LanceDB, indexação |
+| `agents/` | 16 | Agentes especializados |
+| `integrations/` | 8 | Unificação |
+| `topology/` | 2 | Clustering, UMAP |
+| `utils/` | 3 | Harvester, Logger, LLM |

@@ -1,14 +1,44 @@
-# 🕸️ Causal Reasoning Engine
+# 🕸️ CausalEngine
 
 **Module**: `core/reasoning/causal_reasoning.py`  
-**Lines of Code**: 428  
-**Purpose**: Build and analyze causal relationships between concepts
+**Lines**: 526  
+**Purpose**: Build and analyze causal relationships between concepts.
 
 ---
 
-## 🎯 Overview
+## Overview
 
-The Causal Reasoning Engine constructs a **directed graph of causal relationships** from document corpus, enabling Alexandria to understand not just *what* concepts are related, but *how* they influence each other.
+Constructs directed graph of causal relationships from document corpus.
+
+---
+
+## Dependencies
+
+| Import | Purpose |
+|--------|---------|
+| `numpy` | Matrix operations |
+| `sklearn.decomposition` | PCA, SVD for latent discovery |
+| `core.topology.topology_engine` | TopologyEngine for clustering |
+| `core.memory.semantic_memory` | SemanticFileSystem for docs |
+
+---
+
+## Communication
+
+```mermaid
+graph LR
+    CE[CausalEngine] --> TE[TopologyEngine]
+    CE --> SFS[SemanticFileSystem]
+    
+    subgraph "Consumers"
+        Abduction[AbductionEngine] --> CE
+        UI[Streamlit UI] --> CE
+    end
+```
+
+---
+
+## Overview
 
 ### Why Causal Reasoning?
 

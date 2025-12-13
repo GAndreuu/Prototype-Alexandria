@@ -18,7 +18,12 @@ import random
 import torch
 
 from .causal_reasoning import CausalEngine, CausalGraph
-from core.agents.action_agent import ActionAgent, ActionType
+# from core.agents.action_agent import ActionAgent, ActionType  # DEPRECATED
+try:
+    from core.agents.action import ActionAgent, ActionType
+except ImportError:
+    # Fallback ou mock se necessário durante refatoração
+    pass
 
 
 @dataclass

@@ -1,14 +1,44 @@
-# 🍄 Mycelial Reasoning Network
+# 🍄 MycelialReasoning
 
 **Module**: `core/reasoning/mycelial_reasoning.py`  
-**Lines of Code**: ~800  
-**Purpose**: Hebbian learning network over VQ-VAE codebook for emergent reasoning
+**Lines**: 568  
+**Purpose**: Hebbian learning network over VQ-VAE codebook.
 
 ---
 
-## 🎯 Overview
+## Overview
 
-The Mycelial Reasoning Network implements a **biologically-inspired learning system** that grows connections between semantic codes based on co-occurrence patterns. Like mycelium connecting roots in a forest, it creates pathways between related concepts.
+Biologically-inspired learning: "Codes that fire together, wire together."
+
+---
+
+## Dependencies
+
+| Import | Purpose |
+|--------|---------|
+| `torch` | Tensor operations |
+| `numpy` | Array operations |
+| `core.reasoning.vqvae.model` | MonolithV13 |
+| `core.reasoning.vqvae.model_wiki` | MonolithWiki |
+
+---
+
+## Communication
+
+```mermaid
+graph LR
+    MR[MycelialReasoning] --> VQVAE[VQ-VAE Models]
+    
+    subgraph "Consumers"
+        Abduction[AbductionEngine] --> MR
+        PSF[PreStructuralField] --> MR
+        UI[Streamlit UI] --> MR
+    end
+```
+
+---
+
+## Overview
 
 ### Key Concept
 

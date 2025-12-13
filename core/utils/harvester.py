@@ -90,8 +90,8 @@ class ArxivHarvester:
         Executa o fluxo completo: Busca -> Download -> Ingestão.
         """
         # Importar aqui para evitar ciclo se não for usar
-        from core.topology_engine import create_topology_engine
-        from core.semantic_memory import SemanticFileSystem
+        from core.topology.topology_engine import create_topology_engine
+        from core.memory.semantic_memory import SemanticFileSystem
         
         sfs = None
         if ingest:
