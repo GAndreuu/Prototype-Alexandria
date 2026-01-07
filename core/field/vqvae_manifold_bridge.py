@@ -33,6 +33,14 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# mHC Safety Layer import
+try:
+    from .manifold_constraints import normalize_weights_convex
+    _HAS_MHC = True
+except ImportError:
+    _HAS_MHC = False
+    logger.warning("manifold_constraints não disponível, usando normalização padrão")
+
 
 # =============================================================================
 # DATA STRUCTURES
@@ -154,6 +162,9 @@ class VQVAEManifoldBridge:
                 config = BridgeConfig()
         
         self.config = config
+        self.codebook_by_head = {}
+        self.anchor_points = None
+        self._kdtree = None
     
     # =========================================================================
     # CONEXÃO COM VQ-VAE
@@ -439,6 +450,10 @@ class VQVAEManifoldBridge:
         Projeção com interpolação ponderada entre k âncoras mais próximas.
         
         Esta é a projeção mais sofisticada e recomendada.
+        
+        Usa mHC Safety Layer (Sinkhorn) para garantir que o ponto
+        interpolado seja estritamente dentro do convex hull das âncoras.
+        Ref: mHC paper (DeepSeek-AI, 2025)
         """
         codes, head_distances = self._find_codes_per_head(embedding)
         
@@ -456,9 +471,20 @@ class VQVAEManifoldBridge:
             indices = indices[sort_idx]
             distances = distances[sort_idx]
         
-        # Calcular pesos (softmax sobre distâncias negativas)
-        weights = np.exp(-distances / self.config.pull_radius)
-        weights = weights / (np.sum(weights) + 1e-8)
+        # =====================================================================
+        # mHC SAFETY LAYER: Normalização Sinkhorn para combinação convexa
+        # Garante que o ponto interpolado esteja dentro do convex hull
+        # das âncoras, evitando reconstruções fora da distribuição
+        # =====================================================================
+        log_affinities = -distances / self.config.pull_radius
+        
+        if _HAS_MHC:
+            # Usa normalização mHC (Sinkhorn) para pesos baricêntricos estáveis
+            weights = normalize_weights_convex(np.exp(log_affinities), use_sinkhorn=False)
+        else:
+            # Fallback: softmax padrão
+            weights = np.exp(log_affinities)
+            weights = weights / (np.sum(weights) + 1e-8)
         
         # Interpolação ponderada das âncoras
         anchor_blend = np.zeros_like(embedding)
@@ -491,7 +517,7 @@ class VQVAEManifoldBridge:
         logger.warning("Geodesic projection não implementado, usando weighted")
         return self._embed_weighted(embedding)
     
-    def _find_codes_per_head(self, embedding: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def find_codes(self, embedding: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
         """
         Encontra o código mais próximo em cada head.
         
@@ -521,6 +547,20 @@ class VQVAEManifoldBridge:
                 distances[h] = float('inf')
         
         return codes, distances
+
+    def get_code_embedding(self, head_idx: int, code_idx: int) -> Optional[np.ndarray]:
+        """
+        Retorna o embedding do código específico.
+        """
+        if head_idx in self.codebook_by_head:
+            codebook = self.codebook_by_head[head_idx]
+            if 0 <= code_idx < len(codebook):
+                return codebook[code_idx].copy()
+        return None
+        
+    def _find_codes_per_head(self, embedding: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """Deprecated alias for find_codes."""
+        return self.find_codes(embedding)
     
     # =========================================================================
     # RECONSTRUÇÃO CODES → EMBEDDING

@@ -42,6 +42,9 @@ logger = logging.getLogger(__name__)
 class GeodesicBridgeConfig:
     """Configuração da integração Geodesic ↔ Bridge."""
     
+    # Modo de operação
+    use_geodesic: bool = True  # False = sempre usar fallback Euclidiano (rápido)
+    
     # Parâmetros do fluxo geodésico
     max_geodesic_steps: int = 100
     geodesic_step_size: float = 0.01
@@ -233,8 +236,8 @@ class GeodesicBridgeIntegration:
         if use_cache and cache_key in self._path_cache:
             return self._path_cache[cache_key]
         
-        # Computar geodésica
-        if self.geodesic is not None:
+        # Computar geodésica (ou fallback se desativado)
+        if self.config.use_geodesic and self.geodesic is not None:
             try:
                 geo_path = self.geodesic.shortest_path(
                     start_latent, 
@@ -367,7 +370,7 @@ class GeodesicBridgeIntegration:
         paths = [] if self.config.store_intermediate_paths else []
         total_energy = 0.0
         
-        if self.geodesic is not None and self.bridge is not None:
+        if self.config.use_geodesic and self.geodesic is not None and self.bridge is not None:
             try:
                 # Usar propagate_activation do GeodesicFlow
                 from core.field.manifold import ManifoldPoint
@@ -470,7 +473,7 @@ class GeodesicBridgeIntegration:
         lengths = []
         curvatures = []
         
-        if self.geodesic is not None:
+        if self.config.use_geodesic and self.geodesic is not None:
             try:
                 for direction in directions:
                     geo_path = self.geodesic.compute_geodesic(
@@ -554,6 +557,7 @@ class GeodesicBridgeIntegration:
         return {
             "has_bridge": self.bridge is not None,
             "has_geodesic_flow": self.geodesic is not None,
+            "use_geodesic": self.config.use_geodesic,  # Modo atual
             "cached_paths": len(self._path_cache),
             "config": {
                 "max_geodesic_steps": self.config.max_geodesic_steps,

@@ -730,6 +730,25 @@ class LoopCompositionalIntegration:
     
     def _compute_free_energy(self, point: np.ndarray) -> float:
         """Calcula free energy no ponto."""
+        
+        # 1. Tentar usar CompositionalReasoner (já unificado)
+        if self.compositional is not None:
+            # Se o reasoner tem acesso direto ao field
+            if hasattr(self.compositional, 'field') and self.compositional.field is not None:
+                if hasattr(self.compositional.field, 'get_free_energy_at'):
+                    try:
+                        return self.compositional.field.get_free_energy_at(point)
+                    except:
+                        pass
+            
+            # Se não, usar a aproximação dele (que pode ter sido melhorada)
+            if hasattr(self.compositional, '_approximate_free_energy'):
+                try:
+                    return self.compositional._approximate_free_energy(point)
+                except:
+                    pass
+
+        # 2. Fallback: lógica local (duplicada para robustez)
         if self.bridge is None:
             return 0.0
         

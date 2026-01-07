@@ -1,4 +1,4 @@
-# ASI MONOLITH V12 - DEPENDÊNCIAS DO SISTEMA REAL
+
 # Sistema corrigido com APIs e modelos reais
 
 # Core Framework

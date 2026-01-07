@@ -20,6 +20,21 @@ import numpy as np
 from dataclasses import dataclass
 from typing import Optional, List, Tuple
 from core.field.metric import RiemannianMetric
+import logging
+
+logger = logging.getLogger(__name__)
+
+# mHC Safety Layer import
+try:
+    from core.field.manifold_constraints import cap_kinetic_energy
+    _HAS_MHC = True
+except ImportError:
+    _HAS_MHC = False
+    def cap_kinetic_energy(v, current_e, max_e, metric=None):
+        """Fallback simples."""
+        if current_e > max_e and current_e > 1e-12:
+            return v * np.sqrt(max_e / current_e)
+        return v
 
 @dataclass
 class GeodesicConfig:
@@ -37,6 +52,11 @@ class GeodesicConfig:
     lr: float = 0.35            # Taxa de aprendizado inicial para correção de velocidade
     tol: float = 1e-2           # Tolerância de convergência (distância final)
     patience: int = 35          # Passos sem melhora antes de abortar integração
+    
+    # mHC Safety Layer: Limites de energia para evitar divergência
+    # Ref: mHC paper (DeepSeek-AI, 2025) - não-expansividade
+    use_mhc_energy_cap: bool = True
+    max_energy_ratio: float = 10.0  # Máximo de 10x a energia inicial
 
 
 @dataclass
@@ -128,6 +148,20 @@ class GeodesicFlow:
                 if s2 > self.config.speed_floor:
                     # Scaling factor: sqrt(target / current)
                     v *= np.sqrt(max(s2_target, 1e-12) / (s2 + 1e-12))
+            
+            # =================================================================
+            # mHC SAFETY LAYER: Energy Capping
+            # Ref: mHC paper - não-expansividade via ||H||_2 ≤ 1
+            # Limita energia cinética para evitar explosão em regiões de alta
+            # curvatura onde Christoffel pode amplificar a velocidade
+            # =================================================================
+            if self.config.use_mhc_energy_cap:
+                current_energy = self._speed2(x, v)
+                max_allowed = s2_target * self.config.max_energy_ratio if s2_target else 10.0
+                
+                if current_energy > max_allowed:
+                    v = cap_kinetic_energy(v, current_energy, max_allowed)
+                    logger.debug(f"Geodesic energy capped at step {step}")
 
             x = x + v * dt
             points.append(x.copy())

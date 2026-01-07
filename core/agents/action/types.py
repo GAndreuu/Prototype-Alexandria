@@ -59,6 +59,21 @@ class ActionResult:
             return (self.end_time - self.start_time).total_seconds()
         return 0.0
 
+    def to_dict(self) -> Dict[str, Any]:
+        """Serializa o resultado para dicionário (compatível com serialização legada)"""
+        return {
+            "action_id": self.action_id,
+            "action_type": self.action_type.value if hasattr(self.action_type, 'value') else str(self.action_type),
+            "status": self.status.value if hasattr(self.status, 'value') else str(self.status),
+            "start_time": self.start_time.isoformat() if self.start_time else None,
+            "end_time": self.end_time.isoformat() if self.end_time else None,
+            "result_data": self.result_data,
+            "error_message": self.error_message,
+            "evidence_generated": self.evidence_generated,
+            "evidence_type": self.evidence_type.value if self.evidence_type and hasattr(self.evidence_type, 'value') else str(self.evidence_type) if self.evidence_type else None,
+            "duration": self.duration
+        }
+
 
 @dataclass
 class TestHypothesis:

@@ -16,6 +16,17 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+# =============================================================================
+# BASE CLASSES (sempre disponíveis)
+# =============================================================================
+from .base_integration import (
+    BaseCompositionalIntegration,
+    BaseIntegrationConfig,
+    IntegrationMetrics,
+    create_integration
+)
+
+
 # Imports condicionais para graceful degradation
 _available_modules = []
 
@@ -100,6 +111,19 @@ except ImportError as e:
     logger.warning(f"Could not import geodesic_bridge_integration: {e}")
     GeodesicBridgeIntegration = None
 
+try:
+    from .swarm_integration import (
+        SwarmIntegration,
+        SwarmIntegrationConfig,
+        SwarmModeRecommendation,
+        IntegratedNavigationResult,
+        create_swarm_integration
+    )
+    _available_modules.append('swarm')
+except ImportError as e:
+    logger.warning(f"Could not import swarm_integration: {e}")
+    SwarmIntegration = None
+
 
 def available_modules() -> list:
     """Retorna lista de módulos disponíveis."""
@@ -116,11 +140,17 @@ def health_check() -> dict:
         'agents': AgentsCompositionalIntegration is not None,
         'loop': LoopCompositionalIntegration is not None,
         'geodesic_bridge': GeodesicBridgeIntegration is not None,
+        'swarm': SwarmIntegration is not None,
         'total_available': len(_available_modules)
     }
 
 
 __all__ = [
+    # Base Classes (NEW)
+    'BaseCompositionalIntegration',
+    'BaseIntegrationConfig',
+    'IntegrationMetrics',
+    'create_integration',
     # Core
     'AlexandriaCore',
     'AlexandriaConfig',
@@ -153,7 +183,14 @@ __all__ = [
     'ActivationMap',
     'GeodesicField',
     'create_geodesic_bridge',
+    # Swarm Integration
+    'SwarmIntegration',
+    'SwarmIntegrationConfig',
+    'SwarmModeRecommendation',
+    'IntegratedNavigationResult',
+    'create_swarm_integration',
     # Utils
     'available_modules',
     'health_check',
 ]
+

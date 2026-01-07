@@ -38,7 +38,7 @@ class MycelialConfig:
     min_weight: float = 0.1         # threshold para poda (mais alto)
     propagation_steps: int = 2
     activation_threshold: float = 0.05
-    save_path: str = "data/mycelial_state.pkl"
+    save_path: str = "data/mycelial_state.npz"
 
 
 class MycelialReasoning:
@@ -114,9 +114,14 @@ class MycelialReasoning:
         # Hebbian: "Cells that fire together, wire together"
         # Conecta todos contra todos no conjunto ativo (clique)
         for a, b in combinations(active_nodes, 2):
-            # Conexão bidirecional simétrica
-            self.graph[a][b] += self.c.learning_rate
-            self.graph[b][a] += self.c.learning_rate
+            # Conexão bidirecional simétrica com Regra de Oja (Soft Bound em 1.0)
+            # Delta = rate * (1 - current_weight)
+            # Isso garante que o peso convirja para 1.0 e não cresça infinitamente.
+            w_ab = self.graph[a][b]
+            delta = self.c.learning_rate * (1.0 - w_ab)
+            
+            self.graph[a][b] += delta
+            self.graph[b][a] += delta
 
     def observe_batch(self, indices_batch: np.ndarray) -> None:
         """Observa múltiplos colapsos."""
@@ -172,7 +177,10 @@ class MycelialReasoning:
         Retorna o novo peso da aresta.
         """
         # Garantir simetria
-        new_weight = self.graph[node_a][node_b] + weight_delta
+        # Garantir simetria e Soft Bound (1.0)
+        current = self.graph[node_a][node_b]
+        new_weight = min(1.0, current + weight_delta)
+        
         self.graph[node_a][node_b] = new_weight
         self.graph[node_b][node_a] = new_weight
         return new_weight
@@ -491,11 +499,22 @@ class MycelialVQVAE:
                         model = MonolithV13(input_dim=384, hidden_dim=hdim, latent_dim=ldim)
                     
                     state = torch.load(path, map_location=device, weights_only=False)
-                    model.load_state_dict(state, strict=False)
+                    
+                    # Handle both checkpoint format and direct state_dict
+                    if isinstance(state, dict) and 'model_state_dict' in state:
+                        # Checkpoint format: {'model_state_dict': ..., 'config': ..., ...}
+                        actual_state_dict = state['model_state_dict']
+                    else:
+                        # Direct state_dict format
+                        actual_state_dict = state
+                    
+                    model.load_state_dict(actual_state_dict, strict=False)
                     model.to(device)
                     model.eval()
+                    logger.info(f"VQ-VAE loaded from {path} ({desc})")
                     return cls(model)
-                except Exception:
+                except Exception as e:
+                    logger.warning(f"Failed to load {path}: {e}")
                     continue
         
         model = MonolithV13(input_dim=384, hidden_dim=256)

@@ -446,6 +446,92 @@ class TopologyEngine:
         except Exception as e:
             logger.error(f"Erro ao carregar topologia: {e}")
             return False
+    
+    def find_nearest(
+        self, 
+        query_embedding: np.ndarray, 
+        k: int = 5,
+        embeddings_pool: Optional[np.ndarray] = None,
+        labels_pool: Optional[List[str]] = None
+    ) -> List[tuple]:
+        """
+        Find k nearest embeddings to a query point.
+        
+        Args:
+            query_embedding: The query vector (384D)
+            k: Number of neighbors to return
+            embeddings_pool: Pool of embeddings to search in (optional)
+            labels_pool: Labels for the embeddings (optional)
+            
+        Returns:
+            List of (embedding, similarity, label) tuples
+        """
+        if embeddings_pool is None:
+            # Use cluster centers as fallback
+            embeddings_pool = self.get_cluster_centers()
+            if embeddings_pool is None:
+                logger.warning("No embeddings pool available for find_nearest")
+                return []
+        
+        # Normalize query
+        query_norm = query_embedding / (np.linalg.norm(query_embedding) + 1e-9)
+        
+        # Calculate cosine similarities
+        similarities = []
+        for i, emb in enumerate(embeddings_pool):
+            emb_norm = emb / (np.linalg.norm(emb) + 1e-9)
+            sim = float(np.dot(query_norm, emb_norm))
+            label = labels_pool[i] if labels_pool and i < len(labels_pool) else f"concept_{i}"
+            similarities.append((emb, sim, label))
+        
+        # Sort by similarity (descending)
+        similarities.sort(key=lambda x: x[1], reverse=True)
+        
+        return similarities[:k]
+    
+    def find_outliers(
+        self,
+        embeddings: np.ndarray,
+        labels: Optional[List[str]] = None,
+        top_k: int = 5
+    ) -> List[tuple]:
+        """
+        Find outliers in a set of embeddings - the ones most different from the centroid.
+        
+        This is useful for finding "gold" in specialized databases where everything
+        is similar but some items have unique properties.
+        
+        Args:
+            embeddings: Array of embeddings to analyze
+            labels: Optional labels for the embeddings
+            top_k: Number of outliers to return
+            
+        Returns:
+            List of (embedding, distance_from_centroid, label) tuples
+        """
+        if len(embeddings) < 2:
+            return []
+        
+        # Calculate centroid (average of all embeddings)
+        centroid = np.mean(embeddings, axis=0)
+        centroid = centroid / (np.linalg.norm(centroid) + 1e-9)
+        
+        # Calculate distance of each embedding from centroid
+        outliers = []
+        for i, emb in enumerate(embeddings):
+            emb_norm = emb / (np.linalg.norm(emb) + 1e-9)
+            # Use 1 - similarity as distance
+            sim = float(np.dot(centroid, emb_norm))
+            distance = 1.0 - sim
+            label = labels[i] if labels and i < len(labels) else f"item_{i}"
+            outliers.append((emb, distance, label))
+        
+        # Sort by distance (descending) - most distant first
+        outliers.sort(key=lambda x: x[1], reverse=True)
+        
+        logger.info(f"Found {len(outliers)} items, top outlier distance: {outliers[0][1]:.3f}")
+        
+        return outliers[:top_k]
 
 # Função de conveniência para criação
 def create_topology_engine(model_name: str = "all-MiniLM-L6-v2", device: Optional[str] = None) -> TopologyEngine:

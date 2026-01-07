@@ -133,8 +133,19 @@ def train_vqvae(data_path="data/training_embeddings.npy",
             }, checkpoint_path)
             logger.info(f"Saved checkpoint: {checkpoint_path}")
     
-    # Save final model
-    torch.save(model.state_dict(), output_path)
+    # Save final model (same format as checkpoints for consistency)
+    torch.save({
+        'model_state_dict': model.state_dict(),
+        'config': {
+            'epochs': epochs,
+            'batch_size': batch_size,
+            'lr': lr
+        },
+        'history': {
+            'final_loss': avg_loss,
+            'final_recon': avg_recon
+        }
+    }, output_path)
     logger.info(f"✅ Training complete! Model saved to {output_path}")
     
     # Test codebook usage

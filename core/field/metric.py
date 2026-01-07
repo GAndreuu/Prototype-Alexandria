@@ -26,6 +26,7 @@ from concurrent.futures import ThreadPoolExecutor
 import os
 
 from .manifold import DynamicManifold, ManifoldPoint
+from .manifold_constraints import normalize_weights_convex
 
 
 @dataclass
@@ -82,6 +83,10 @@ class RiemannianMetric:
         self.deformations: List[DeformationEvent] = []
         self._curvature_cache: Optional[np.ndarray] = None
         self._cache_valid = False
+        
+        # mHC Safety Layer: normaliza pesos para evitar singularidades
+        # Ref: mHC paper (DeepSeek-AI, 2025) - Manifold-Constrained Hyper-Connections
+        self.use_mhc_normalization: bool = True
         
     # =========================================================================
     # TENSOR MÉTRICO
@@ -151,6 +156,18 @@ class RiemannianMetric:
             weights = intensities / (1.0 + dist_sq / r_sq)
         else:
             weights = intensities * np.exp(-0.5 * dist_sq / r_sq)
+        
+        # =====================================================================
+        # mHC SAFETY LAYER: Normalização para combinação convexa
+        # Ref: mHC paper Eq. 6 - Projeta no Politopo de Birkhoff
+        # Garante que a deformação total seja uma mistura suave (Σ w_i ≤ 1)
+        # Isso evita singularidades quando muitos atratores se sobrepõem
+        # =====================================================================
+        if self.use_mhc_normalization and len(weights) > 0:
+            # Normaliza pesos para somar ≤ 1 (combinação convexa)
+            weights = normalize_weights_convex(weights, use_sinkhorn=False)
+            # Escala para manter força total controlada (max = deformation_strength)
+            weights = weights * self.config.deformation_strength
             
         # Directions n
         inv_dist = 1.0 / np.sqrt(dist_sq + 1e-12)

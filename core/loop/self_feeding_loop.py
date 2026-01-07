@@ -33,8 +33,8 @@ class LoopConfig:
     save_metrics_every_n_cycles: int = 10
     metrics_save_path: str = "data/loop_metrics.json"
     # Active Inference modes
-    use_active_inference_shadow: bool = False  # Log AI suggestions without changing behavior
-    use_active_inference: bool = False          # Use AI as primary decision source
+    use_active_inference_shadow: bool = True   # Log AI suggestions (sempre ativo)
+    use_active_inference: bool = True          # Use AI as primary decision source
 
 
 class SelfFeedingLoop:
@@ -62,7 +62,8 @@ class SelfFeedingLoop:
         on_action_complete: Optional[Callable] = None,
         active_inference_adapter: Optional[ActionSelectionAdapter] = None,
         mycelial=None,  # Optional MycelialReasoning for stats
-        field=None      # Optional PreStructuralField for stats
+        field=None,     # Optional PreStructuralField for stats
+        swarm_integration=None  # Optional SwarmIntegration for bridge navigation
     ):
         self.abduction_engine = abduction_engine
         self.executor = hypothesis_executor or HypothesisExecutor()
@@ -84,9 +85,21 @@ class SelfFeedingLoop:
         self.ai_primary_actions: List[AgentAction] = []  # Actions used when AI is primary
         self.ai_fallback_count: int = 0  # Count of times heuristic was used as fallback
         
+        # Auto-create adapter if AI is enabled but no adapter provided
+        if self.config.use_active_inference and not self.active_inference_adapter:
+            try:
+                from .active_inference_adapter import ActiveInferenceActionAdapter
+                self.active_inference_adapter = ActiveInferenceActionAdapter()
+                logger.info("Auto-created ActiveInferenceActionAdapter")
+            except Exception as e:
+                logger.warning(f"Could not auto-create AI adapter: {e}")
+        
         # External components for stats
         self.mycelial = mycelial  # MycelialReasoning instance
         self.field = field        # PreStructuralField instance
+        
+        # Swarm Integration for BRIDGE_CONCEPTS execution
+        self.swarm_integration = swarm_integration
         
         logger.info("SelfFeedingLoop inicializado")
     
@@ -139,7 +152,8 @@ class SelfFeedingLoop:
                 hypotheses = self._get_ai_hypotheses(gaps, hypotheses)
             
             for hypothesis in hypotheses:
-                result = self.executor.execute(hypothesis)
+                # Check if this is a bridge hypothesis and Swarm is available
+                result = self._execute_hypothesis_smart(hypothesis)
                 cycle.actions_executed += 1
                 
                 if result.success:
@@ -317,6 +331,57 @@ class SelfFeedingLoop:
         except Exception as e:
             logger.error(f"Erro ao gerar hipóteses: {e}")
             return []
+    
+    def _execute_hypothesis_smart(self, hypothesis: Dict[str, Any]) -> ActionResult:
+        """
+        Execute hypothesis using Swarm if it's a bridge type and Swarm is available.
+        
+        Falls back to standard executor otherwise.
+        
+        Args:
+            hypothesis: Hypothesis dict with type info
+            
+        Returns:
+            ActionResult from execution
+        """
+        # Check if this is a bridge-type hypothesis and Swarm is available
+        is_bridge = (
+            hypothesis.get('_action_type') == 'BRIDGE_CONCEPTS' or
+            hypothesis.get('type') == 'BRIDGE_CONCEPTS' or
+            'bridge' in hypothesis.get('hypothesis_text', '').lower()
+        )
+        
+        if is_bridge and self.swarm_integration:
+            try:
+                source = hypothesis.get('source_cluster', hypothesis.get('source', ''))
+                target = hypothesis.get('target_cluster', hypothesis.get('target', ''))
+                
+                if source and target:
+                    # Use SwarmIntegration for navigation
+                    nav_result = self.swarm_integration.navigate_with_inference(
+                        start_concept=source,
+                        target_concept=target
+                    )
+                    
+                    # Convert to ActionResult
+                    return ActionResult(
+                        hypothesis_id=hypothesis.get('id', 'unknown'),
+                        action_type='BRIDGE_CONCEPTS',
+                        success=nav_result.success,
+                        evidence_found=[{
+                            'type': 'swarm_navigation',
+                            'improvement': nav_result.improvement,
+                            'mode': nav_result.mode_used,
+                            'steps': nav_result.steps
+                        }] if nav_result.success else [],
+                        new_connections=1 if nav_result.success else 0,
+                        execution_time_ms=0.0  # Not tracked here
+                    )
+            except Exception as e:
+                logger.warning(f"Swarm execution failed, falling back to standard: {e}")
+        
+        # Standard execution via HypothesisExecutor
+        return self.executor.execute(hypothesis)
     
     def _save_metrics(self):
         """Salva métricas em arquivo"""

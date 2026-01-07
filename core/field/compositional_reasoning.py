@@ -39,6 +39,7 @@ import numpy as np
 from typing import List, Dict, Tuple, Optional, Any, Callable
 from dataclasses import dataclass, field
 from enum import Enum
+from collections import deque
 import logging
 
 logger = logging.getLogger(__name__)
@@ -78,6 +79,11 @@ class CompositionConfig:
     hebbian_scale: float = 0.15          # Escala específica Hebbiana
     attention_scale: float = 0.1         # Escala específica Attention
     field_scale: float = 0.05            # Escala específica Campo
+    
+    # HYBRID Mode Weights (devem somar ~1.0)
+    hybrid_hebbian_weight: float = 0.4   # Peso para componente Hebbian
+    hybrid_field_weight: float = 0.2     # Peso para componente Field (-∇F)
+    hybrid_target_weight: float = 0.4    # Peso para direção ao target
     
     # Hebbian
     hebbian_top_k: int = 8               # Vizinhos Hebbianos a considerar
@@ -197,11 +203,13 @@ class CompositionalReasoner:
         bridge,                          # VQVAEManifoldBridge
         mycelial=None,                   # MycelialReasoning (opcional)
         geodesic_flow=None,              # BridgedGeodesicFlow (opcional)
+        field=None,                      # PreStructuralField (opcional, fonte de Free Energy)
         config: Optional[CompositionConfig] = None
     ):
         self.bridge = bridge
         self.mycelial = mycelial
         self.flow = geodesic_flow
+        self.field = field
         self.config = config or CompositionConfig()
         
         # Cache
@@ -247,6 +255,9 @@ class CompositionalReasoner:
             start = self.bridge._project_to_latent(start)
             target = self.bridge._project_to_latent(target)
         
+        # Armazenar target para uso pelo modo HYBRID
+        self._current_target = target.copy()
+        
         # Computar caminho geodésico
         path_points, path_velocities = self._compute_path(start, target)
         
@@ -254,6 +265,9 @@ class CompositionalReasoner:
         result = self._accumulate_residuals(
             start, target, path_points, path_velocities, mode
         )
+        
+        # Limpar target temporário
+        self._current_target = None
         
         result.computation_time_ms = (time.time() - t0) * 1000
         result.config = self.config
@@ -376,9 +390,22 @@ class CompositionalReasoner:
         """
         Computa caminho geodésico de start a target.
         
-        Se geodesic_flow disponível, usa ele.
-        Senão, interpola linearmente (fallback).
+        Prioridade:
+            1. Micelial (BFS no grafo Hebbian) - topologicamente correto
+            2. geodesic_flow (Christoffel) - geometricamente correto
+            3. interpolação linear (fallback)
         """
+        # OPÇÃO 1: Geodésica discreta via grafo Micelial (MELHOR)
+        if self.mycelial is not None and hasattr(self.mycelial, 'graph') and len(self.mycelial.graph) > 0:
+            try:
+                points, velocities = self._compute_path_via_micelial(start, target)
+                if len(points) > 0:
+                    logger.debug(f"Using Micelial discrete geodesic: {len(points)} points")
+                    return points, velocities
+            except Exception as e:
+                logger.warning(f"Micelial geodesic failed: {e}, trying fallback")
+        
+        # OPÇÃO 2: Geodésica contínua via flow (Christoffel)
         if self.flow is not None:
             try:
                 path = self.flow.shortest_path(start, target, n_iterations=5)
@@ -386,7 +413,7 @@ class CompositionalReasoner:
             except Exception as e:
                 logger.warning(f"Geodesic flow failed: {e}, using linear")
         
-        # Fallback: interpolação linear
+        # OPÇÃO 3: Fallback - interpolação linear
         n_steps = min(
             self.config.max_path_length,
             max(10, int(np.linalg.norm(target - start) / 0.1))
@@ -401,6 +428,231 @@ class CompositionalReasoner:
             velocities[i] = (target - start) / n_steps
         
         return points, velocities
+    
+    def _compute_path_via_micelial(
+        self,
+        start: np.ndarray,
+        target: np.ndarray
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Computa caminho usando BFS no grafo Hebbian Micelial.
+        
+        Esta é a GEODÉSICA DISCRETA topologicamente correta:
+        - Respeita a estrutura de conexões reais
+        - Passa por conceitos intermediários
+        - Evita "cortar" regiões vazias
+        
+        Args:
+            start: Embedding inicial [384D]
+            target: Embedding alvo [384D]
+            
+        Returns:
+            (points, velocities): Caminho no espaço de embeddings
+        """
+        from collections import deque
+        
+        # 1. Converter embeddings para códigos VQ-VAE
+        start_codes = self._embedding_to_codes(start)
+        target_codes = self._embedding_to_codes(target)
+        
+        # 2. BFS no grafo Micelial
+        path_nodes = self._bfs_on_micelial(start_codes, target_codes)
+        
+        if not path_nodes:
+            # Se não encontrou caminho, retorna vazio para fallback
+            return np.array([]), np.array([])
+        
+        # 3. Converter nós de volta para embeddings
+        path_points = []
+        
+        # Ponto inicial
+        path_points.append(start.copy())
+        
+        # Pontos intermediários via códigos
+        for node in path_nodes[1:-1]:  # Exclui primeiro e último
+            try:
+                point = self._node_to_embedding(node, reference=start)
+                path_points.append(point)
+            except Exception:
+                continue
+        
+        # Ponto final
+        path_points.append(target.copy())
+        
+        # Garantir mínimo de pontos
+        if len(path_points) < 3:
+            # Interpolar para ter mais pontos
+            path_points = self._interpolate_path(path_points, min_points=10)
+        
+        points = np.array(path_points)
+        
+        # Calcular velocidades
+        velocities = np.zeros_like(points)
+        velocities[:-1] = np.diff(points, axis=0)
+        velocities[-1] = velocities[-2] if len(velocities) > 1 else np.zeros(len(start))
+        
+        return points, velocities
+    
+    def _embedding_to_codes(self, embedding: np.ndarray) -> List[int]:
+        """
+        Converte embedding 384D para códigos VQ-VAE [4 heads].
+        
+        Usa VQVAEManifoldBridge.find_codes se disponível.
+        Fallback para hash determinístico se bridge não inicializado.
+        """
+        if self.bridge is not None and hasattr(self.bridge, 'find_codes'):
+            try:
+                # Check if bridge is actually connected (has anchor_points)
+                if hasattr(self.bridge, 'anchor_points') and self.bridge.anchor_points is not None:
+                    codes, _ = self.bridge.find_codes(embedding)
+                    return list(codes)
+            except Exception as e:
+                logger.debug(f"Bridge find_codes failed details: {e}")
+                pass
+        
+        # Fallback: hash baseado em seções (Simulated VQ-VAE)
+        # Necessário para testes ou quando VQ-VAE não está conectado
+        codes = []
+        chunk_size = max(1, len(embedding) // 4)
+        for h in range(4):
+            start = h * chunk_size
+            end = min((h + 1) * chunk_size, len(embedding))
+            if start < end:
+                section = embedding[start:end]
+                # Hash determinístico: soma absoluta normalizada para 0-255
+                code = int(np.abs(section.sum() * 100) % 256)
+                codes.append(code)
+            else:
+                codes.append(0)
+        
+        return codes
+    
+    def _bfs_on_micelial(
+        self, 
+        start_codes: List[int], 
+        target_codes: List[int],
+        max_hops: int = 5
+    ) -> List[Tuple[int, int]]:
+        """
+        BFS no grafo Hebbian para encontrar caminho entre códigos.
+        
+        Baseado no MycelialBridgeAgent.find_path_between_codes()
+        """
+        # Criar nós de início e destino
+        start_nodes = set((h, int(c)) for h, c in enumerate(start_codes) if h < 4)
+        target_nodes = set((h, int(c)) for h, c in enumerate(target_codes) if h < 4)
+        
+        # BFS
+        queue = deque([(node, [node]) for node in start_nodes])
+        visited = set(start_nodes)
+        
+        while queue:
+            current, path = queue.popleft()
+            
+            # Chegou ao destino?
+            if current in target_nodes:
+                return path
+            
+            # Limite de profundidade
+            if len(path) - 1 >= max_hops:
+                continue
+            
+            # Expandir vizinhos
+            if current in self.mycelial.graph:
+                neighbors = self.mycelial.graph[current]
+                
+                # Ordenar por peso (prioriza conexões fortes)
+                sorted_neighbors = sorted(
+                    neighbors.items(), 
+                    key=lambda x: x[1], 
+                    reverse=True
+                )
+                
+                for neighbor, weight in sorted_neighbors:
+                    if neighbor not in visited and weight > 0.1:
+                        visited.add(neighbor)
+                        queue.append((neighbor, path + [neighbor]))
+        
+        # Não encontrou caminho
+        return []
+    
+    def _node_to_embedding(
+        self, 
+        node: Tuple[int, int], 
+        reference: np.ndarray
+    ) -> np.ndarray:
+        """
+        Converte nó do grafo (head, code) para embedding 384D.
+        
+        Usa bridge.get_code_embedding se disponível.
+        Fallback: modifica referência (simulação).
+        """
+        head, code = node
+        
+        # Tenta usar codebook do bridge via API pública
+        if self.bridge is not None:
+            if hasattr(self.bridge, 'get_code_embedding'):
+                emb = self.bridge.get_code_embedding(head, code)
+                if emb is not None:
+                    return emb
+        
+        # Fallback: modifica seção correspondente do reference
+        # Isso cria um embedding "sintético" que representa o código
+        result = reference.copy()
+        chunk_size = len(reference) // 4
+        start_idx = head * chunk_size
+        
+        # Se referência for muito pequena (ex: testes unitários com vetor pequeno)
+        if start_idx >= len(result):
+            start_idx = 0
+            chunk_size = len(result)
+            
+        # Criar padrão determinístico baseado no código
+        rng = np.random.RandomState(code + head * 256)
+        pattern = rng.randn(chunk_size) * 0.3
+        
+        # Normalizar padrão
+        p_norm = np.linalg.norm(pattern)
+        if p_norm > 1e-8:
+            pattern = pattern / p_norm
+        
+        # Blend com referência (mantém contexto global, altera local)
+        end_idx = min(start_idx + chunk_size, len(result))
+        
+        if start_idx < end_idx:
+            current_rem = result[start_idx:end_idx]
+            result[start_idx:end_idx] = 0.5 * current_rem + 0.5 * pattern[:end_idx-start_idx]
+        
+        # Normalizar resultado final
+        res_norm = np.linalg.norm(result)
+        return result / (res_norm + 1e-8)
+    
+    def _interpolate_path(
+        self, 
+        points: List[np.ndarray], 
+        min_points: int = 10
+    ) -> List[np.ndarray]:
+        """
+        Interpola caminho para ter mais pontos.
+        """
+        if len(points) < 2:
+            return points
+        
+        result = []
+        total_segments = len(points) - 1
+        points_per_segment = max(1, min_points // total_segments)
+        
+        for i in range(total_segments):
+            start = points[i]
+            end = points[i + 1]
+            
+            for t in range(points_per_segment):
+                alpha = t / points_per_segment
+                interp = start + alpha * (end - start)
+                result.append(interp)
+        
+        result.append(points[-1])
+        return result
     
     # =========================================================================
     # ACUMULAÇÃO DE RESÍDUOS
@@ -458,9 +710,10 @@ class CompositionalReasoner:
             concept_name = f"step_{i}"
             if self.config.decode_concepts and self.bridge is not None:
                 try:
-                    codes, _ = self.bridge._find_codes_per_head(point)
-                    concept_codes = codes
-                    concept_name = self._decode_concept(codes)
+                    if hasattr(self.bridge, 'find_codes'):
+                        codes, _ = self.bridge.find_codes(point)
+                        concept_codes = codes
+                        concept_name = self._decode_concept(codes)
                 except:
                     pass
             
@@ -562,7 +815,10 @@ class CompositionalReasoner:
         
         try:
             # Encontrar códigos VQ-VAE do ponto
-            codes, _ = self.bridge._find_codes_per_head(point)
+            if hasattr(self.bridge, 'find_codes'):
+                codes, _ = self.bridge.find_codes(point)
+            else:
+                codes = self._embedding_to_codes(point)
             
             # Buscar conexões Hebbianas
             neighbors = self._get_hebbian_neighbors(codes)
@@ -750,27 +1006,45 @@ class CompositionalReasoner:
         r_attention = self._attention_residual(v, point, all_points, att_contrib)
         r_field = self._field_residual(v, point, fld_contrib)
         
-        # Pesos adaptativos baseados em magnitude
-        mags = np.array([
-            np.linalg.norm(r_hebbian),
-            np.linalg.norm(r_attention),
-            np.linalg.norm(r_field)
-        ])
+        # Componente de direção ao target (NOVO)
+        r_target = np.zeros_like(v)
+        if hasattr(self, '_current_target') and self._current_target is not None:
+            target_direction = self._current_target - v
+            target_norm = np.linalg.norm(target_direction)
+            if target_norm > 1e-8:
+                r_target = target_direction / target_norm * self.config.residual_scale
         
-        if np.sum(mags) < 1e-8:
-            return np.zeros_like(v)
+        # Usar pesos configuráveis (não mais adaptativos por magnitude)
+        w_heb = self.config.hybrid_hebbian_weight
+        w_fld = self.config.hybrid_field_weight
+        w_tgt = self.config.hybrid_target_weight
         
-        weights = mags / np.sum(mags)
+        # Normalizar pesos
+        total_weight = w_heb + w_fld + w_tgt
+        if total_weight > 0:
+            w_heb /= total_weight
+            w_fld /= total_weight
+            w_tgt /= total_weight
         
+        # Combinar (attention não incluído por default no HYBRID principal)
         residual = (
-            weights[0] * r_hebbian +
-            weights[1] * r_attention +
-            weights[2] * r_field
+            w_heb * r_hebbian +
+            w_fld * r_field +
+            w_tgt * r_target
         )
         
         contributions.extend(heb_contrib)
-        contributions.extend(att_contrib)
         contributions.extend(fld_contrib)
+        
+        # Adicionar contribuição do target
+        if np.linalg.norm(r_target) > 1e-8:
+            contributions.append(ResidualContribution(
+                node_index=-1,
+                coordinates=self._current_target if hasattr(self, '_current_target') else point,
+                residual=r_target,
+                weight=w_tgt,
+                source="target_direction"
+            ))
         
         return residual
     
@@ -864,8 +1138,21 @@ class CompositionalReasoner:
     
     def _approximate_free_energy(self, point: np.ndarray) -> float:
         """
-        Aproxima energia livre como distância média aos atratores.
+        Aproxima energia livre de um ponto.
+        
+        Prioridade:
+        1. PreStructuralField (fonte de verdade para Variational Free Energy)
+        2. Distância aos atratores via Bridge (fallback)
         """
+        # 1. Tentar usar PreStructuralField (fonte de verdade)
+        if self.field is not None and hasattr(self.field, 'get_free_energy_at'):
+            try:
+                # Retorna valor da superfície de energia
+                return self.field.get_free_energy_at(point)
+            except Exception:
+                pass
+        
+        # 2. Fallback: Distância média aos atratores
         if self.bridge is None:
             return 0.0
         

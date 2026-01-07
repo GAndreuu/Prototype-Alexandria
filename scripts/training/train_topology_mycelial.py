@@ -40,14 +40,17 @@ def train_topology(embeddings: np.ndarray, n_clusters: int = 256):
     
     return engine
 
-def train_mycelial(embeddings: np.ndarray, model_path: str = "data/monolith_v13_finetuned.pth", batch_size: int = 256):
+def train_mycelial(embeddings: np.ndarray, model_path: str = "data/monolith_v13_trained.pth", batch_size: int = 256):
     """Train Mycelial Network by observing VQ-VAE indices"""
     logger.info("=== Training Mycelial Network ===")
     
     # Load VQ-VAE model
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = MonolithV13()
-    model.load_state_dict(torch.load(model_path, map_location=device))
+    checkpoint = torch.load(model_path, map_location=device, weights_only=False)
+    # Handle both formats: direct state_dict or {'model_state_dict': ...}
+    state_dict = checkpoint.get('model_state_dict', checkpoint)
+    model.load_state_dict(state_dict)
     model.to(device)
     model.eval()
     
@@ -91,8 +94,11 @@ def train_mycelial(embeddings: np.ndarray, model_path: str = "data/monolith_v13_
     mycelial.save_state()
     
     # Stats
-    stats = mycelial.get_stats()
-    logger.info(f"Mycelial Network trained: {stats['n_nodes']} nodes, {stats['n_edges']} edges, {stats['total_observations']} observations")
+    try:
+        stats = mycelial.get_stats()
+        logger.info(f"Mycelial Network trained: {stats['n_nodes']} nodes, {stats['n_edges']} edges, {stats['total_observations']} observations")
+    except AttributeError:
+        logger.info(f"Mycelial Network trained and saved to {config.save_path}")
     
     return mycelial
 
@@ -100,7 +106,7 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description="Train Topology & Mycelial")
     parser.add_argument("--data", type=str, default="data/training_embeddings.npy")
-    parser.add_argument("--model", type=str, default="data/monolith_v13_finetuned.pth")
+    parser.add_argument("--model", type=str, default="data/monolith_v13_trained.pth")
     parser.add_argument("--clusters", type=int, default=256)
     parser.add_argument("--skip-topology", action="store_true")
     parser.add_argument("--skip-mycelial", action="store_true")

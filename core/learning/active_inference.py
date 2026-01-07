@@ -129,7 +129,7 @@ class ActiveInferenceConfig:
     """Configuração do sistema de Active Inference"""
     
     # Dimensões
-    state_dim: int = 64                  # Dimensão do estado latente
+    state_dim: int = 384                 # Dimensão do estado latente (igual ao embedding)
     action_embedding_dim: int = 32       # Dimensão do embedding de ações
     
     # Planning
